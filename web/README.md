@@ -1,21 +1,21 @@
-# Neith Steam Launcher — Web oficial V2
+# Neith Steam Launcher — Web V3 AAA
 
-Web estática lista para Netlify, construida con HTML, CSS y JavaScript sin frameworks.
+## Netlify
+Sube el contenido de esta carpeta como raíz del sitio. No requiere proceso de build.
 
-## Publicación en Netlify
-1. Crea un sitio nuevo en Netlify o abre el sitio existente.
-2. Sube el contenido de este ZIP conservando su estructura.
-3. En Domain management añade `neithlauncher.com` y `www.neithlauncher.com`.
-4. Configura el dominio principal que prefieras y deja que Netlify emita el certificado HTTPS automático.
-5. Comprueba las rutas `/boostpc/`, `/hourboost/`, `/logros/` y `/juegos-gratis/`.
+- `_redirects` mantiene las URLs limpias y la página 404.
+- `_headers` añade cabeceras de seguridad y caché.
+- `netlify.toml` publica la raíz.
+- Netlify provisiona HTTPS automáticamente cuando `neithlauncher.com` y/o `www.neithlauncher.com` estén asociados al sitio y el DNS esté correctamente configurado.
 
-## Incluye
-- Capturas reales optimizadas a WebP.
-- Páginas completas por módulo.
-- SEO, Open Graph, sitemap y robots.txt.
-- 404 personalizada.
-- Headers de seguridad y caché en `netlify.toml`.
-- Área preparada para futuro Free/Premium sin compras ni lógica de licencia activa.
+## Rutas
+- `/boostpc`
+- `/hourboost`
+- `/logros`
+- `/juegos-gratis`
 
 ## Capturas
-Las imágenes reales están en `img/`. Para sustituir una captura, conserva el nombre del archivo o actualiza su referencia HTML.
+Las 10 capturas reales están optimizadas a WebP en `img/`.
+
+## Free / Premium
+La home incluye una sección preparada para comunicar futuros planes sin definir todavía qué funciones pertenecerán a cada nivel. La capa comercial puede añadirse más adelante sin reestructurar las páginas de producto.

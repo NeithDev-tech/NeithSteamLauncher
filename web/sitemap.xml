@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<url><loc>https://www.neithlauncher.com/</loc></url>
-<url><loc>https://www.neithlauncher.com/boostpc/</loc></url>
-<url><loc>https://www.neithlauncher.com/hourboost/</loc></url>
-<url><loc>https://www.neithlauncher.com/logros/</loc></url>
-<url><loc>https://www.neithlauncher.com/juegos-gratis/</loc></url>
-<url><loc>https://www.neithlauncher.com/docs/</loc></url>
-<url><loc>https://www.neithlauncher.com/free-premium/</loc></url>
+  <url><loc>https://www.neithlauncher.com/</loc><priority>1.0</priority></url>
+  <url><loc>https://www.neithlauncher.com/boostpc</loc><priority>0.8</priority></url>
+  <url><loc>https://www.neithlauncher.com/hourboost</loc><priority>0.8</priority></url>
+  <url><loc>https://www.neithlauncher.com/logros</loc><priority>0.8</priority></url>
+  <url><loc>https://www.neithlauncher.com/juegos-gratis</loc><priority>0.8</priority></url>
 </urlset>
