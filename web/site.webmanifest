@@ -3,7 +3,7 @@
   "short_name": "Neith",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#000A14",
-  "theme_color": "#000A14",
+  "background_color": "#00101F",
+  "theme_color": "#00101F",
   "description": "Web oficial de Neith Steam Launcher."
 }
