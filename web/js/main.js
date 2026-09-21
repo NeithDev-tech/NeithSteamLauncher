@@ -21,50 +21,38 @@ document.querySelectorAll('.product-shot,.shot').forEach(frame=>{
   }
 });
 
-/* Hero carousel: homepage only. */
-(() => {
-  const carousel=document.querySelector('[data-carousel]');
-  if(!carousel) return;
-  const slides=[...carousel.querySelectorAll('.hero-carousel__slide')];
-  const prev=carousel.querySelector('.hero-carousel__arrow--prev');
-  const next=carousel.querySelector('.hero-carousel__arrow--next');
-  const dotsWrap=carousel.querySelector('.hero-carousel__dots');
-  const label=carousel.querySelector('.hero-carousel__label');
+/* Hero screenshot carousel — nav/hero only */
+(()=>{
+  const carousel=document.querySelector('.hero-carousel');
+  if(!carousel)return;
+  const slides=[...carousel.querySelectorAll('.hero-slide')];
+  const dotsWrap=carousel.querySelector('.hero-dots');
+  const prev=carousel.querySelector('.hero-arrow-prev');
+  const next=carousel.querySelector('.hero-arrow-next');
   let index=0;
-  let startX=null;
-  const dots=slides.map((slide,i)=>{
+  let timer=null;
+  slides.forEach((slide,i)=>{
     const dot=document.createElement('button');
-    dot.type='button';
-    dot.className='hero-carousel__dot'+(i===0?' is-active':'');
-    dot.setAttribute('aria-label',`Ver captura ${slide.dataset.label||i+1}`);
-    dot.setAttribute('role','tab');
-    dot.setAttribute('aria-selected',i===0?'true':'false');
-    dot.addEventListener('click',()=>show(i));
-    dotsWrap?.appendChild(dot);
-    return dot;
+    const alt=slide.querySelector('img')?.alt||`Captura ${i+1}`;
+    const label=alt.replace(/ de Neith Steam Launcher$/i,'').replace(/Neith Steam Launcher/ig,'Neith').trim();
+    dot.type='button'; dot.className='hero-dot'+(i===0?' active':'');
+    dot.dataset.label=label;
+    dot.setAttribute('aria-label',`Ver ${label}`);
+    dot.title=label;
+    dot.addEventListener('click',()=>show(i,true));
+    dotsWrap.appendChild(dot);
   });
-  function show(nextIndex){
-    index=(nextIndex+slides.length)%slides.length;
-    slides.forEach((slide,i)=>slide.classList.toggle('is-active',i===index));
-    dots.forEach((dot,i)=>{
-      dot.classList.toggle('is-active',i===index);
-      dot.setAttribute('aria-selected',i===index?'true':'false');
-    });
-    if(label) label.textContent=slides[index].dataset.label||'';
+  const dots=[...dotsWrap.children];
+  function show(i,user=false){
+    index=(i+slides.length)%slides.length;
+    slides.forEach((s,n)=>s.classList.toggle('active',n===index));
+    dots.forEach((d,n)=>d.classList.toggle('active',n===index));
+    if(user)restart();
   }
-  prev?.addEventListener('click',()=>show(index-1));
-  next?.addEventListener('click',()=>show(index+1));
-  carousel.addEventListener('keydown',e=>{
-    if(e.key==='ArrowLeft'){e.preventDefault();show(index-1)}
-    if(e.key==='ArrowRight'){e.preventDefault();show(index+1)}
-  });
-  carousel.setAttribute('tabindex','0');
-  carousel.addEventListener('pointerdown',e=>{startX=e.clientX});
-  carousel.addEventListener('pointerup',e=>{
-    if(startX===null) return;
-    const delta=e.clientX-startX;
-    startX=null;
-    if(Math.abs(delta)>45) show(index+(delta<0?1:-1));
-  });
-  show(0);
+  function restart(){clearInterval(timer);timer=setInterval(()=>show(index+1),6500)}
+  prev?.addEventListener('click',()=>show(index-1,true));
+  next?.addEventListener('click',()=>show(index+1,true));
+  carousel.addEventListener('mouseenter',()=>clearInterval(timer));
+  carousel.addEventListener('mouseleave',restart);
+  restart();
 })();
