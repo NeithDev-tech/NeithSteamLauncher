@@ -19,3 +19,9 @@ Web estática lista para Netlify, construida con HTML, CSS y JavaScript sin fram
 
 ## Capturas
 Las imágenes reales están en `img/`. Para sustituir una captura, conserva el nombre del archivo o actualiza su referencia HTML.
+
+
+## NEITH ID / SUPABASE / STRIPE
+Esta build añade UI de Login/Registro, Google/Discord OAuth mediante Supabase, Dashboard privado, perfiles con RLS y estructura de checkout/webhook Stripe para Cloudflare Pages Functions.
+
+La activación se documenta en `SETUP_AUTH_STRIPE.md`. Las claves secretas se mantienen exclusivamente server-side.

@@ -57,3 +57,57 @@ document.querySelectorAll('.product-shot,.shot').forEach(frame=>{
   carousel.addEventListener('mouseleave',restart);
   restart();
 })();
+
+/* Neith carousel premium card tilt — desktop pointer only */
+document.querySelectorAll('.hero .neith-card-inner[data-tilt]').forEach(card=>{
+  const maxTilt=4.2;
+  card.addEventListener('pointermove',e=>{
+    if(window.matchMedia('(pointer: coarse)').matches)return;
+    const r=card.getBoundingClientRect();
+    const x=(e.clientX-r.left)/r.width;
+    const y=(e.clientY-r.top)/r.height;
+    card.style.setProperty('--ry',`${((x-.5)*maxTilt*2).toFixed(2)}deg`);
+    card.style.setProperty('--rx',`${((.5-y)*maxTilt*2).toFixed(2)}deg`);
+    card.style.setProperty('--mx',`${(x*100).toFixed(1)}%`);
+    card.style.setProperty('--my',`${(y*100).toFixed(1)}%`);
+  });
+  card.addEventListener('pointerleave',()=>{
+    card.style.setProperty('--rx','0deg');card.style.setProperty('--ry','0deg');
+    card.style.setProperty('--mx','50%');card.style.setProperty('--my','50%');
+  });
+});
+
+/* Universal zero-clip card fitting safeguard.
+   Only compacts a card when its live content is larger than the available frame. */
+(()=>{
+  const cards=[...document.querySelectorAll('.hero .neith-card-inner')];
+  if(!cards.length)return;
+  const fit=card=>{
+    const content=card.querySelector('.neith-card-content');
+    if(!content)return;
+    card.classList.remove('fit-compact','fit-tight');
+    requestAnimationFrame(()=>{
+      const over=content.scrollHeight>card.clientHeight+1 || content.scrollWidth>card.clientWidth+1;
+      if(over)card.classList.add('fit-compact');
+      requestAnimationFrame(()=>{
+        const over2=content.scrollHeight>card.clientHeight+1 || content.scrollWidth>card.clientWidth+1;
+        if(over2)card.classList.add('fit-tight');
+      });
+    });
+  };
+  const ro=new ResizeObserver(entries=>entries.forEach(e=>fit(e.target)));
+  cards.forEach(card=>{ro.observe(card);fit(card)});
+  window.addEventListener('load',()=>cards.forEach(fit),{once:true});
+})();
+
+
+/* Feature cards: lightweight live RAM indicator while Boost PC is hovered. */
+(()=>{
+  const card=document.querySelector('#features .feature-boost');
+  const value=card?.querySelector('[data-ram-value]');
+  if(!card||!value)return;
+  let timer=null;
+  const tick=()=>{ value.textContent=`+${Math.floor(78+Math.random()*16)}%`; };
+  card.addEventListener('mouseenter',()=>{tick();clearInterval(timer);timer=setInterval(tick,850);});
+  card.addEventListener('mouseleave',()=>{clearInterval(timer);timer=null;value.textContent='+85%';});
+})();
