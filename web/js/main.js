@@ -33,12 +33,13 @@ document.querySelectorAll('.product-shot,.shot').forEach(frame=>{
   let timer=null;
   slides.forEach((slide,i)=>{
     const dot=document.createElement('button');
-    const alt=slide.querySelector('img')?.alt||`Captura ${i+1}`;
-    const label=alt.replace(/ de Neith Steam Launcher$/i,'').replace(/Neith Steam Launcher/ig,'Neith').trim();
-    dot.type='button'; dot.className='hero-dot'+(i===0?' active':'');
+    const img=slide.querySelector('img');
+    const label=slide.dataset.label || img?.alt || `Captura ${i+1}`;
+    dot.type='button';
+    dot.className='hero-dot'+(i===0?' active':'')+(slide.dataset.promo==='true'?' promo-dot':'');
     dot.dataset.label=label;
     dot.setAttribute('aria-label',`Ver ${label}`);
-    dot.title=label;
+    if(img?.getAttribute('src')) dot.style.setProperty('--thumb',`url("${img.getAttribute('src')}")`);
     dot.addEventListener('click',()=>show(i,true));
     dotsWrap.appendChild(dot);
   });
