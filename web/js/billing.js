@@ -16,7 +16,7 @@
     button.disabled = true;
     button.textContent = 'PREPARANDO CHECKOUT…';
     try {
-      const response = await fetch('/api/create-checkout-session', {
+      const response = await fetch(new URL('api/create-checkout-session', window.location.origin + '/').href, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

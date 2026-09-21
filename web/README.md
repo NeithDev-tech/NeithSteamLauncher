@@ -25,3 +25,10 @@ Las imágenes reales están en `img/`. Para sustituir una captura, conserva el n
 Esta build añade UI de Login/Registro, Google/Discord OAuth mediante Supabase, Dashboard privado, perfiles con RLS y estructura de checkout/webhook Stripe para Cloudflare Pages Functions.
 
 La activación se documenta en `SETUP_AUTH_STRIPE.md`. Las claves secretas se mantienen exclusivamente server-side.
+
+
+## Production portability fix (20260921.4)
+- Internal HTML/CSS/JS/image routes use relative paths.
+- Main CSS and JS include cache-busting version `v=20260921.4`.
+- Google Fonts imports Orbitron, Inter and Rajdhani directly from fonts.googleapis.com.
+- External Supabase CDN remains an HTTPS absolute URL by design.

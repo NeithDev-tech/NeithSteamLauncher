@@ -1,5 +1,12 @@
 (() => {
   'use strict';
+  const scriptUrl = document.currentScript?.src || '';
+  const siteBase = (() => {
+    try { return new URL('../', scriptUrl || window.location.href); }
+    catch { return new URL('./', window.location.href); }
+  })();
+  const siteUrl = path => new URL(String(path || '').replace(/^\/+/, ''), siteBase).href;
+
 
   const cfg = window.NEITH_CONFIG || {};
   const configured = Boolean(
@@ -222,7 +229,7 @@
       setMessage('Configura Supabase antes de activar Google o Discord.', 'warning');
       return;
     }
-    const redirectTo = `${window.location.origin}/dashboard/`;
+    const redirectTo = siteUrl('dashboard/');
     const { error } = await state.client.auth.signInWithOAuth({ provider, options: { redirectTo } });
     if (error) setMessage(error.message, 'error');
   }
@@ -230,7 +237,7 @@
   async function logout() {
     if (!state.client) return;
     await state.client.auth.signOut();
-    window.location.href = '/';
+    window.location.href = siteUrl('');
   }
 
   async function initAuth() {
