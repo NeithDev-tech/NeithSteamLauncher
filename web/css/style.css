@@ -69,3 +69,76 @@
 @media(max-width:930px){.product-shot,.product-shot.reveal.on,.shot,.shot.reveal.on,.showcase.reverse .shot,.showcase.reverse .shot.reveal.on{transform:perspective(1200px) rotateY(0deg) rotateX(.7deg)}.product-shot:hover,.product-shot.reveal.on:hover,.shot:hover,.shot.reveal.on:hover,.showcase.reverse .shot:hover,.showcase.reverse .shot.reveal.on:hover{transform:translateY(-5px) scale(1.01)}}
 @media(max-width:620px){.product-shot,.shot{border-radius:18px;padding:8px}.product-shot img,.shot img{border-radius:12px}.product-shot>.screen-shine{inset:8px}.shot>.screen-shine{inset:8px 8px 42px}}
 @media(prefers-reduced-motion:reduce){.product-shot,.shot,.brand .mark,.primary::before,.product-shot::after,.shot::after{animation:none!important}.product-shot,.product-shot.reveal.on,.shot,.shot.reveal.on,.showcase.reverse .shot,.showcase.reverse .shot.reveal.on{transform:none!important}}
+
+/* ============================================================
+   NAV + HERO PREMIUM — requested surgical update only
+   ============================================================ */
+.brand{font-family:"Chakra Petch",Orbitron,Inter,sans-serif;font-weight:700;letter-spacing:.13em;position:relative;transition:transform .26s ease,filter .3s ease}
+.brand:hover{transform:translateY(-1px);filter:brightness(1.12)}
+.brand .mark{width:46px;height:46px;border-radius:15px;padding:0;background:linear-gradient(145deg,rgba(0,240,255,.14),rgba(8,124,232,.16));border:1px solid rgba(0,240,255,.52);box-shadow:0 0 16px rgba(0,240,255,.33),0 0 38px rgba(8,124,232,.18),inset 0 0 18px rgba(0,240,255,.08);overflow:hidden;animation:navLogoPulse 3.8s ease-in-out infinite}
+.brand .mark img{display:block;width:100%;height:100%;object-fit:cover;border-radius:13px;filter:saturate(1.2) brightness(1.08) drop-shadow(0 0 9px rgba(0,240,255,.75));transition:filter .3s ease,transform .3s ease}
+.brand:hover .mark{box-shadow:0 0 20px rgba(0,240,255,.58),0 0 48px rgba(8,124,232,.32),inset 0 0 20px rgba(0,240,255,.12)}
+.brand:hover .mark img{filter:saturate(1.35) brightness(1.18) drop-shadow(0 0 13px rgba(0,240,255,.96));transform:scale(1.035)}
+.brand-word{position:relative;color:var(--bright);font-size:1.05rem;text-shadow:0 0 8px rgba(0,240,255,.72),0 0 22px rgba(88,217,255,.34);animation:navWordPulse 4.4s ease-in-out infinite;transition:color .28s ease,text-shadow .28s ease,transform .28s ease}
+.brand:hover .brand-word{color:#9df5ff;text-shadow:0 0 9px rgba(0,240,255,1),0 0 26px rgba(0,240,255,.66),0 0 42px rgba(8,124,232,.34);transform:translateX(1px)}
+.navlinks{font-family:"Chakra Petch",Inter,sans-serif;font-weight:600;letter-spacing:.035em;color:var(--cyan)}
+.navlinks>a:not(.btn){color:var(--cyan);position:relative;transform:translateY(0);text-shadow:0 0 0 rgba(0,240,255,0);transition:color .24s ease,text-shadow .24s ease,transform .24s ease}
+.navlinks>a:not(.btn)::after{content:"";position:absolute;left:50%;right:50%;bottom:-9px;height:2px;border-radius:999px;background:linear-gradient(90deg,transparent,var(--bright),var(--cyan),transparent);box-shadow:0 0 10px rgba(0,240,255,.8);transition:left .26s ease,right .26s ease,opacity .26s ease;opacity:.42}
+.navlinks>a:not(.btn):hover{color:#d8fbff;text-shadow:0 0 9px rgba(0,240,255,.86),0 0 20px rgba(88,217,255,.45);transform:translateY(-2px)}
+.navlinks>a:not(.btn):hover::after{left:0;right:0;opacity:1}
+.navlinks .btn.primary{font-family:"Chakra Petch",Orbitron,sans-serif;font-weight:700;letter-spacing:.06em;color:#00101F;border:1px solid rgba(0,240,255,.76);background:linear-gradient(110deg,var(--bright) 0%,#2ff4dc 48%,var(--green) 100%);box-shadow:0 0 18px rgba(0,240,255,.36),0 0 34px rgba(0,255,136,.16),inset 0 0 18px rgba(255,255,255,.3);transition:transform .26s ease,box-shadow .28s ease,filter .28s ease}
+.navlinks .btn.primary::before{content:"";position:absolute;z-index:-1;top:-45%;bottom:-45%;left:-32%;width:18%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.85),transparent);transform:skewX(-18deg);opacity:0}
+.navlinks .btn.primary:hover{transform:translateY(-3px) scale(1.02);filter:saturate(1.08) brightness(1.05);box-shadow:0 0 24px rgba(0,240,255,.62),0 0 52px rgba(0,255,136,.27),inset 0 0 22px rgba(255,255,255,.35)}
+.navlinks .btn.primary:hover::before{opacity:1;animation:navButtonShine .95s ease 1}
+
+.hero h1{font-family:Orbitron,"Chakra Petch",sans-serif;font-weight:900;letter-spacing:.045em;color:transparent;background:linear-gradient(102deg,#58D9FF 0%,#00F0FF 34%,#d7fbff 48%,#00F0FF 63%,#58D9FF 100%);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;text-shadow:0 0 9px rgba(0,240,255,.48),0 0 25px rgba(0,240,255,.34),0 0 58px rgba(8,124,232,.22);filter:drop-shadow(0 0 12px rgba(0,240,255,.2));animation:heroTitleFlow 5.4s ease-in-out infinite,heroTitleDrift 6.8s ease-in-out infinite;transform-origin:left center}
+.hero h1:hover{text-shadow:0 0 10px rgba(0,240,255,.74),0 0 30px rgba(0,240,255,.47),0 0 72px rgba(8,124,232,.3)}
+
+.hero-carousel.product-shot{position:relative;padding:0;border-radius:52px;background:linear-gradient(145deg,rgba(0,240,255,.10),rgba(0,16,31,.98) 52%,rgba(255,0,229,.055));border:1px solid rgba(0,240,255,.52);box-shadow:0 38px 90px rgba(0,0,0,.58),0 0 35px rgba(0,240,255,.22),0 0 72px rgba(88,217,255,.10);transform:perspective(1600px) rotateY(-4deg) rotateX(1.1deg);animation:heroCarouselFloat 7.2s ease-in-out infinite;overflow:visible;isolation:isolate}
+.hero-carousel.product-shot::before{inset:-2px;border-radius:54px;background:linear-gradient(125deg,rgba(0,240,255,.94),rgba(88,217,255,.16) 44%,rgba(255,0,229,.24));filter:blur(8px);opacity:.58}
+.hero-carousel.product-shot::after{inset:-12%;border-radius:50%;background:radial-gradient(ellipse at 25% 35%,rgba(0,240,255,.30),transparent 42%),radial-gradient(ellipse at 82% 70%,rgba(255,0,229,.17),transparent 37%);filter:blur(42px);opacity:.86;animation:heroHaloPulse 6.4s ease-in-out infinite}
+.hero-carousel__halo{position:absolute;z-index:-3;inset:10% -8% -15%;border-radius:50%;background:radial-gradient(ellipse at center,rgba(0,240,255,.17),rgba(255,0,229,.06) 48%,transparent 72%);filter:blur(32px);animation:heroHaloPulse 6.4s ease-in-out infinite}
+.hero-carousel__viewport{position:relative;overflow:hidden;border-radius:50px;aspect-ratio:1.34/1;background:#00101F;box-shadow:inset 0 0 0 1px rgba(255,255,255,.035),0 18px 46px rgba(0,0,0,.42)}
+.hero-carousel__track{position:relative;width:100%;height:100%}
+.hero-carousel__slide{position:absolute;inset:0;margin:0;opacity:0;transform:scale(1.045) translateX(18px);transition:opacity .58s ease,transform .72s cubic-bezier(.2,.72,.2,1);pointer-events:none}
+.hero-carousel__slide.is-active{opacity:1;transform:scale(1) translateX(0);pointer-events:auto}
+.hero-carousel__slide img{width:100%;height:100%;object-fit:cover;border-radius:50px;filter:saturate(1.04) contrast(1.025) brightness(.98);transition:transform .55s cubic-bezier(.2,.75,.2,1),filter .4s ease;box-shadow:none}
+.hero-carousel__slide[data-label="Inicio"] img{object-position:50% 42%}
+.hero-carousel__slide[data-label="Cuentas"] img{object-position:50% 36%}
+.hero-carousel__slide[data-label="Biblioteca"] img{object-position:53% 42%}
+.hero-carousel__slide[data-label="Hour Boost"] img{object-position:50% 40%}
+.hero-carousel__slide[data-label="Boost PC"] img{object-position:50% 38%}
+.hero-carousel__slide[data-label="Logros"] img{object-position:50% 42%}
+.hero-carousel__slide[data-label="Juegos Gratis"] img{object-position:50% 38%}
+.hero-carousel__slide[data-label="Actualizaciones"] img{object-position:50% 40%}
+.hero-carousel__slide[data-label="Ayuda"] img{object-position:50% 42%}
+.hero-carousel__slide[data-label="Ajustes"] img{object-position:50% 38%}
+.hero-carousel .screen-shine{position:absolute;z-index:5;pointer-events:none;inset:0;border-radius:50px;overflow:hidden}
+.hero-carousel .screen-shine::before{content:"";position:absolute;top:-25%;bottom:-25%;left:-38%;width:18%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.31),rgba(88,217,255,.18),transparent);transform:skewX(-18deg);opacity:0}
+.hero-carousel:hover .screen-shine::before{opacity:1;animation:screenShine 1.05s cubic-bezier(.2,.7,.2,1) 1}
+.hero-carousel:hover{animation-play-state:paused;transform:perspective(1600px) rotateY(0) rotateX(0) translateY(-8px) scale(1.022);border-color:rgba(0,240,255,.92);box-shadow:0 44px 105px rgba(0,0,0,.62),0 0 28px rgba(0,240,255,.44),0 0 74px rgba(0,240,255,.22),0 0 98px rgba(255,0,229,.07)}
+.hero-carousel:hover .hero-carousel__slide.is-active img{transform:scale(1.018);filter:saturate(1.08) contrast(1.035) brightness(1.025)}
+.hero-carousel__arrow{position:absolute;z-index:8;top:50%;width:50px;height:50px;border-radius:50%;border:1px solid rgba(0,240,255,.62);background:rgba(0,16,31,.72);backdrop-filter:blur(14px);color:var(--bright);font:700 2rem/1 "Chakra Petch",sans-serif;display:grid;place-items:center;cursor:pointer;box-shadow:0 0 18px rgba(0,240,255,.24),inset 0 0 14px rgba(0,240,255,.05);transform:translateY(-50%);transition:transform .24s ease,background .24s ease,box-shadow .24s ease,color .24s ease}
+.hero-carousel__arrow--prev{left:-24px}.hero-carousel__arrow--next{right:-24px}
+.hero-carousel__arrow:hover{background:rgba(0,240,255,.15);color:#fff;box-shadow:0 0 22px rgba(0,240,255,.58),0 0 44px rgba(88,217,255,.2),inset 0 0 16px rgba(0,240,255,.12);transform:translateY(-50%) scale(1.08)}
+.hero-carousel__arrow:active{transform:translateY(-50%) scale(.96)}
+.hero-carousel__meta{position:absolute;z-index:9;left:50%;bottom:-23px;transform:translateX(-50%);display:flex;align-items:center;gap:12px;padding:9px 13px;border-radius:999px;background:rgba(0,16,31,.84);border:1px solid rgba(0,240,255,.28);backdrop-filter:blur(16px);box-shadow:0 0 20px rgba(0,240,255,.14);white-space:nowrap}
+.hero-carousel__label{font-family:"Chakra Petch",sans-serif;font-weight:700;font-size:.78rem;color:var(--cyan);letter-spacing:.055em;min-width:86px;text-align:right}
+.hero-carousel__dots{display:flex;gap:6px}
+.hero-carousel__dot{width:7px;height:7px;padding:0;border:0;border-radius:999px;background:rgba(169,214,234,.28);cursor:pointer;box-shadow:none;transition:width .25s ease,background .25s ease,box-shadow .25s ease}
+.hero-carousel__dot.is-active{width:22px;background:var(--bright);box-shadow:0 0 11px rgba(0,240,255,.82)}
+.hero-carousel.product-shot.reveal{opacity:0;transform:perspective(1600px) translateY(34px) scale(.955) rotateY(-4deg) rotateX(1.1deg);transition:opacity .78s ease,transform .92s cubic-bezier(.2,.72,.18,1)}
+.hero-carousel.product-shot.reveal.on{opacity:1;transform:perspective(1600px) rotateY(-4deg) rotateX(1.1deg) translateY(0)}
+.hero-carousel.product-shot.reveal.on:hover{transform:perspective(1600px) rotateY(0) rotateX(0) translateY(-8px) scale(1.022)}
+
+@keyframes navLogoPulse{0%,100%{box-shadow:0 0 16px rgba(0,240,255,.32),0 0 36px rgba(8,124,232,.15),inset 0 0 16px rgba(0,240,255,.07)}50%{box-shadow:0 0 22px rgba(0,240,255,.56),0 0 48px rgba(8,124,232,.25),inset 0 0 20px rgba(0,240,255,.12)}}
+@keyframes navWordPulse{0%,100%{filter:brightness(1)}50%{filter:brightness(1.18)}}
+@keyframes navButtonShine{0%{left:-32%;opacity:0}20%{opacity:1}100%{left:126%;opacity:0}}
+@keyframes heroTitleFlow{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes heroTitleDrift{0%,100%{transform:translate3d(0,0,0) skewX(0deg)}50%{transform:translate3d(2px,-2px,0) skewX(-.5deg)}}
+@keyframes heroCarouselFloat{0%,100%{translate:0 0}50%{translate:0 -7px}}
+@keyframes heroHaloPulse{0%,100%{opacity:.66;transform:scale(.98)}50%{opacity:1;transform:scale(1.035)}}
+
+@media(max-width:930px){.hero-carousel.product-shot,.hero-carousel.product-shot.reveal.on{transform:perspective(1200px) rotateY(0deg) rotateX(.5deg)}.hero-carousel.product-shot:hover,.hero-carousel.product-shot.reveal.on:hover{transform:translateY(-5px) scale(1.01)}.hero-carousel__arrow--prev{left:10px}.hero-carousel__arrow--next{right:10px}.hero-carousel__arrow{width:46px;height:46px;background:rgba(0,16,31,.82)}}
+@media(max-width:620px){.brand .mark{width:42px;height:42px}.brand-word{font-size:.98rem}.hero-carousel.product-shot{border-radius:32px}.hero-carousel__viewport,.hero-carousel__slide img,.hero-carousel .screen-shine{border-radius:30px}.hero-carousel__meta{bottom:-20px;max-width:92%;padding:8px 10px}.hero-carousel__label{display:none}.hero-carousel__arrow{width:42px;height:42px;font-size:1.7rem}.hero-carousel__slide img{object-position:center center}.hero h1{letter-spacing:.025em}}
+@media(prefers-reduced-motion:reduce){.brand .mark,.brand-word,.hero h1,.hero-carousel.product-shot,.hero-carousel.product-shot::after,.hero-carousel__halo{animation:none!important}.hero-carousel.product-shot,.hero-carousel.product-shot.reveal.on{transform:none!important}}
