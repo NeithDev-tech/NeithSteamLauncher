@@ -9,6 +9,7 @@
 
 
   const cfg = window.NEITH_CONFIG || {};
+  const oauthEnabled = cfg.oauthEnabled === true;
   const configured = Boolean(
     window.supabase &&
     cfg.supabaseUrl &&
@@ -68,27 +69,34 @@
               <label>Contraseña<input name="password" type="password" autocomplete="new-password" required minlength="8" placeholder="Mínimo 8 caracteres"></label>
               <button class="auth-submit" type="submit">CREAR CUENTA</button>
             </form>
-            <div class="auth-separator"><span>O CONTINÚA CON</span></div>
-            <div class="auth-socials">
-              <button type="button" class="social google" data-oauth="google"><span class="social-icon google-icon" aria-hidden="true">G</span><b>Iniciar sesión con Google</b></button>
-              <button type="button" class="social discord" data-oauth="discord"><span class="social-icon discord-icon" aria-hidden="true">◈</span><b>Iniciar sesión con Discord</b></button>
+            <div class="auth-separator" ${oauthEnabled ? '' : 'hidden'}><span>O CONTINÚA CON</span></div>
+            <div class="auth-socials" ${oauthEnabled ? '' : 'hidden'}>
+              <button type="button" class="social google" data-oauth="google"><span class="social-icon google-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="#4285F4" d="M21.6 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.4a4.6 4.6 0 0 1-2 3v2.5h3.3c1.9-1.8 2.9-4.4 2.9-7.3Z"/><path fill="#34A853" d="M12 22c2.7 0 5-.9 6.7-2.4l-3.3-2.5c-.9.6-2.1 1-3.4 1-2.6 0-4.8-1.8-5.6-4.2H3v2.6A10 10 0 0 0 12 22Z"/><path fill="#FBBC05" d="M6.4 13.9A6 6 0 0 1 6.1 12c0-.7.1-1.3.3-1.9V7.5H3A10 10 0 0 0 2 12c0 1.6.4 3.1 1 4.5l3.4-2.6Z"/><path fill="#EA4335" d="M12 5.9c1.5 0 2.8.5 3.8 1.5l2.9-2.8A9.7 9.7 0 0 0 3 7.5l3.4 2.6C7.2 7.7 9.4 5.9 12 5.9Z"/></svg></span><b>Continuar con Google</b></button>
+              <button type="button" class="social discord" data-oauth="discord"><span class="social-icon discord-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M19.7 5.3A18 18 0 0 0 15.3 4l-.5 1a16 16 0 0 0-5.6 0l-.5-1a18 18 0 0 0-4.4 1.3C1.5 9.5.7 13.6 1.1 17.6A18 18 0 0 0 6.5 20l1.3-1.8a12 12 0 0 1-2-.9l.5-.4c3.8 1.8 7.6 1.8 11.4 0l.5.4c-.6.4-1.3.7-2 .9l1.3 1.8a18 18 0 0 0 5.4-2.4c.5-4.6-.8-8.7-3.2-12.3ZM8.2 15.2c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2.1 1 2 2.2c0 1.2-.9 2.2-2 2.2Zm7.6 0c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2.1 1 2 2.2c0 1.2-.9 2.2-2 2.2Z"/></svg></span><b>Continuar con Discord</b></button>
             </div>
             <p class="auth-message" data-auth-message></p>
-            <p class="auth-config-note" ${configured ? 'hidden' : ''}>Modo de interfaz activo. Añade tus credenciales públicas de Supabase en <code>js/supabase-config.js</code> para activar el acceso real.</p>
+            <p class="auth-config-note" ${configured ? 'hidden' : ''}>Modo visual activo. Pega tu <strong>Project URL</strong> y tu <strong>anon/public key</strong> en <code>js/supabase-config.js</code>. Después activa Google y Discord en Supabase Authentication → Providers.</p>
           </section>
         </div>
       `);
     }
 
-    document.querySelectorAll('.navlinks').forEach(nav => {
-      if (nav.querySelector('[data-auth-nav]')) return;
-      const download = [...nav.children].find(el => el.matches('a.btn.primary'));
+    document.querySelectorAll('.nav').forEach(navShell => {
+      const existing = [...navShell.querySelectorAll('[data-auth-nav]')];
+      if (existing.length > 1) existing.slice(1).forEach(node => node.remove());
+      if (existing.length) return;
+
+      const actions = navShell.querySelector('.nav-actions');
+      if (!actions) return;
+      const download = actions.querySelector('.nav-download, a.btn.primary');
       const button = document.createElement('button');
       button.type = 'button';
-      button.className = 'nav-auth-button';
+      button.className = 'nav-auth-button nav-login-visible';
       button.dataset.authNav = '';
+      button.setAttribute('aria-haspopup', 'dialog');
+      button.setAttribute('aria-controls', 'neith-auth-modal');
       button.innerHTML = '<span class="nav-auth-led"></span><span data-auth-nav-label>INICIAR SESIÓN</span>';
-      if (download) nav.insertBefore(button, download); else nav.appendChild(button);
+      if (download) actions.insertBefore(button, download); else actions.prepend(button);
     });
 
     document.querySelectorAll('[data-auth-nav]').forEach(button => {
@@ -108,6 +116,13 @@
     modal?.classList.add('open');
     modal?.setAttribute('aria-hidden', 'false');
     document.documentElement.classList.add('auth-open');
+    const shell = modal?.querySelector('.auth-shell');
+    if (shell) {
+      shell.classList.remove('auth-glitch');
+      void shell.offsetWidth;
+      shell.classList.add('auth-glitch');
+      setTimeout(() => shell.classList.remove('auth-glitch'), 320);
+    }
     setTimeout(() => modal?.querySelector('input')?.focus(), 80);
   }
 
@@ -210,7 +225,8 @@
           options: { data: { display_name: data.display_name } }
         });
         if (error) throw error;
-        setMessage('Cuenta creada. Revisa tu correo si la confirmación está activada.', 'success');
+        form.reset();
+        setMessage('Cuenta creada. Te hemos enviado un correo para confirmar tu dirección.', 'success');
       } else {
         const { error } = await state.client.auth.signInWithPassword({ email: data.email, password: data.password });
         if (error) throw error;
@@ -227,6 +243,10 @@
   async function oauth(provider) {
     if (!configured) {
       setMessage('Configura Supabase antes de activar Google o Discord.', 'warning');
+      return;
+    }
+    if (!oauthEnabled) {
+      setMessage('El acceso social se activará más adelante.', 'warning');
       return;
     }
     const redirectTo = siteUrl('dashboard/');

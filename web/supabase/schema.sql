@@ -7,21 +7,20 @@ create table if not exists public.profiles (
   avatar_url text,
   plan text not null default 'free' check (plan in ('free','premium')),
   subscription_status text not null default 'free',
-  stripe_customer_id text unique,
-  stripe_subscription_id text unique,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
 
 alter table public.profiles enable row level security;
 
+drop policy if exists "Users can read own profile" on public.profiles;
 create policy "Users can read own profile"
 on public.profiles for select
 to authenticated
 using (auth.uid() = id);
 
--- Billing fields are intentionally NOT writable by browser clients.
--- They are updated only from trusted server-side code using the service-role key.
+-- Premium/licensing fields are intentionally not writable by browser clients.
+-- The future Neith license backend will update trusted account state server-side.
 
 create or replace function public.handle_new_user()
 returns trigger
@@ -44,3 +43,12 @@ drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created
 after insert on auth.users
 for each row execute procedure public.handle_new_user();
+
+-- Backfill users that may already exist before this schema is installed.
+insert into public.profiles (id, display_name, avatar_url)
+select
+  u.id,
+  coalesce(u.raw_user_meta_data->>'display_name', u.raw_user_meta_data->>'full_name', split_part(u.email, '@', 1)),
+  coalesce(u.raw_user_meta_data->>'avatar_url', u.raw_user_meta_data->>'picture')
+from auth.users u
+on conflict (id) do nothing;

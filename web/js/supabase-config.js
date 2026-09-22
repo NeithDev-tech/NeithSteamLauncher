@@ -1,10 +1,15 @@
 /*
-  NEITH AUTH CONFIG
-  Public browser configuration only. The Supabase anon key is designed to be public.
-  NEVER place your Supabase service-role key or Stripe secret key in this file.
+  NEITH AUTH CONFIG — SUPABASE PRODUCTION
+
+  Public browser configuration only.
+  The publishable key is designed to be shipped in frontend code.
+
+  NEVER place service_role, sb_secret_*, SMTP credentials,
+  Lemon Squeezy secrets or other server-side secrets here.
 */
 window.NEITH_CONFIG = Object.freeze({
-  supabaseUrl: 'https://YOUR_PROJECT.supabase.co',
-  supabaseAnonKey: 'YOUR_SUPABASE_ANON_KEY',
-  siteUrl: window.location.origin
+  supabaseUrl: 'https://nsqhfbyxqcmdthvptuzp.supabase.co',
+  supabaseAnonKey: 'sb_publishable_bRJYGXCPI6M9I4o_egb5WA_n7ZIEASg',
+  siteUrl: 'https://neithlauncher.com',
+  oauthEnabled: false
 });

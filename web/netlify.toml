@@ -23,3 +23,9 @@
   for = "/*.js"
   [headers.values]
     Cache-Control = "public, max-age=604800"
+
+[[redirects]]
+  from = "/api/free-games"
+  to = "/.netlify/functions/free-games"
+  status = 200
+  force = true
