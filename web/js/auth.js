@@ -59,15 +59,22 @@
             </div>
             <form class="auth-form" data-auth-form="login" novalidate>
               <label>Correo electrónico<input name="email" type="email" autocomplete="email" required placeholder="tu@correo.com"></label>
-              <label>Contraseña<input name="password" type="password" autocomplete="current-password" required minlength="8" placeholder="••••••••"></label>
+              <label>Contraseña<div class="password-field"><input name="password" type="password" autocomplete="current-password" required minlength="8" placeholder="••••••••"><button class="password-toggle" type="button" data-password-toggle aria-label="Mostrar contraseña" aria-pressed="false"><svg class="password-eye" viewBox="0 0 24 24" aria-hidden="true"><path class="eye-open" d="M2.4 12s3.4-6 9.6-6 9.6 6 9.6 6-3.4 6-9.6 6-9.6-6-9.6-6Z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle class="eye-open" cx="12" cy="12" r="2.7" fill="none" stroke="currentColor" stroke-width="1.8"/><path class="eye-slash" d="M4 4l16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></button></div></label>
+              <button class="auth-forgot" type="button" data-auth-switch="recover">¿Olvidaste tu contraseña?</button>
               <button class="auth-submit" type="submit">ENTRAR EN NEITH</button>
               <button class="auth-switch-link" type="button" data-auth-switch="register">¿No tienes cuenta? <strong>Regístrate aquí</strong></button>
             </form>
             <form class="auth-form" data-auth-form="register" hidden novalidate>
               <label>Nombre de usuario<input name="display_name" type="text" autocomplete="nickname" required maxlength="40" placeholder="Tu nombre en Neith"></label>
               <label>Correo electrónico<input name="email" type="email" autocomplete="email" required placeholder="tu@correo.com"></label>
-              <label>Contraseña<input name="password" type="password" autocomplete="new-password" required minlength="8" placeholder="Mínimo 8 caracteres"></label>
+              <label>Contraseña<div class="password-field"><input name="password" type="password" autocomplete="new-password" required minlength="8" placeholder="Mínimo 8 caracteres"><button class="password-toggle" type="button" data-password-toggle aria-label="Mostrar contraseña" aria-pressed="false"><svg class="password-eye" viewBox="0 0 24 24" aria-hidden="true"><path class="eye-open" d="M2.4 12s3.4-6 9.6-6 9.6 6 9.6 6-3.4 6-9.6 6-9.6-6-9.6-6Z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle class="eye-open" cx="12" cy="12" r="2.7" fill="none" stroke="currentColor" stroke-width="1.8"/><path class="eye-slash" d="M4 4l16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></button></div></label>
               <button class="auth-submit" type="submit">CREAR CUENTA</button>
+            </form>
+            <form class="auth-form" data-auth-form="recover" hidden novalidate>
+              <div class="auth-recovery-copy"><strong>RECUPERAR ACCESO</strong><span>Te enviaremos un enlace seguro para crear una nueva contraseña.</span></div>
+              <label>Correo electrónico<input name="email" type="email" autocomplete="email" required placeholder="tu@correo.com"></label>
+              <button class="auth-submit" type="submit">ENVIAR ENLACE DE RECUPERACIÓN</button>
+              <button class="auth-switch-link" type="button" data-auth-switch="login">← Volver a iniciar sesión</button>
             </form>
             <div class="auth-separator" ${oauthEnabled ? '' : 'hidden'}><span>O CONTINÚA CON</span></div>
             <div class="auth-socials" ${oauthEnabled ? '' : 'hidden'}>
@@ -136,6 +143,10 @@
   function setTab(tab) {
     document.querySelectorAll('[data-auth-tab]').forEach(btn => btn.classList.toggle('active', btn.dataset.authTab === tab));
     document.querySelectorAll('[data-auth-form]').forEach(form => form.hidden = form.dataset.authForm !== tab);
+    const tabs = document.querySelector('.auth-tabs');
+    if (tabs) tabs.hidden = tab === 'recover';
+    const title = document.getElementById('auth-title');
+    if (title) title.textContent = tab === 'recover' ? 'RECUPERAR CONTRASEÑA' : 'ACCESO NEITH';
     setMessage('');
   }
 
@@ -206,6 +217,17 @@
     protectedPage.classList.add('auth-ready');
   }
 
+  function togglePassword(button) {
+    const field = button.closest('.password-field');
+    const input = field?.querySelector('input[type="password"], input[type="text"]');
+    if (!input) return;
+    const revealing = input.type === 'password';
+    input.type = revealing ? 'text' : 'password';
+    button.setAttribute('aria-pressed', String(revealing));
+    button.setAttribute('aria-label', revealing ? 'Ocultar contraseña' : 'Mostrar contraseña');
+    button.classList.toggle('is-visible', revealing);
+  }
+
   async function handleAuthForm(form) {
     if (!configured) {
       setMessage('Configura Supabase para activar el registro y el inicio de sesión reales.', 'warning');
@@ -226,7 +248,13 @@
         });
         if (error) throw error;
         form.reset();
-        setMessage('Cuenta creada. Te hemos enviado un correo para confirmar tu dirección.', 'success');
+        setMessage('Cuenta creada. Revisa tu correo y confirma tu dirección antes de iniciar sesión.', 'success');
+      } else if (form.dataset.authForm === 'recover') {
+        const redirectTo = siteUrl('reset-password/');
+        const { error } = await state.client.auth.resetPasswordForEmail(data.email, { redirectTo });
+        if (error) throw error;
+        form.reset();
+        setMessage('Si existe una cuenta con ese correo, recibirás un enlace para crear una nueva contraseña.', 'success');
       } else {
         const { error } = await state.client.auth.signInWithPassword({ email: data.email, password: data.password });
         if (error) throw error;
@@ -272,6 +300,8 @@
       if (switcher) setTab(switcher.dataset.authSwitch);
       const provider = e.target.closest('[data-oauth]');
       if (provider) oauth(provider.dataset.oauth);
+      const passwordToggle = e.target.closest('[data-password-toggle]');
+      if (passwordToggle) togglePassword(passwordToggle);
       if (e.target.closest('[data-logout]')) logout();
     });
 

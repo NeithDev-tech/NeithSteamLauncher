@@ -5722,3 +5722,34 @@ body.accounts-lightbox-open{overflow:hidden}
 .accounts-lightbox-close{position:absolute;z-index:3;top:20px;right:22px;width:46px;height:46px;border:1px solid rgba(101,235,255,.32);border-radius:50%;background:rgba(3,17,31,.92);color:#effeff;font:400 1.8rem/1 Inter,sans-serif;cursor:pointer;box-shadow:0 12px 24px rgba(0,0,0,.26);transition:transform .2s ease,border-color .2s ease,background .2s ease}.accounts-lightbox-close:hover{transform:scale(1.05);border-color:rgba(121,243,255,.58);background:rgba(7,30,50,.98)}.accounts-lightbox-close:focus-visible{outline:2px solid rgba(112,239,255,.9);outline-offset:3px}
 @media(max-width:760px){.accounts-lightbox{padding:14px}.accounts-lightbox-frame{width:100%;padding:9px;border-radius:18px}.accounts-lightbox-close{top:10px;right:10px;width:42px;height:42px}.accounts-lightbox-caption{flex-direction:column;align-items:flex-start;gap:7px;padding-inline:4px}.accounts-proof-zoom-hint{right:10px;bottom:10px;padding:8px 10px}}
 @media(prefers-reduced-motion:reduce){.accounts-proof-zoom img,.accounts-proof-zoom-hint,.accounts-lightbox,.accounts-lightbox-frame,.accounts-lightbox-close{transition:none!important}}
+
+/* 2026-09-22 AUTH RECOVERY + PASSWORD VISIBILITY V7 */
+.password-field{position:relative;display:block;width:100%}
+.password-field input{width:100%;padding-right:50px!important}
+.password-toggle{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:38px;height:38px;border:1px solid rgba(95,221,255,.22);border-radius:10px;background:rgba(3,14,28,.88);color:#8eeeff;display:grid;place-items:center;cursor:pointer;transition:border-color .2s ease,background .2s ease,color .2s ease,box-shadow .2s ease;z-index:4}
+.password-toggle:hover,.password-toggle:focus-visible,.password-toggle.is-visible{border-color:rgba(0,240,255,.72);background:rgba(6,28,48,.96);color:#eaffff;box-shadow:0 0 16px rgba(0,240,255,.18);outline:none}
+.password-toggle span{font-size:1.08rem;line-height:1;transform:scaleX(1.15)}
+.password-toggle.is-visible span{filter:drop-shadow(0 0 5px rgba(0,240,255,.72))}
+.auth-forgot{align-self:flex-end;margin:-4px 0 2px;border:0;background:transparent;color:#79dff2;font:700 .72rem/1.25 Rajdhani,Inter,sans-serif;letter-spacing:.035em;cursor:pointer;padding:3px 0}
+.auth-forgot:hover,.auth-forgot:focus-visible{color:#eaffff;text-shadow:0 0 12px rgba(0,240,255,.32);outline:none}
+.auth-recovery-copy{display:grid;gap:6px;padding:13px 15px;border:1px solid rgba(0,240,255,.14);border-radius:12px;background:linear-gradient(135deg,rgba(0,240,255,.05),rgba(37,74,164,.045));color:#c9e8ef}
+.auth-recovery-copy strong{font:800 .74rem/1 Orbitron,Inter,sans-serif;color:#9ef4ff;letter-spacing:.08em}
+.auth-recovery-copy span{font-size:.86rem;line-height:1.5;color:#91aebe}
+.password-reset-page{min-height:760px;background:radial-gradient(circle at 50% 20%,rgba(0,167,255,.08),transparent 32%),linear-gradient(180deg,#020914,#020711)}
+.password-reset-section{padding:150px 0 100px}
+.password-reset-shell{display:grid;place-items:center}
+.password-reset-card{position:relative;width:min(620px,100%);padding:42px;border:1px solid rgba(0,240,255,.22);border-radius:22px;background:linear-gradient(155deg,rgba(7,22,39,.96),rgba(2,8,18,.985));box-shadow:0 30px 90px rgba(0,0,0,.52),0 0 38px rgba(0,240,255,.11);overflow:hidden}
+.password-reset-card::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 12% 0,rgba(0,240,255,.13),transparent 28%),radial-gradient(circle at 100% 100%,rgba(116,60,255,.10),transparent 30%)}
+.password-reset-card>*{position:relative;z-index:1}
+.password-reset-card h1{margin:10px 0 8px}
+.password-reset-lead{max-width:520px;margin:0 0 28px;color:#91aebe;line-height:1.65}
+.password-reset-form{display:grid;gap:18px}
+.password-reset-form label{display:grid;gap:8px;color:#bfe9f2;font:700 .74rem/1.2 Orbitron,Inter,sans-serif;letter-spacing:.045em}
+.password-reset-form input{min-height:52px;border-radius:12px;border:1px solid rgba(0,240,255,.22);background:#00040a;color:#effeff;padding:0 16px;font:600 1rem Inter,sans-serif;outline:none}
+.password-reset-form input:focus{border-color:#00f0ff;box-shadow:0 0 0 2px rgba(0,240,255,.10),0 0 22px rgba(0,240,255,.17)}
+.password-reset-form .auth-submit{margin-top:4px}
+.password-reset-back{display:inline-flex;margin-top:18px;color:#79dff2;font-weight:700;text-decoration:none}
+.password-reset-back:hover{color:#eaffff}
+@media(max-width:640px){.password-reset-section{padding:120px 0 70px}.password-reset-card{padding:30px 20px;border-radius:18px}.password-reset-card h1{font-size:clamp(1.7rem,10vw,2.5rem)}}
+@media(prefers-reduced-motion:reduce){.password-toggle{transition:none}}
+.password-eye{width:21px;height:21px;display:block}.password-eye .eye-slash{opacity:0}.password-toggle.is-visible .password-eye .eye-slash{opacity:1}.password-toggle.is-visible .password-eye .eye-open{opacity:.72}
