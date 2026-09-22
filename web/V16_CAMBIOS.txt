@@ -1,0 +1,15 @@
+NEITH OFFICIAL WEB — V16 LOCAL TEST
+
+OBJETIVO DE ESTA ENTREGA
+- Evitar que una instancia vieja de python -m http.server 8080 haga que el navegador siga mostrando una versión anterior.
+- Mantener el origen http://localhost:8080 para conservar compatibilidad con autenticación/Supabase.
+- Forzar cache-bust V16 para auth.js e i18n.js.
+
+_PROBAR_WEB.bat
+1. Busca exclusivamente procesos Python cuyo CommandLine contenga http.server 8080 y los detiene.
+2. Comprueba que el puerto 8080 está libre.
+3. Si otro programa ajeno ocupa 8080, NO lo mata: muestra PID/proceso y se detiene.
+4. Arranca el servidor desde la carpeta exacta de esta V16.
+5. Abre el navegador solo después del arranque, con ?neithbuild=V16.
+
+La interfaz y las páginas permanecen sin cambios visuales respecto a V15.

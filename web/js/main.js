@@ -1,3 +1,4 @@
+const neithText=(es,en)=>document.documentElement.lang==='en'?en:es;
 const menu=document.querySelector('.menu'),nav=document.querySelector('.navlinks');
 menu?.addEventListener('click',()=>nav.classList.toggle('open'));
 document.querySelectorAll('.navlinks a').forEach(a=>a.addEventListener('click',()=>nav?.classList.remove('open')));
@@ -157,7 +158,7 @@ document.querySelectorAll('.product-shot,.shot').forEach(frame=>{
     setInterval(() => {
       const current = Number(el.dataset.current || base) + (0.1 + i * 0.03);
       el.dataset.current = current.toFixed(1);
-      el.textContent = `${current.toFixed(1)} h`;
+      el.textContent = `${current.toFixed(1)} ${neithText('h','hrs')}`;
       el.animate([{opacity:.72},{opacity:1}],{duration:260,easing:'ease-out'});
     }, 2600 + i * 450);
   });
@@ -184,16 +185,16 @@ document.querySelectorAll('.product-shot,.shot').forEach(frame=>{
     if (!reduced) {
       setInterval(() => {
         value += Math.floor(1 + Math.random() * 4);
-        hours.textContent = `+${value.toLocaleString('en-US')} hrs`;
+        hours.textContent = `+${value.toLocaleString(document.documentElement.lang==='en'?'en-US':'es-ES')} ${neithText('h','hrs')}`;
         hours.animate([{opacity:.72,transform:'translateY(1px)'},{opacity:1,transform:'translateY(0)'}],{duration:320,easing:'ease-out'});
       }, 3600);
     }
   }
   if (sessions && !reduced) {
-    const states = ['24/7 ONLINE','24/7 ONLINE','24/7 ONLINE'];
+    const states = () => [neithText('24/7 EN LÍNEA','24/7 ONLINE'),neithText('24/7 EN LÍNEA','24/7 ONLINE'),neithText('24/7 EN LÍNEA','24/7 ONLINE')];
     let i = 0;
     setInterval(() => {
-      sessions.textContent = states[(++i) % states.length];
+      const liveStates=states(); sessions.textContent = liveStates[(++i) % liveStates.length];
       sessions.animate([{filter:'brightness(.8)'},{filter:'brightness(1.2)'},{filter:'brightness(1)'}],{duration:420,easing:'ease-out'});
     }, 3200);
   }
@@ -237,7 +238,7 @@ document.querySelectorAll('.product-shot,.shot').forEach(frame=>{
   const count = page.querySelector('[data-faq-count]');
   const title = page.querySelector('[data-faq-category-title]');
   const empty = page.querySelector('[data-faq-empty]');
-  const labels = {core:'NÚCLEO', subscriptions:'SUSCRIPCIONES', config:'CONFIGURACIÓN'};
+  const labels = {core:()=>neithText('NÚCLEO','CORE'), subscriptions:()=>neithText('SUSCRIPCIONES','SUBSCRIPTIONS'), config:()=>neithText('CONFIGURACIÓN','SETTINGS')};
   let active = 'core';
   const normalize = value => (value || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
   const apply = () => {
@@ -250,8 +251,8 @@ document.querySelectorAll('.product-shot,.shot').forEach(frame=>{
       item.hidden = !match;
       if (match) visible++;
     });
-    if (title) title.textContent = q ? 'BÚSQUEDA GLOBAL' : labels[active];
-    if (count) count.textContent = `${visible} ${visible === 1 ? 'REGISTRO' : 'REGISTROS'}`;
+    if (title) title.textContent = q ? neithText('BÚSQUEDA GLOBAL','GLOBAL SEARCH') : labels[active]();
+    if (count) count.textContent = `${visible} ${visible === 1 ? neithText('REGISTRO','ENTRY') : neithText('REGISTROS','ENTRIES')}`;
     if (empty) empty.hidden = visible !== 0;
     consoleEl?.classList.remove('is-filtering');
     requestAnimationFrame(() => consoleEl?.classList.add('is-filtering'));
@@ -272,6 +273,7 @@ document.querySelectorAll('.product-shot,.shot').forEach(frame=>{
   search?.addEventListener('keydown', e => {
     if (e.key === 'Escape') { search.value = ''; apply(); search.blur(); }
   });
+  window.addEventListener('neith:languagechange', apply);
   apply();
 })();
 
@@ -301,8 +303,8 @@ document.querySelectorAll('.product-shot,.shot').forEach(frame=>{
   let step = 0;
   const tick = () => {
     step = (step + 1) % 6;
-    if (ram) ram.textContent = `+${[88,89,91,90,92,88][step]}% LIBRE`;
-    if (latency) latency.textContent = `CERO RETRASO · ${['0.2','0.2','0.1','0.2','0.3','0.2'][step]}ms`;
+    if (ram) ram.textContent = `+${[88,89,91,90,92,88][step]}% ${neithText('LIBRE','FREE')}`;
+    if (latency) latency.textContent = `${neithText('CERO RETRASO','ZERO LAG')} · ${['0.2','0.2','0.1','0.2','0.3','0.2'][step]}ms`;
   };
   window.setInterval(tick, 1800);
 })();
@@ -377,7 +379,7 @@ document.querySelectorAll('.product-shot,.shot').forEach(frame=>{
     const trigger = triggers[index];
     if (!trigger || !image) return;
     const src = trigger.dataset.full;
-    const text = trigger.dataset.caption || trigger.querySelector('img')?.alt || 'Captura Hour Boost';
+    const text = trigger.dataset.caption || trigger.querySelector('img')?.alt || neithText('Captura de Hour Boost','Hour Boost capture');
     image.classList.remove('is-zoomed');
     if (animate) {
       image.animate([{opacity:.28,transform:'scale(.975)'},{opacity:1,transform:'scale(1)'}],{duration:260,easing:'cubic-bezier(.2,.8,.2,1)'});

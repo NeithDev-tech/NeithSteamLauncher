@@ -1,0 +1,5 @@
+V17 ROOT REBUILD
+1) Account header click captured at window level before all legacy handlers.
+2) No account trigger is allowed to retain href/onclick navigation.
+3) i18n.js rebuilt from scratch with the 754-entry ES/EN catalogue.
+4) Language clicks captured at window level and dynamic DOM/attributes translated.

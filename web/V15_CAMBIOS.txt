@@ -1,0 +1,34 @@
+NEITH OFFICIAL WEB — V15
+BASE: V14 ACCOUNT_MENU_CLICK_FIX
+
+RECONSTRUCCIÓN DE RAÍZ (sin alterar los diseños de las páginas):
+
+1) COMPONENTE DE USUARIO / CABECERA
+- El acceso de usuario se normaliza siempre como botón real, nunca como enlace.
+- Eliminados listeners duplicados/competidores del comportamiento V14.
+- Un único listener global controla el clic de la cuenta.
+- Si hay sesión: abre/cierra el menú de cuenta y NO navega al Dashboard.
+- Si no hay sesión: abre el modal de inicio de sesión.
+- Se cancelan comportamientos heredados href/onclick antes de que puedan ejecutarse.
+- El menú conserva perfil, email, plan, estado, Mi panel, Mi cuenta, Licencia y plan, Seguridad y Cerrar sesión.
+
+2) SISTEMA GLOBAL ES/EN
+- Un único motor global en js/i18n.js.
+- js/nav-i18n.js queda como shim de compatibilidad sin listeners ni mutaciones propias.
+- Traducción reversible basada en fuente original: ES -> EN -> ES sin degradación acumulativa.
+- Cobertura de textos DOM, títulos, aria-label, placeholder, alt, metadatos, textos dinámicos y tooltips.
+- MutationObserver para contenido creado/actualizado por JavaScript.
+- Soporte para imágenes ES/EN cuando existan data-img-es / data-img-en.
+- Metadatos y descripciones secundarias añadidos al catálogo.
+- Cache-busters V15 nuevos para auth.js e i18n.js.
+
+3) CONSERVADO
+- Estructura y diseño visual de las páginas existentes.
+- _PROBAR_WEB.bat intacto byte a byte respecto a V14.
+
+VALIDACIÓN
+- node --check correcto en todos los JS.
+- 12 HTML auditados.
+- 755 entradas de traducción detectadas.
+- Sin controles data-auth-nav con href ni elementos <a>.
+- Sin textos españoles visibles sin contraparte EN, salvo marca/nombres propios que no se traducen.

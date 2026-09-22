@@ -1,85 +1,149 @@
 <!DOCTYPE html>
-<html lang="es"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Dashboard — Neith Steam Launcher</title><meta content="Panel privado de usuario de Neith Steam Launcher." name="description"/><meta content="#00101F" name="theme-color"/><link href="../favicon.ico" rel="icon"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Orbitron:wght@600;700;800;900&amp;family=Rajdhani:wght@500;600;700&amp;family=Syncopate:wght@400;700&amp;display=swap" rel="stylesheet"/><link href="../css/style.css?v=20260922-v9-dashboard-restored" rel="stylesheet"/></head><body><header class="topbar"><nav class="nav shell"><a class="brand" href="../"><span aria-hidden="true" class="mark nav-brand-mark"><svg class="nav-brand-glyph" focusable="false" role="img" viewbox="0 0 48 48"><defs><lineargradient gradientunits="userSpaceOnUse" id="navNGrad" x1="6" x2="42" y1="5" y2="43"><stop stop-color="#dffcff"></stop><stop offset=".22" stop-color="#63ecff"></stop><stop offset=".58" stop-color="#0aa8ff"></stop><stop offset="1" stop-color="#1557d8"></stop></lineargradient></defs><path class="nav-mark-ring" d="M24 3.5 38.2 9l6.3 13.4-4.1 14.3L28 44.5l-14.2-3.2L4.5 30.5 6.8 16 17 6.2Z"></path><path class="nav-mark-n" d="M13 34V14h6.3l9.4 11.2V14H35v20h-6.1l-9.6-11.3V34Z"></path><path class="nav-mark-cut" d="m18 14 5 5-3.2 3.9-5-5.1Zm11 12.3 4.2 5.1-3.6 3.3-4.2-5.2Z"></path><circle class="nav-mark-node" cx="38.2" cy="11.4" r="2.3"></circle><path class="nav-mark-arm" d="M36.4 13.2 30.8 18"></path></svg></span><span class="brand-name" data-text="NEITH LAUNCHER">NEITH LAUNCHER</span></a><button aria-expanded="false" aria-label="Abrir menú" class="menu">☰</button><div class="navlinks"><a href="../hourboost/">Hour Boost</a><a href="../boostpc/">Boost PC</a><a href="../logros/">Logros</a><a href="../juegos-gratis/">Juegos Gratis</a><a href="../cuentas/">Cuentas</a><button aria-controls="neith-auth-modal" aria-haspopup="dialog" class="nav-auth-button nav-login-visible" data-auth-nav="" type="button"><span aria-hidden="true" class="nav-auth-led"></span><span data-auth-nav-label="">INICIAR SESIÓN</span></button></div><div class="nav-actions"><a class="btn primary nav-download" href="../descargar">DESCARGAR LAUNCHER</a><div aria-label="Idioma / Language" class="language-switcher" role="group"><button aria-label="Español" class="lang-flag lang-flag--es" data-lang="es" title="Español" type="button"><svg aria-hidden="true" focusable="false" viewbox="0 0 24 24"><defs><clippath id="esCircle"><circle cx="12" cy="12" r="11"></circle></clippath></defs><g clip-path="url(#esCircle)"><rect fill="#AA151B" height="24" width="24"></rect><rect fill="#F1BF00" height="12" width="24" y="6"></rect><rect fill="#AA151B" height="5.5" rx=".25" width="1.5" x="6.8" y="9"></rect><rect fill="#fff" height="1" opacity=".9" width="2.2" x="6.45" y="10"></rect></g><circle cx="12" cy="12" fill="none" r="11" stroke="rgba(255,255,255,.78)" stroke-width=".7"></circle></svg></button><button aria-label="English" class="lang-flag lang-flag--en" data-lang="en" title="English" type="button"><svg aria-hidden="true" focusable="false" viewbox="0 0 24 24"><defs><clippath id="gbCircle"><circle cx="12" cy="12" r="11"></circle></clippath></defs><g clip-path="url(#gbCircle)"><rect fill="#012169" height="24" width="24"></rect><path d="M0 0 24 24M24 0 0 24" stroke="#fff" stroke-width="5"></path><path d="M0 0 24 24M24 0 0 24" stroke="#C8102E" stroke-width="2.2"></path><path d="M12 0v24M0 12h24" stroke="#fff" stroke-width="7"></path><path d="M12 0v24M0 12h24" stroke="#C8102E" stroke-width="4"></path></g><circle cx="12" cy="12" fill="none" r="11" stroke="rgba(255,255,255,.78)" stroke-width=".7"></circle></svg></button></div></div></nav></header><main class="account-page dashboard-v9" data-auth-required="">
-<section class="dashboard-hero">
-<div class="shell dashboard-shell">
+
+<html lang="es"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Panel — Neith Steam Launcher</title><meta content="Panel privado de usuario de Neith Steam Launcher." name="description"/><meta content="#00101F" name="theme-color"/><link href="../favicon.ico" rel="icon"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Orbitron:wght@600;700;800;900&amp;family=Rajdhani:wght@500;600;700&amp;family=Syncopate:wght@400;700&amp;display=swap" rel="stylesheet"/><link href="../css/style.css?v=20260922-v14-account-menu-clickfix" rel="stylesheet"/></head><body><header class="topbar"><nav class="nav shell"><a class="brand" href="../"><span aria-hidden="true" class="mark nav-brand-mark"><svg class="nav-brand-glyph" focusable="false" role="img" viewbox="0 0 48 48"><defs><lineargradient gradientunits="userSpaceOnUse" id="navNGrad" x1="6" x2="42" y1="5" y2="43"><stop stop-color="#dffcff"></stop><stop offset=".22" stop-color="#63ecff"></stop><stop offset=".58" stop-color="#0aa8ff"></stop><stop offset="1" stop-color="#1557d8"></stop></lineargradient></defs><path class="nav-mark-ring" d="M24 3.5 38.2 9l6.3 13.4-4.1 14.3L28 44.5l-14.2-3.2L4.5 30.5 6.8 16 17 6.2Z"></path><path class="nav-mark-n" d="M13 34V14h6.3l9.4 11.2V14H35v20h-6.1l-9.6-11.3V34Z"></path><path class="nav-mark-cut" d="m18 14 5 5-3.2 3.9-5-5.1Zm11 12.3 4.2 5.1-3.6 3.3-4.2-5.2Z"></path><circle class="nav-mark-node" cx="38.2" cy="11.4" r="2.3"></circle><path class="nav-mark-arm" d="M36.4 13.2 30.8 18"></path></svg></span><span class="brand-name" data-text="NEITH LAUNCHER">NEITH LAUNCHER</span></a><button aria-expanded="false" aria-label="Abrir menú" class="menu">☰</button><div class="navlinks"><a href="../hourboost/">Hour Boost</a><a href="../boostpc/">Boost PC</a><a href="../logros/">Logros</a><a href="../juegos-gratis/">Juegos Gratis</a><a href="../cuentas/">Cuentas</a><button aria-controls="neith-auth-modal" aria-haspopup="dialog" class="nav-auth-button nav-login-visible" data-auth-nav="" type="button"><span aria-hidden="true" class="nav-auth-led"></span><span data-auth-nav-label="">INICIAR SESIÓN</span></button></div><div class="nav-actions"><a class="btn primary nav-download" href="../descargar">DESCARGAR LAUNCHER</a><div aria-label="Idioma" class="language-switcher" role="group"><button aria-label="Español" class="lang-flag lang-flag--es" data-lang="es" title="Español" type="button"><svg aria-hidden="true" focusable="false" viewbox="0 0 24 24"><defs><clippath id="esCircle"><circle cx="12" cy="12" r="11"></circle></clippath></defs><g clip-path="url(#esCircle)"><rect fill="#AA151B" height="24" width="24"></rect><rect fill="#F1BF00" height="12" width="24" y="6"></rect><rect fill="#AA151B" height="5.5" rx=".25" width="1.5" x="6.8" y="9"></rect><rect fill="#fff" height="1" opacity=".9" width="2.2" x="6.45" y="10"></rect></g><circle cx="12" cy="12" fill="none" r="11" stroke="rgba(255,255,255,.78)" stroke-width=".7"></circle></svg></button><button aria-label="English" class="lang-flag lang-flag--en" data-lang="en" title="English" type="button"><svg aria-hidden="true" focusable="false" viewbox="0 0 24 24"><defs><clippath id="gbCircle"><circle cx="12" cy="12" r="11"></circle></clippath></defs><g clip-path="url(#gbCircle)"><rect fill="#012169" height="24" width="24"></rect><path d="M0 0 24 24M24 0 0 24" stroke="#fff" stroke-width="5"></path><path d="M0 0 24 24M24 0 0 24" stroke="#C8102E" stroke-width="2.2"></path><path d="M12 0v24M0 12h24" stroke="#fff" stroke-width="7"></path><path d="M12 0v24M0 12h24" stroke="#C8102E" stroke-width="4"></path></g><circle cx="12" cy="12" fill="none" r="11" stroke="rgba(255,255,255,.78)" stroke-width=".7"></circle></svg></button></div></div></nav></header><main class="account-page dashboard-v11" data-auth-required="">
+<section class="dash11-hero">
+<div class="shell dash11-shell">
 <div class="dashboard-guard" data-dashboard-guard="">
 <div class="kicker">CONFIGURACIÓN REQUERIDA</div>
 <h1 class="title-gaming-premium">ACTIVA SUPABASE PARA PROBAR EL PANEL PRIVADO</h1>
 <p>La interfaz está preparada para trabajar con la autenticación segura de Neith.</p>
 <a class="btn ghost" href="../">Volver al inicio</a>
 </div>
-<div class="dashboard-command-head">
-<div class="dashboard-identity">
-<div class="dashboard-avatar-wrap">
+<section aria-label="Centro de cuenta Neith" class="dash11-command">
+<div aria-hidden="true" class="dash11-scanline"></div>
+<div class="dash11-id">
+<div class="dashboard-avatar-wrap dash11-avatar-wrap">
 <span aria-hidden="true" class="dashboard-avatar-ring"></span>
-<div class="account-avatar dashboard-avatar" data-dashboard-avatar="">N</div>
+<div class="account-avatar dashboard-avatar dash11-avatar" data-dashboard-avatar="">N</div>
 <span class="dashboard-online-dot" title="Sesión activa"></span>
 </div>
-<div class="dashboard-identity-copy">
-<div class="kicker">NEITH ID // CENTRO DE CUENTA</div>
-<h1>BIENVENIDO, <span data-dashboard-name="">USUARIO</span></h1>
-<p data-dashboard-email="">—</p>
-<div aria-label="Métodos de acceso vinculados" class="dashboard-provider-row" data-dashboard-providers=""></div>
+<div class="dash11-id-copy">
+<div class="dash11-eyebrow"><span>NEITH ID</span><b>SECURE CHANNEL</b></div>
+<p class="dash11-welcome">Bienvenido de nuevo</p>
+<h1><span data-dashboard-name="">USUARIO</span></h1>
+<p class="dash11-mail" data-dashboard-email="">—</p>
+<div aria-label="Métodos de acceso vinculados" class="dashboard-provider-row dash11-provider-row" data-dashboard-providers=""></div>
 </div>
 </div>
-<div class="dashboard-head-actions">
-<a class="btn primary" href="../descargar">DESCARGAR NEITH</a>
-<button aria-label="Cerrar sesión" class="dashboard-icon-btn" data-logout="" type="button"><span aria-hidden="true">↪</span><b>CERRAR SESIÓN</b></button>
+<div class="dash11-profile-core">
+<div class="dash11-core-ring"><span data-dashboard-plan-orb="">FREE</span></div>
+<div class="dash11-core-copy">
+<span>NIVEL DE ACCESO</span>
+<b data-dashboard-plan="" data-plan="free">USUARIO GRATIS</b>
+<small><i></i> IDENTIDAD VERIFICADA</small>
 </div>
 </div>
-<div class="dashboard-core-grid">
-<article class="dashboard-plan-card">
-<span aria-hidden="true" class="dashboard-card-scan"></span>
-<div class="dashboard-card-top"><span class="kicker">PLAN ACTUAL</span><span class="dashboard-live-badge"><i></i> CUENTA ACTIVA</span></div>
-<div aria-hidden="true" class="dashboard-plan-orb"><span>FREE</span></div>
-<h2 data-dashboard-plan="" data-plan="free">USUARIO FREE</h2>
-<p>Tu identidad Neith está sincronizada. Las funciones base permanecen disponibles y el sistema queda preparado para asociar una licencia Premium más adelante.</p>
-<div class="dashboard-plan-metrics">
-<div><span>ESTADO</span><b data-dashboard-status="">FREE</b></div>
-<div><span>LICENCIA</span><b data-dashboard-license="">NO ACTIVA</b></div>
-<div><span>AUTH</span><b>SUPABASE</b></div>
+<div class="dash11-head-actions">
+<a class="dash11-main-action" href="../descargar"><span>↓</span><b>DESCARGAR NEITH</b><small>Windows 10/11</small></a>
+<button class="dash11-logout" data-logout="" type="button"><span aria-hidden="true">↪</span><b>CERRAR SESIÓN</b></button>
+</div>
+</section>
+<div aria-label="Estado de la cuenta" class="dash11-telemetry">
+<span><i class="green"></i><small>CUENTA</small><b>VERIFICADA</b></span>
+<span><i></i><small>SESIÓN</small><b>SEGURA</b></span>
+<span><i></i><small>NEITH CLOUD</small><b>ONLINE</b></span>
+<span><i class="violet"></i><small>AUTH</small><b>SUPABASE</b></span>
+<span class="dash11-idcode"><small>NEITH ID</small><b data-dashboard-user-short="">••••••••</b></span>
+</div>
+<div class="dash11-grid dash11-grid-primary">
+<article class="dash11-card dash11-plan-card" id="account">
+<div class="dash11-card-top">
+<div><span class="dash11-label">PLAN ACTUAL</span><h2>ACCESO NEITH</h2></div>
+<span class="dash11-badge live"><i></i> ACTIVO</span>
+</div>
+<div class="dash11-plan-body">
+<div class="dash11-plan-title">
+<span>NEITH</span>
+<strong data-dashboard-license-type="">FREE</strong>
+<p>Tu identidad ya forma parte del ecosistema Neith. Las funciones base permanecen disponibles y la cuenta está preparada para recibir una licencia Premium.</p>
+</div>
+<div class="dash11-access-stack">
+<div class="dash11-access active"><span>CORE ACCESS</span><b>HABILITADO</b><i>01</i></div>
+<div class="dash11-access active"><span>NEITH ID</span><b>SINCRONIZADA</b><i>02</i></div>
+<div class="dash11-access locked"><span>PREMIUM CORE</span><b>NO ACTIVO</b><i>03</i></div>
+</div>
+</div>
+<div class="dash11-card-foot">
+<span><small>ESTADO</small><b data-dashboard-status="">FREE</b></span>
+<span><small>LICENCIA</small><b data-dashboard-license="">NO ACTIVA</b></span>
+<span><small>CUENTA</small><b>VERIFICADA</b></span>
 </div>
 </article>
-<div class="dashboard-side-stack">
-<article class="dashboard-module dashboard-license-module">
-<div aria-hidden="true" class="dashboard-module-icon">◇</div>
-<div><span class="kicker">LICENCIA NEITH</span><h3>SISTEMA PREPARADO</h3><p>Este espacio mostrará tu clave, vigencia y nivel cuando activemos el sistema de licencias.</p></div>
-<span class="dashboard-module-state pending">PRÓXIMAMENTE</span>
-</article>
-<article class="dashboard-module">
-<div aria-hidden="true" class="dashboard-module-icon shield">⬡</div>
-<div><span class="kicker">SEGURIDAD</span><h3>ACCESOS VINCULADOS</h3><p>Consulta de un vistazo los proveedores asociados a tu identidad Neith.</p></div>
-<span class="dashboard-module-state online">PROTEGIDO</span>
-</article>
-<article class="dashboard-module">
-<div aria-hidden="true" class="dashboard-module-icon launcher">N</div>
-<div><span class="kicker">LAUNCHER</span><h3>NEITH PARA WINDOWS</h3><p>Accede a la última versión publicada desde tu centro de cuenta.</p></div>
-<a class="dashboard-mini-action" href="../descargar">ABRIR DESCARGA</a>
+<article class="dash11-card dash11-license-card" id="license">
+<div class="dash11-card-top">
+<div><span class="dash11-label">LICENCIA NEITH</span><h2>BÓVEDA DE LICENCIA</h2></div>
+<span class="dash11-badge pending">PRÓXIMAMENTE</span>
+</div>
+<div class="dash11-license-vault">
+<span>CLAVE ASOCIADA</span>
+<b data-dashboard-license-key="">— — — —</b>
+<em>NEITH://LICENSE/VAULT</em>
+</div>
+<div class="dash11-data-list">
+<div><span>TIPO</span><b data-dashboard-license-type="">FREE</b></div>
+<div><span>ESTADO</span><b data-dashboard-license-state="">Sin licencia Premium</b></div>
+<div><span>VIGENCIA</span><b data-dashboard-license-expiry="">—</b></div>
+</div>
+<div class="dash11-info-note"><i>i</i><p>Las licencias compradas o emitidas manualmente aparecerán aquí cuando activemos el sistema.</p></div>
 </article>
 </div>
+<div class="dash11-grid dash11-grid-secondary">
+<article class="dash11-card dash11-security-card" id="security">
+<div class="dash11-card-top">
+<div><span class="dash11-label">SEGURIDAD</span><h2>IDENTIDADES VINCULADAS</h2></div>
+<span class="dash11-badge secure">PROTEGIDO</span>
+</div>
+<div class="dashboard-v10-provider-panel dash11-provider-panel" data-dashboard-providers-large=""></div>
+<div class="dash11-split-stats">
+<span><small>ÚLTIMO ACCESO</small><b data-dashboard-last-signin="">—</b></span>
+<span><small>MIEMBRO DESDE</small><b data-dashboard-created="">—</b></span>
+</div>
+</article>
+<article class="dash11-card dash11-session-card">
+<div class="dash11-card-top">
+<div><span class="dash11-label">SESIÓN ACTUAL</span><h2>TERMINAL AUTORIZADO</h2></div>
+<span class="dash11-badge live"><i></i> ONLINE</span>
+</div>
+<div class="dash11-terminal">
+<div class="dash11-terminal-icon"><span></span><b>PC</b></div>
+<div><small>DISPOSITIVO</small><b data-dashboard-device="">Este dispositivo</b><span data-dashboard-browser="">Navegador web</span></div>
+<em>AUTORIZADO</em>
+</div>
+<div class="dash11-split-stats">
+<span><small>PLATAFORMA</small><b data-dashboard-platform="">—</b></span>
+<span><small>ESTADO</small><b class="dashboard-green">AUTENTICADA</b></span>
+</div>
+<p class="dash11-microcopy">La gestión de varias sesiones se habilitará cuando conectemos el backend de dispositivos.</p>
+</article>
 </div>
 </div>
 </section>
-<section class="dashboard-lower-section">
-<div class="shell dashboard-lower-grid">
-<article class="dashboard-console-card">
-<div class="dashboard-section-heading"><div><span class="kicker">IDENTIDAD</span><h2>ESTADO DE TU CUENTA</h2></div><span class="dashboard-section-code">NEITH://ACCOUNT/ONLINE</span></div>
-<div class="dashboard-info-grid">
-<div><span>NOMBRE</span><b data-dashboard-name="">USUARIO</b></div>
-<div><span>CORREO</span><b data-dashboard-email="">—</b></div>
-<div><span>PLAN</span><b data-dashboard-status="">FREE</b></div>
-<div><span>SESIÓN</span><b class="dashboard-session-ok"><i></i> AUTENTICADA</b></div>
+<section class="dash11-control-zone">
+<div class="shell">
+<div class="dash11-section-head">
+<div><span class="dash11-label">CENTRO DE CONTROL</span><h2>TU ECOSISTEMA NEITH</h2><p>Accesos directos a las áreas principales de tu cuenta.</p></div>
+<span class="dash11-protocol">NEITH://ACCOUNT/CONTROL // ONLINE</span>
 </div>
-</article>
-<article class="dashboard-console-card dashboard-roadmap-card">
-<div class="dashboard-section-heading"><div><span class="kicker">EVOLUCIÓN DE CUENTA</span><h2>PRÓXIMOS MÓDULOS</h2></div></div>
-<div class="dashboard-roadmap">
-<span class="done"><i>01</i><b>CUENTA NEITH</b><small>Activa</small></span>
-<span class="done"><i>02</i><b>GOOGLE + DISCORD</b><small>Vinculados</small></span>
-<span><i>03</i><b>LICENCIAS</b><small>Próxima fase</small></span>
-<span><i>04</i><b>PREMIUM</b><small>Próxima fase</small></span>
+<div class="dash11-quick-grid">
+<a class="dash11-quick" href="../descargar"><span class="dash11-quick-icon">↓</span><div><small>LAUNCHER</small><b>DESCARGAR NEITH</b><p>Última versión para Windows 10/11 x64</p></div><em>ABRIR</em></a>
+<a class="dash11-quick" href="../free-premium/"><span class="dash11-quick-icon star">✦</span><div><small>PLANES</small><b>FREE / PREMIUM</b><p>Compara niveles y futuras ventajas</p></div><em>VER</em></a>
+<a class="dash11-quick" href="../docs/"><span class="dash11-quick-icon">?</span><div><small>SOPORTE</small><b>DOCUMENTACIÓN</b><p>Guías, configuración y ayuda de Neith</p></div><em>ABRIR</em></a>
 </div>
-</article>
+<section aria-label="Neith Premium" class="dash11-premium">
+<div aria-hidden="true" class="dash11-premium-grid"></div>
+<div class="dash11-premium-copy">
+<div class="dash11-premium-overline"><i></i> NEITH PREMIUM // CORE EXPANSION</div>
+<h2>ELEVA TU CUENTA.<br/><span>DESBLOQUEA EL NÚCLEO.</span></h2>
+<p>Tu Neith ID ya está preparada para la siguiente fase: activación segura de licencias, suscripciones y licencias manuales administradas desde tu propia cuenta.</p>
+<div class="dash11-premium-pills"><span>LICENCIA VINCULADA</span><span>ENTITLEMENTS PREMIUM</span><span>ACTIVACIÓN SEGURA</span><span>CONTROL DE CUENTA</span></div>
+<a class="dash11-premium-cta" href="../free-premium/"><b>EXPLORAR PREMIUM</b><span>→</span></a>
+</div>
+<div class="dash11-reactor">
+<div class="dash11-reactor-ring r1"></div><div class="dash11-reactor-ring r2"></div><div class="dash11-reactor-ring r3"></div>
+<div class="dash11-reactor-core"><span>N</span><small>CORE</small></div>
+<em>PREMIUM<br/>READY</em>
+</div>
+</section>
 </div>
 </section>
 </main><footer class="footer footer-premium">
@@ -97,4 +161,4 @@
 <div class="footer-column"><h4>Oficial</h4><ul><li><a href="../descargar">Última versión</a></li><li><a href="https://github.com/NeithDev-tech/NeithSteamLauncher">GitHub</a></li></ul></div>
 </div>
 <div class="shell footer-bottom"><span class="footer-copy">© <span data-year=""></span> Neith Steam Launcher</span><span class="footer-core-status"><i aria-hidden="true"></i> NÚCLEO NEITH: ACTIVO <b>//</b> SERVIDORES: ACTIVOS</span><span class="footer-platform">Windows 10/11 x64</span></div>
-</footer><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="../js/supabase-config.js?v=20260922-oauth-v8"></script><script defer="" src="../js/i18n.js?v=20260922.2"></script><script defer="" src="../../js/main.js?v=20260922-v9-restored"></script><script defer="" src="../js/auth.js?v=20260922-oauth-v8"></script><script defer="" src="../js/billing.js?v=20260922-supabase-live1"></script></body></html>
+</footer><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="../js/supabase-config.js?v=20260922-oauth-v8"></script><script defer="" src="../js/i18n.js?v=20260923-v17-i18n-root"></script><script defer="" src="../js/main.js?v=20260922-v14-global"></script><script defer="" src="../js/auth.js?v=20260923-v17-account-root"></script><script defer src="../js/header-controller.js?v=20260923-v17-header-root"></script><script defer="" src="../js/billing.js?v=20260922-supabase-live1"></script></body></html>

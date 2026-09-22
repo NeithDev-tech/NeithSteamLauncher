@@ -1,0 +1,31 @@
+NEITH WEB — V13
+ACCOUNT MENU + I18N GLOBAL RECONSTRUIDO
+
+CORRECCIONES PRINCIPALES
+- Corregido el menú de usuario de la cabecera: al iniciar sesión y pulsar el nombre/avatar abre el menú de cuenta en lugar de ir directamente al panel.
+- Evento delegado global para que el menú siga funcionando aunque la cabecera o el estado de sesión se actualicen dinámicamente.
+- Menú reposicionado automáticamente para escritorio, portátil y ventanas pequeñas.
+- Cierre al pulsar fuera, al usar Esc o al elegir una opción.
+- Menú bilingüe completo ES/EN.
+
+IDIOMAS
+- Motor ES/EN reconstruido para normalizar la página completa en cualquiera de los dos idiomas, incluso si el HTML de origen contiene textos mezclados.
+- Traducción de textos, botones, menús, formularios, estados, mensajes dinámicos, títulos, metadatos, placeholders, aria-labels, tooltips, alt de imágenes, captions y datos usados por JavaScript.
+- El idioma se conserva entre páginas y recargas mediante localStorage.
+- MutationObserver bilingüe: también traduce contenido que aparece después de cargar la página (autenticación, cuenta, juegos gratis, etc.).
+- Cabeceras y banderas ES/EN comprobadas en las 12 páginas HTML.
+- Añadido soporte data-img-es / data-img-en para intercambiar automáticamente imágenes localizadas cuando existan ambas versiones.
+
+IMÁGENES
+- Alt, títulos y captions de imágenes cambian con el idioma.
+- Las capturas reales del launcher incluidas actualmente solo existen como un único archivo por captura. El sistema ya soporta una variante española y otra inglesa, pero no se falsifica ni se modifica el texto incrustado dentro de una captura real si no existe su segunda captura.
+
+PRUEBA LOCAL
+- Se mantiene _PROBAR_WEB.bat en la raíz.
+- Doble clic para iniciar localhost:8080 y abrir la web sin usar CMD manualmente.
+
+VALIDACIÓN
+- Sintaxis JavaScript comprobada.
+- 12/12 páginas con selector ES/EN e i18n global.
+- 11/11 páginas normales con autenticación/menu de cuenta global; reset-password conserva su flujo de recuperación aislado para no interferir con PASSWORD_RECOVERY.
+- Referencias V12 eliminadas de HTML para evitar caché antigua.

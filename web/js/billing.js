@@ -11,6 +11,6 @@
       return;
     }
 
-    window.alert('Neith Premium todavía no está a la venta. El sistema de licencias se activará más adelante.');
+    window.alert(window.NeithI18n?.t('Neith Premium todavía no está a la venta. El sistema de licencias se activará más adelante.') || 'Neith Premium todavía no está a la venta. El sistema de licencias se activará más adelante.');
   });
 })();

@@ -25,7 +25,7 @@
     const reveal = input.type === 'password';
     input.type = reveal ? 'text' : 'password';
     button.setAttribute('aria-pressed', String(reveal));
-    button.setAttribute('aria-label', reveal ? 'Ocultar contraseña' : 'Mostrar contraseña');
+    button.setAttribute('aria-label', reveal ? (window.NeithI18n?.t('Ocultar contraseña') || 'Ocultar contraseña') : (window.NeithI18n?.t('Mostrar contraseña') || 'Mostrar contraseña'));
     button.classList.toggle('is-visible', reveal);
   }
 

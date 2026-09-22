@@ -1,5 +1,7 @@
 (() => {
   'use strict';
+  window.__NEITH_WEB_BUILD__ = 'V17';
+  console.info('[NEITH WEB] Build V17 activo · header/account + i18n root rebuild');
   const scriptUrl = document.currentScript?.src || '';
   const siteBase = (() => {
     try { return new URL('../', scriptUrl || window.location.href); }
@@ -88,6 +90,30 @@
       `);
     }
 
+    if (!document.getElementById('neith-account-menu')) {
+      document.body.insertAdjacentHTML('beforeend', `
+        <section class="neith-account-menu" id="neith-account-menu" role="menu" aria-hidden="true" aria-label="Cuenta Neith">
+          <div class="account-menu-glow" aria-hidden="true"></div>
+          <div class="account-menu-profile">
+            <div class="account-menu-avatar" data-account-menu-avatar>N</div>
+            <div class="account-menu-identity">
+              <strong data-account-menu-name>Usuario</strong>
+              <span data-account-menu-email>—</span>
+            </div>
+            <span class="account-menu-plan" data-account-menu-plan>FREE</span>
+          </div>
+          <div class="account-menu-status"><i></i><span>Cuenta Neith</span><b data-account-menu-status>ACTIVO</b></div>
+          <nav class="account-menu-links" aria-label="Cuenta Neith">
+            <a href="${siteUrl('dashboard/')}" role="menuitem"><span class="account-menu-icon">◈</span><span><b>MI PANEL</b><small>Ir al panel</small></span><em>›</em></a>
+            <a href="${siteUrl('dashboard/#account')}" role="menuitem"><span class="account-menu-icon">◎</span><span><b>MI CUENTA</b><small>Gestionar cuenta</small></span><em>›</em></a>
+            <a href="${siteUrl('dashboard/#license')}" role="menuitem"><span class="account-menu-icon">◇</span><span><b>LICENCIA Y PLAN</b><small>Licencia y plan</small></span><em>›</em></a>
+            <a href="${siteUrl('dashboard/#security')}" role="menuitem"><span class="account-menu-icon">⌾</span><span><b>SEGURIDAD</b><small>Seguridad</small></span><em>›</em></a>
+          </nav>
+          <button class="account-menu-logout" type="button" data-logout role="menuitem"><span>⏻</span><b>CERRAR SESIÓN</b></button>
+        </section>
+      `);
+    }
+
     document.querySelectorAll('.nav').forEach(navShell => {
       const existing = [...navShell.querySelectorAll('[data-auth-nav]')];
       if (existing.length > 1) existing.slice(1).forEach(node => node.remove());
@@ -106,17 +132,57 @@
       if (download) actions.insertBefore(button, download); else actions.prepend(button);
     });
 
-    document.querySelectorAll('[data-auth-nav]').forEach(button => {
-      if (button.dataset.authBound === '1') return;
-      button.dataset.authBound = '1';
-      button.addEventListener('click', () => {
-        if (state.session?.user) window.location.href = '/dashboard/';
-        else openAuth('login');
-      });
-    });
+    // The account trigger is handled with delegated events in initAuth().
+    // This makes it reliable even when the header is injected/rebuilt by another module.
   }
 
+  let accountMenuAnchor = null;
+
+  function positionAccountMenu() {
+    const menu = document.getElementById('neith-account-menu');
+    const anchor = accountMenuAnchor;
+    if (!menu || !anchor || !menu.classList.contains('open')) return;
+    const rect = anchor.getBoundingClientRect();
+    const width = Math.min(360, Math.max(300, window.innerWidth - 24));
+    menu.style.width = `${width}px`;
+    const left = Math.min(window.innerWidth - width - 12, Math.max(12, rect.right - width));
+    const menuHeight = menu.getBoundingClientRect().height || 390;
+    const below = rect.bottom + 12;
+    const above = Math.max(12, rect.top - menuHeight - 12);
+    const top = below + menuHeight <= window.innerHeight - 12 ? below : above;
+    menu.style.left = `${left}px`;
+    menu.style.top = `${top}px`;
+  }
+
+  function closeAccountMenu() {
+    const menu = document.getElementById('neith-account-menu');
+    if (!menu) return;
+    menu.classList.remove('open');
+    menu.setAttribute('aria-hidden', 'true');
+    document.querySelectorAll('[data-auth-nav]').forEach(btn => btn.setAttribute('aria-expanded', 'false'));
+    accountMenuAnchor = null;
+  }
+
+  function openAccountMenu(anchor) {
+    const menu = document.getElementById('neith-account-menu');
+    if (!menu || !state.session?.user) return;
+    accountMenuAnchor = anchor;
+    menu.classList.add('open');
+    menu.setAttribute('aria-hidden', 'false');
+    document.querySelectorAll('[data-auth-nav]').forEach(btn => btn.setAttribute('aria-expanded', btn === anchor ? 'true' : 'false'));
+    positionAccountMenu();
+    requestAnimationFrame(positionAccountMenu);
+  }
+
+  function toggleAccountMenu(anchor) {
+    const menu = document.getElementById('neith-account-menu');
+    if (menu?.classList.contains('open') && accountMenuAnchor === anchor) closeAccountMenu();
+    else openAccountMenu(anchor);
+  }
+
+
   function openAuth(tab = 'login') {
+    closeAccountMenu();
     injectAuthUI();
     setTab(tab);
     const modal = document.getElementById('neith-auth-modal');
@@ -168,8 +234,30 @@
     return state.profile;
   }
 
+  function normalizeAuthTriggers() {
+    document.querySelectorAll('[data-auth-nav]').forEach(trigger => {
+      // Account access is a control, never a navigation link. Rebuild legacy anchors
+      // as real buttons so no stale href/dashboard behavior can survive.
+      if (trigger.tagName === 'BUTTON') {
+        trigger.type = 'button';
+        trigger.removeAttribute('href');
+        trigger.removeAttribute('onclick');
+        return;
+      }
+      const button = document.createElement('button');
+      [...trigger.attributes].forEach(attr => {
+        if (!['href', 'onclick', 'role', 'tabindex'].includes(attr.name)) button.setAttribute(attr.name, attr.value);
+      });
+      button.type = 'button';
+      button.className = trigger.className;
+      button.innerHTML = trigger.innerHTML;
+      trigger.replaceWith(button);
+    });
+  }
+
   function syncUI() {
     const user = state.session?.user;
+    normalizeAuthTriggers();
     document.querySelectorAll('[data-auth-nav]').forEach(btn => {
       const label = btn.querySelector('[data-auth-nav-label]');
       btn.classList.toggle('signed-in', Boolean(user));
@@ -186,12 +274,38 @@
       btn.dataset.initials = initials(user);
     });
 
+    document.querySelectorAll('[data-auth-nav]').forEach(btn => {
+      btn.setAttribute('aria-haspopup', user ? 'menu' : 'dialog');
+      btn.setAttribute('aria-expanded', 'false');
+      btn.setAttribute('aria-controls', user ? 'neith-account-menu' : 'neith-auth-modal');
+    });
+
+    const accountMenu = document.getElementById('neith-account-menu');
+    if (!user) closeAccountMenu();
+    if (accountMenu) {
+      const avatar = avatarUrl(user) || state.profile?.avatar_url || '';
+      const menuAvatar = accountMenu.querySelector('[data-account-menu-avatar]');
+      if (menuAvatar) {
+        if (avatar) menuAvatar.innerHTML = `<img src="${escapeHtml(avatar)}" alt="Avatar de ${escapeHtml(displayName(user))}">`;
+        else menuAvatar.textContent = user ? initials(user) : 'N';
+      }
+      const menuName = accountMenu.querySelector('[data-account-menu-name]');
+      const menuEmail = accountMenu.querySelector('[data-account-menu-email]');
+      if (menuName) menuName.textContent = user ? (state.profile?.display_name || displayName(user)) : 'Usuario';
+      if (menuEmail) menuEmail.textContent = user?.email || '—';
+    }
+
     const plan = (state.profile?.plan || 'free').toUpperCase();
     const subscription = state.profile?.subscription_status || (plan === 'PREMIUM' ? 'active' : 'free');
+    const menuPlan = document.querySelector('[data-account-menu-plan]');
+    const menuStatus = document.querySelector('[data-account-menu-status]');
+    if (menuPlan) { menuPlan.textContent = plan; menuPlan.dataset.plan = plan.toLowerCase(); }
+    if (menuStatus) menuStatus.textContent = subscription === 'active' ? 'ACTIVO' : (plan === 'PREMIUM' ? 'ACTIVO' : 'FREE');
+
     document.querySelectorAll('[data-dashboard-name]').forEach(el => el.textContent = user ? (state.profile?.display_name || displayName(user)) : 'Usuario');
     document.querySelectorAll('[data-dashboard-email]').forEach(el => el.textContent = user?.email || '—');
     document.querySelectorAll('[data-dashboard-plan]').forEach(el => {
-      el.textContent = plan === 'PREMIUM' ? 'USUARIO PREMIUM ACTIVADO' : 'USUARIO FREE';
+      el.textContent = plan === 'PREMIUM' ? 'USUARIO PREMIUM ACTIVADO' : 'USUARIO GRATIS';
       el.dataset.plan = plan.toLowerCase();
     });
     document.querySelectorAll('[data-dashboard-status]').forEach(el => el.textContent = subscription.toUpperCase());
@@ -212,6 +326,36 @@
     document.querySelectorAll('[data-dashboard-license]').forEach(el => {
       el.textContent = plan === 'PREMIUM' ? 'VINCULADA' : 'NO ACTIVA';
     });
+
+
+    // Dashboard V10: datos seguros derivados de la sesión actual. No expone secretos ni tokens.
+    const providersRaw = user?.app_metadata?.providers || (user?.app_metadata?.provider ? [user.app_metadata.provider] : []);
+    const providersSafe = Array.from(new Set((providersRaw || []).map(x => String(x).toLowerCase())));
+    if (user?.email && !providersSafe.includes('email')) providersSafe.push('email');
+    const providerLabel = { google: 'Google', discord: 'Discord', email: 'Email' };
+    document.querySelectorAll('[data-dashboard-providers-large]').forEach(el => {
+      el.innerHTML = providersSafe.map(provider => `<div class="dashboard-v10-provider ${escapeHtml(provider)}"><i></i><div><b>${escapeHtml(providerLabel[provider] || provider)}</b><span>Vinculado a tu Neith ID</span></div><em>ACTIVO</em></div>`).join('');
+    });
+    document.querySelectorAll('[data-dashboard-plan-orb]').forEach(el => el.textContent = plan === 'PREMIUM' ? 'PRO' : 'FREE');
+    document.querySelectorAll('[data-dashboard-license-type]').forEach(el => el.textContent = plan === 'PREMIUM' ? 'PREMIUM' : 'FREE');
+    document.querySelectorAll('[data-dashboard-license-state]').forEach(el => el.textContent = plan === 'PREMIUM' ? 'Licencia vinculada' : 'Sin licencia Premium');
+    document.querySelectorAll('[data-dashboard-license-expiry]').forEach(el => el.textContent = plan === 'PREMIUM' ? 'Gestionada por Neith' : '—');
+    document.querySelectorAll('[data-dashboard-license-key]').forEach(el => el.textContent = plan === 'PREMIUM' ? '•••• •••• ••••' : '— — — —');
+    const shortId = user?.id ? `${String(user.id).slice(0,4).toUpperCase()}-${String(user.id).slice(-4).toUpperCase()}` : '••••••••';
+    document.querySelectorAll('[data-dashboard-user-short]').forEach(el => el.textContent = shortId);
+    const fmtDate = value => {
+      if (!value) return '—';
+      try { return new Intl.DateTimeFormat(document.documentElement.lang === 'en' ? 'en-GB' : 'es-ES', { day:'2-digit', month:'short', year:'numeric' }).format(new Date(value)); }
+      catch { return '—'; }
+    };
+    document.querySelectorAll('[data-dashboard-last-signin]').forEach(el => el.textContent = fmtDate(user?.last_sign_in_at));
+    document.querySelectorAll('[data-dashboard-created]').forEach(el => el.textContent = fmtDate(user?.created_at));
+    const ua = navigator.userAgent || '';
+    const browser = /Edg\//.test(ua) ? 'Microsoft Edge' : /Chrome\//.test(ua) ? 'Google Chrome' : /Firefox\//.test(ua) ? 'Mozilla Firefox' : /Safari\//.test(ua) ? 'Safari' : 'Navegador web';
+    const platform = navigator.userAgentData?.platform || navigator.platform || 'Windows';
+    document.querySelectorAll('[data-dashboard-browser]').forEach(el => el.textContent = browser);
+    document.querySelectorAll('[data-dashboard-platform]').forEach(el => el.textContent = platform || '—');
+    document.querySelectorAll('[data-dashboard-device]').forEach(el => el.textContent = /Windows/i.test(platform + ua) ? 'PC Windows actual' : 'Dispositivo actual');
   }
 
   async function requireDashboardSession() {
@@ -236,7 +380,7 @@
     const revealing = input.type === 'password';
     input.type = revealing ? 'text' : 'password';
     button.setAttribute('aria-pressed', String(revealing));
-    button.setAttribute('aria-label', revealing ? 'Ocultar contraseña' : 'Mostrar contraseña');
+    button.setAttribute('aria-label', revealing ? (window.NeithI18n?.t('Ocultar contraseña') || 'Ocultar contraseña') : (window.NeithI18n?.t('Mostrar contraseña') || 'Mostrar contraseña'));
     button.classList.toggle('is-visible', revealing);
   }
 
@@ -323,8 +467,28 @@
 
   async function initAuth() {
     injectAuthUI();
+    normalizeAuthTriggers();
 
     document.addEventListener('click', e => {
+      const authTrigger = e.target.closest('[data-auth-nav]');
+      if (authTrigger) {
+        // Single source of truth for the header account control. This listener runs
+        // in capture phase, cancels every legacy navigation behavior, and either
+        // opens the account menu (signed in) or the auth modal (signed out).
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        if (state.session?.user) toggleAccountMenu(authTrigger);
+        else openAuth('login');
+        return;
+      }
+
+      const accountMenu = document.getElementById('neith-account-menu');
+      if (accountMenu?.classList.contains('open') && !e.target.closest('#neith-account-menu')) closeAccountMenu();
+
+      const menuLink = e.target.closest('#neith-account-menu a');
+      if (menuLink) closeAccountMenu();
+
       const close = e.target.closest('[data-auth-close]');
       if (close) closeAuth();
       const tab = e.target.closest('[data-auth-tab]');
@@ -336,7 +500,7 @@
       const passwordToggle = e.target.closest('[data-password-toggle]');
       if (passwordToggle) togglePassword(passwordToggle);
       if (e.target.closest('[data-logout]')) logout();
-    });
+    }, true);
 
     document.addEventListener('submit', e => {
       const form = e.target.closest('[data-auth-form]');
@@ -346,7 +510,13 @@
     });
 
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') closeAuth();
+      if (e.key === 'Escape') { closeAccountMenu(); closeAuth(); }
+    });
+
+    window.addEventListener('resize', positionAccountMenu, { passive: true });
+    window.addEventListener('scroll', positionAccountMenu, { passive: true });
+    window.addEventListener('neith:languagechange', () => {
+      if (state.session?.user) syncUI();
     });
 
     const url = new URL(window.location.href);
@@ -380,6 +550,10 @@
     get profile() { return state.profile; },
     open: openAuth,
     close: closeAuth,
+    openAccountMenu,
+    closeAccountMenu,
+    toggleAccountMenu,
+    syncUI,
     refreshProfile: async () => { await loadProfile(); syncUI(); return state.profile; }
   };
 
