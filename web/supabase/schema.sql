@@ -31,7 +31,7 @@ begin
   insert into public.profiles (id, display_name, avatar_url)
   values (
     new.id,
-    coalesce(new.raw_user_meta_data->>'display_name', new.raw_user_meta_data->>'full_name', split_part(new.email, '@', 1)),
+    coalesce(new.raw_user_meta_data->>'display_name', new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'name', new.raw_user_meta_data->>'preferred_username', new.raw_user_meta_data->>'user_name', split_part(new.email, '@', 1)),
     coalesce(new.raw_user_meta_data->>'avatar_url', new.raw_user_meta_data->>'picture')
   )
   on conflict (id) do nothing;
@@ -48,7 +48,7 @@ for each row execute procedure public.handle_new_user();
 insert into public.profiles (id, display_name, avatar_url)
 select
   u.id,
-  coalesce(u.raw_user_meta_data->>'display_name', u.raw_user_meta_data->>'full_name', split_part(u.email, '@', 1)),
+  coalesce(u.raw_user_meta_data->>'display_name', u.raw_user_meta_data->>'full_name', u.raw_user_meta_data->>'name', u.raw_user_meta_data->>'preferred_username', u.raw_user_meta_data->>'user_name', split_part(u.email, '@', 1)),
   coalesce(u.raw_user_meta_data->>'avatar_url', u.raw_user_meta_data->>'picture')
 from auth.users u
 on conflict (id) do nothing;

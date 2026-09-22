@@ -43,3 +43,20 @@ Flujo:
 6. Tras actualizarla, se cierra la sesión temporal y se vuelve al login.
 
 Los campos de contraseña incluyen un botón accesible para mostrar/ocultar el valor.
+
+
+## OAuth Google + Discord (V8)
+
+Proveedores configurados en Supabase Authentication > Sign In / Providers:
+- Google: activado con Client ID + Client Secret de Google Cloud.
+- Discord: activado con Client ID + Client Secret de Discord Developer Portal.
+
+En Supabase > Authentication > URL Configuration > Redirect URLs añade exactamente:
+
+https://neithlauncher.com/dashboard/
+
+Antes de probar OAuth ejecuta una sola vez `supabase/oauth-profile-upgrade.sql`.
+Este script actualiza el trigger de perfiles para normalizar nombre/avatar de Google y Discord.
+Todos los usuarios OAuth nacen con el plan `free` por defecto.
+
+La web usa `signInWithOAuth()` y retorna a `/dashboard/`. No contiene Client Secrets de Google/Discord; esos secretos permanecen únicamente en Supabase.

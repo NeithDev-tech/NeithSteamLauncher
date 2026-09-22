@@ -11,5 +11,5 @@ window.NEITH_CONFIG = Object.freeze({
   supabaseUrl: 'https://nsqhfbyxqcmdthvptuzp.supabase.co',
   supabaseAnonKey: 'sb_publishable_bRJYGXCPI6M9I4o_egb5WA_n7ZIEASg',
   siteUrl: 'https://neithlauncher.com',
-  oauthEnabled: false
+  oauthEnabled: true
 });

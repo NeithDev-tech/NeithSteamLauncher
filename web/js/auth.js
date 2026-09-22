@@ -31,12 +31,12 @@
   })[ch]);
 
   function initials(user) {
-    const name = user?.user_metadata?.display_name || user?.user_metadata?.full_name || user?.email || 'N';
+    const name = user?.user_metadata?.display_name || user?.user_metadata?.full_name || user?.user_metadata?.name || user?.user_metadata?.preferred_username || user?.user_metadata?.user_name || user?.email || 'N';
     return name.trim().split(/\s+/).slice(0,2).map(x => x[0]?.toUpperCase() || '').join('') || 'N';
   }
 
   function displayName(user) {
-    return user?.user_metadata?.display_name || user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Usuario';
+    return user?.user_metadata?.display_name || user?.user_metadata?.full_name || user?.user_metadata?.name || user?.user_metadata?.preferred_username || user?.user_metadata?.user_name || user?.email?.split('@')[0] || 'Usuario';
   }
 
   function avatarUrl(user) {
@@ -273,13 +273,34 @@
       setMessage('Configura Supabase antes de activar Google o Discord.', 'warning');
       return;
     }
-    if (!oauthEnabled) {
-      setMessage('El acceso social se activará más adelante.', 'warning');
+    if (!oauthEnabled || !['google', 'discord'].includes(provider)) {
+      setMessage('Este proveedor de acceso no está disponible.', 'warning');
       return;
     }
-    const redirectTo = siteUrl('dashboard/');
-    const { error } = await state.client.auth.signInWithOAuth({ provider, options: { redirectTo } });
-    if (error) setMessage(error.message, 'error');
+
+    const button = document.querySelector(`[data-oauth="${provider}"]`);
+    const original = button?.innerHTML || '';
+    if (button) {
+      button.disabled = true;
+      button.setAttribute('aria-busy', 'true');
+    }
+    setMessage(provider === 'google' ? 'Abriendo Google…' : 'Abriendo Discord…');
+
+    try {
+      const redirectTo = siteUrl('dashboard/');
+      const options = { redirectTo };
+      if (provider === 'discord') options.scopes = 'identify email';
+      if (provider === 'google') options.scopes = 'openid email profile';
+      const { error } = await state.client.auth.signInWithOAuth({ provider, options });
+      if (error) throw error;
+    } catch (error) {
+      setMessage(error?.message || 'No se pudo iniciar el acceso social.', 'error');
+      if (button) {
+        button.disabled = false;
+        button.removeAttribute('aria-busy');
+        button.innerHTML = original;
+      }
+    }
   }
 
   async function logout() {
