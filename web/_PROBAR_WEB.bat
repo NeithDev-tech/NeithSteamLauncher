@@ -1,7 +1,7 @@
 @echo off
 setlocal EnableExtensions EnableDelayedExpansion
 cd /d "%~dp0"
-title NEITH WEB V19 - PRUEBA LOCAL FIABLE
+title NEITH WEB V20 - PRUEBA LOCAL FIABLE
 
 set "PORT=8080"
 set "PYTHON_CMD="
@@ -14,7 +14,7 @@ if not defined PYTHON_CMD (
 if not defined PYTHON_CMD (
     echo.
     echo ============================================================
-    echo  NEITH WEB V19 - Python 3 no encontrado
+    echo  NEITH WEB V20 - Python 3 no encontrado
     echo ============================================================
     echo Instala Python 3 y marca "Add Python to PATH".
     echo.
@@ -24,7 +24,7 @@ if not defined PYTHON_CMD (
 
 echo.
 echo ============================================================
-echo  NEITH WEB V19 - PRUEBA LOCAL FIABLE / SIN CACHE
+echo  NEITH WEB V20 - PRUEBA LOCAL FIABLE / SIN CACHE
 echo ============================================================
 echo.
 echo Carpeta que se va a servir:
@@ -64,7 +64,7 @@ echo.
 
 if errorlevel 1 (
     echo.
-    echo ERROR: el servidor local V19 se cerro con un error.
+    echo ERROR: el servidor local V20 se cerro con un error.
     pause
 )
 endlocal

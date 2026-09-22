@@ -4,7 +4,7 @@ from functools import partial
 from pathlib import Path
 import threading, time, webbrowser, sys
 
-BUILD = "V19"
+BUILD = "V20"
 HOST = "127.0.0.1"
 PORT = 8080
 ROOT = Path(__file__).resolve().parent
@@ -19,6 +19,22 @@ class NeithHandler(SimpleHTTPRequestHandler):
 
     def log_message(self, fmt, *args):
         sys.stdout.write("[NEITH LOCAL] " + (fmt % args) + "\n")
+
+    def do_GET(self):
+        # Match the clean directory routes used by production hosting.
+        # /mi-cuenta and /mi-cuenta/ both resolve to /mi-cuenta/index.html, etc.
+        from urllib.parse import urlsplit
+        parsed = urlsplit(self.path)
+        clean = parsed.path
+        route_dirs = {
+            "/dashboard", "/mi-cuenta", "/licencia", "/seguridad",
+            "/boostpc", "/hourboost", "/logros", "/juegos-gratis",
+            "/cuentas", "/docs", "/faq", "/free-premium", "/reset-password"
+        }
+        if clean.rstrip("/") in route_dirs:
+            target = clean.rstrip("/") + "/index.html"
+            self.path = target + (("?" + parsed.query) if parsed.query else "")
+        return super().do_GET()
 
 
 def open_when_ready():

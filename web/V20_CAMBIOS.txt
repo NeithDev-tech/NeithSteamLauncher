@@ -1,0 +1,11 @@
+NEITH OFFICIAL WEB — V20
+
+- Registro blindado: el correo de confirmación se toma únicamente del formulario Crear cuenta.
+- Confirmación doble de email y normalización antes de llamar a Supabase.
+- Mensaje visible con el correo exacto solicitado para confirmación.
+- Campos de registro aislados del autocompletado de la identificación recordada.
+- Autofill del navegador mantiene el fondo oscuro premium.
+- Ojos de contraseña recolocados en una columna propia, centrados y sin solapamientos.
+- Seguridad: nueva función real Cambiar contraseña con verificación de contraseña actual y Supabase auth.updateUser.
+- Prueba local: las rutas limpias se resuelven igual que en producción y las páginas privadas se pueden previsualizar localmente sin colapsar todas a Inicio.
+- Selector de cuenta reforzado en 4 columnas reales: avatar | nombre | divisor | chevron.

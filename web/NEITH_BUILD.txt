@@ -1,2 +1,1 @@
-V19
-Neith Premium Auth + Account Pages + No-Cache Local Test
+V20 — AUTH EMAIL HARDENING + SECURITY PASSWORD + LOCAL ROUTE PARITY
