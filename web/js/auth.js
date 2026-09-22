@@ -200,6 +200,18 @@
       if (avatar) el.innerHTML = `<img src="${escapeHtml(avatar)}" alt="Avatar de ${escapeHtml(displayName(user))}">`;
       else el.textContent = user ? initials(user) : 'N';
     });
+
+    document.querySelectorAll('[data-dashboard-providers]').forEach(el => {
+      const raw = user?.app_metadata?.providers || (user?.app_metadata?.provider ? [user.app_metadata.provider] : []);
+      const providers = Array.from(new Set((raw || []).map(x => String(x).toLowerCase())));
+      if (user?.email && !providers.includes('email')) providers.push('email');
+      const label = { google: 'Google', discord: 'Discord', email: 'Email' };
+      el.innerHTML = providers.map(provider => `<span class="dashboard-provider-chip ${escapeHtml(provider)}"><i></i>${escapeHtml(label[provider] || provider)}</span>`).join('');
+    });
+
+    document.querySelectorAll('[data-dashboard-license]').forEach(el => {
+      el.textContent = plan === 'PREMIUM' ? 'VINCULADA' : 'NO ACTIVA';
+    });
   }
 
   async function requireDashboardSession() {
