@@ -1,0 +1,14 @@
+NEITH OFFICIAL WEB — V18
+
+- Base: V17 publicada y confirmada funcional.
+- Selector de cuenta rediseñado: avatar, nombre y chevron separados, sin solapamiento.
+- Chevron con estado abierto/cerrado y feedback hover.
+- Menú de cuenta con destinos independientes:
+  * MI PANEL -> /dashboard/
+  * MI CUENTA -> /mi-cuenta/
+  * LICENCIA Y PLAN -> /licencia/
+  * SEGURIDAD -> /seguridad/
+  * CERRAR SESIÓN -> acción directa
+- Nuevas páginas privadas enfocadas para cuenta, licencia y seguridad.
+- Traducciones ES/EN añadidas para los nuevos textos.
+- _PROBAR_WEB.bat conservado.

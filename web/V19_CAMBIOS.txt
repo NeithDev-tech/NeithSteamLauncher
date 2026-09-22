@@ -1,0 +1,11 @@
+NEITH OFFICIAL WEB — V19
+
+- Selector de cuenta reconstruido con cuatro zonas DOM: avatar | nombre | divisor | chevron.
+- Eliminado el avatar pseudo-elemento que podía provocar solapamientos.
+- Mi Cuenta, Licencia y Plan y Seguridad son páginas privadas con arquitectura visual y contenido propios.
+- Login/registro/recovery remodelados como consola premium compacta.
+- Añadido Recordar identificación: guarda solo el correo si el usuario lo permite; nunca la contraseña.
+- Supabase mantiene persistSession/autoRefreshToken para la sesión autenticada.
+- _PROBAR_WEB.bat reconstruido: sirve exclusivamente la carpeta extraída, sin caché, cierra servidores de prueba antiguos y no abre otra web si 8080 está ocupado.
+- NEITH_BUILD.txt permite confirmar la build local exacta.
+- ES/EN ampliado con los nuevos textos de autenticación y páginas privadas.

@@ -1,13 +1,16 @@
 (() => {
   'use strict';
-  window.__NEITH_WEB_BUILD__ = 'V17';
-  console.info('[NEITH WEB] Build V17 activo · header/account + i18n root rebuild');
+  window.__NEITH_WEB_BUILD__ = 'V19';
+  console.info('[NEITH WEB] Build V19 activo · premium auth + real account pages + reliable local test');
   const scriptUrl = document.currentScript?.src || '';
   const siteBase = (() => {
     try { return new URL('../', scriptUrl || window.location.href); }
     catch { return new URL('./', window.location.href); }
   })();
   const siteUrl = path => new URL(String(path || '').replace(/^\/+/, ''), siteBase).href;
+
+  const REMEMBER_EMAIL_KEY = 'neith_auth_remembered_email';
+  const REMEMBER_PREF_KEY = 'neith_auth_remember_identity';
 
 
   const cfg = window.NEITH_CONFIG || {};
@@ -48,36 +51,64 @@
   function injectAuthUI() {
     if (!document.getElementById('neith-auth-modal')) {
       document.body.insertAdjacentHTML('beforeend', `
-        <div class="auth-modal" id="neith-auth-modal" aria-hidden="true">
+        <div class="auth-modal auth-modal-v19" id="neith-auth-modal" aria-hidden="true">
           <div class="auth-backdrop" data-auth-close></div>
-          <section class="auth-shell" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+          <section class="auth-shell auth-shell-v19" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+            <span class="auth-corner auth-corner-a" aria-hidden="true"></span>
+            <span class="auth-corner auth-corner-b" aria-hidden="true"></span>
+            <div class="auth-scanline" aria-hidden="true"></div>
             <button class="auth-close" type="button" aria-label="Cerrar" data-auth-close>×</button>
-            <div class="auth-brandline"><span class="auth-led"></span> NEITH ID // SECURE ACCESS</div>
-            <h2 id="auth-title">ACCESO NEITH</h2>
-            <p class="auth-subtitle">Tu identidad, tus planes y tu launcher conectados en un único núcleo.</p>
+
+            <header class="auth-v19-head">
+              <div class="auth-v19-emblem" aria-hidden="true"><span>N</span><i></i></div>
+              <div class="auth-v19-headcopy">
+                <div class="auth-brandline"><span class="auth-led"></span> NEITH ID // SECURE ACCESS</div>
+                <h2 id="auth-title">ACCESO NEITH</h2>
+                <p class="auth-subtitle">Tu identidad Neith, protegida y sincronizada en un único acceso.</p>
+              </div>
+            </header>
+
+            <div class="auth-v19-status" aria-hidden="true"><span><i></i>NÚCLEO SEGURO</span><b>256-BIT SESSION</b></div>
+
             <div class="auth-tabs" role="tablist">
               <button class="active" type="button" data-auth-tab="login">INICIAR SESIÓN</button>
-              <button type="button" data-auth-tab="register">REGISTRO</button>
+              <button type="button" data-auth-tab="register">CREAR CUENTA</button>
             </div>
-            <form class="auth-form" data-auth-form="login" novalidate>
-              <label>Correo electrónico<input name="email" type="email" autocomplete="email" required placeholder="tu@correo.com"></label>
-              <label>Contraseña<div class="password-field"><input name="password" type="password" autocomplete="current-password" required minlength="8" placeholder="••••••••"><button class="password-toggle" type="button" data-password-toggle aria-label="Mostrar contraseña" aria-pressed="false"><svg class="password-eye" viewBox="0 0 24 24" aria-hidden="true"><path class="eye-open" d="M2.4 12s3.4-6 9.6-6 9.6 6 9.6 6-3.4 6-9.6 6-9.6-6-9.6-6Z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle class="eye-open" cx="12" cy="12" r="2.7" fill="none" stroke="currentColor" stroke-width="1.8"/><path class="eye-slash" d="M4 4l16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></button></div></label>
-              <button class="auth-forgot" type="button" data-auth-switch="recover">¿Olvidaste tu contraseña?</button>
-              <button class="auth-submit" type="submit">ENTRAR EN NEITH</button>
-              <button class="auth-switch-link" type="button" data-auth-switch="register">¿No tienes cuenta? <strong>Regístrate aquí</strong></button>
+
+            <form class="auth-form auth-form-v19" data-auth-form="login" novalidate>
+              <label class="auth-field">
+                <span class="auth-field-title">CORREO ELECTRÓNICO</span>
+                <div class="auth-input-shell"><span class="auth-field-icon" aria-hidden="true">@</span><input name="email" type="email" autocomplete="email" required placeholder="tu@correo.com"></div>
+              </label>
+              <label class="auth-field">
+                <span class="auth-field-title">CONTRASEÑA</span>
+                <div class="auth-input-shell password-field"><span class="auth-field-icon auth-lock-icon" aria-hidden="true">◇</span><input name="password" type="password" autocomplete="current-password" required minlength="8" placeholder="••••••••"><button class="password-toggle" type="button" data-password-toggle aria-label="Mostrar contraseña" aria-pressed="false"><svg class="password-eye" viewBox="0 0 24 24" aria-hidden="true"><path class="eye-open" d="M2.4 12s3.4-6 9.6-6 9.6 6 9.6 6-3.4 6-9.6 6-9.6-6-9.6-6Z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle class="eye-open" cx="12" cy="12" r="2.7" fill="none" stroke="currentColor" stroke-width="1.8"/><path class="eye-slash" d="M4 4l16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></button></div>
+              </label>
+
+              <div class="auth-login-tools">
+                <label class="auth-remember"><input type="checkbox" name="remember" value="1" data-auth-remember><span class="auth-check" aria-hidden="true"><i>✓</i></span><span>Recordar identificación</span></label>
+                <button class="auth-forgot" type="button" data-auth-switch="recover">¿Olvidaste tu contraseña?</button>
+              </div>
+              <p class="auth-remember-note">Guardamos únicamente tu correo en este navegador. Nunca tu contraseña.</p>
+
+              <button class="auth-submit auth-submit-v19" type="submit"><span>ENTRAR EN NEITH</span><em aria-hidden="true">→</em></button>
+              <button class="auth-switch-link" type="button" data-auth-switch="register">¿No tienes cuenta? <strong>Crear Neith ID</strong></button>
             </form>
-            <form class="auth-form" data-auth-form="register" hidden novalidate>
-              <label>Nombre de usuario<input name="display_name" type="text" autocomplete="nickname" required maxlength="40" placeholder="Tu nombre en Neith"></label>
-              <label>Correo electrónico<input name="email" type="email" autocomplete="email" required placeholder="tu@correo.com"></label>
-              <label>Contraseña<div class="password-field"><input name="password" type="password" autocomplete="new-password" required minlength="8" placeholder="Mínimo 8 caracteres"><button class="password-toggle" type="button" data-password-toggle aria-label="Mostrar contraseña" aria-pressed="false"><svg class="password-eye" viewBox="0 0 24 24" aria-hidden="true"><path class="eye-open" d="M2.4 12s3.4-6 9.6-6 9.6 6 9.6 6-3.4 6-9.6 6-9.6-6-9.6-6Z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle class="eye-open" cx="12" cy="12" r="2.7" fill="none" stroke="currentColor" stroke-width="1.8"/><path class="eye-slash" d="M4 4l16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></button></div></label>
-              <button class="auth-submit" type="submit">CREAR CUENTA</button>
+
+            <form class="auth-form auth-form-v19" data-auth-form="register" hidden novalidate>
+              <label class="auth-field"><span class="auth-field-title">NOMBRE DE USUARIO</span><div class="auth-input-shell"><span class="auth-field-icon" aria-hidden="true">N</span><input name="display_name" type="text" autocomplete="nickname" required maxlength="40" placeholder="Tu nombre en Neith"></div></label>
+              <label class="auth-field"><span class="auth-field-title">CORREO ELECTRÓNICO</span><div class="auth-input-shell"><span class="auth-field-icon" aria-hidden="true">@</span><input name="email" type="email" autocomplete="email" required placeholder="tu@correo.com"></div></label>
+              <label class="auth-field"><span class="auth-field-title">CONTRASEÑA</span><div class="auth-input-shell password-field"><span class="auth-field-icon auth-lock-icon" aria-hidden="true">◇</span><input name="password" type="password" autocomplete="new-password" required minlength="8" placeholder="Mínimo 8 caracteres"><button class="password-toggle" type="button" data-password-toggle aria-label="Mostrar contraseña" aria-pressed="false"><svg class="password-eye" viewBox="0 0 24 24" aria-hidden="true"><path class="eye-open" d="M2.4 12s3.4-6 9.6-6 9.6 6 9.6 6-3.4 6-9.6 6-9.6-6-9.6-6Z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle class="eye-open" cx="12" cy="12" r="2.7" fill="none" stroke="currentColor" stroke-width="1.8"/><path class="eye-slash" d="M4 4l16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></button></div></label>
+              <button class="auth-submit auth-submit-v19" type="submit"><span>CREAR CUENTA</span><em aria-hidden="true">→</em></button>
             </form>
-            <form class="auth-form" data-auth-form="recover" hidden novalidate>
+
+            <form class="auth-form auth-form-v19" data-auth-form="recover" hidden novalidate>
               <div class="auth-recovery-copy"><strong>RECUPERAR ACCESO</strong><span>Te enviaremos un enlace seguro para crear una nueva contraseña.</span></div>
-              <label>Correo electrónico<input name="email" type="email" autocomplete="email" required placeholder="tu@correo.com"></label>
-              <button class="auth-submit" type="submit">ENVIAR ENLACE DE RECUPERACIÓN</button>
+              <label class="auth-field"><span class="auth-field-title">CORREO ELECTRÓNICO</span><div class="auth-input-shell"><span class="auth-field-icon" aria-hidden="true">@</span><input name="email" type="email" autocomplete="email" required placeholder="tu@correo.com"></div></label>
+              <button class="auth-submit auth-submit-v19" type="submit"><span>ENVIAR ENLACE DE RECUPERACIÓN</span><em aria-hidden="true">→</em></button>
               <button class="auth-switch-link" type="button" data-auth-switch="login">← Volver a iniciar sesión</button>
             </form>
+
             <div class="auth-separator" ${oauthEnabled ? '' : 'hidden'}><span>O CONTINÚA CON</span></div>
             <div class="auth-socials" ${oauthEnabled ? '' : 'hidden'}>
               <button type="button" class="social google" data-oauth="google"><span class="social-icon google-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="#4285F4" d="M21.6 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.4a4.6 4.6 0 0 1-2 3v2.5h3.3c1.9-1.8 2.9-4.4 2.9-7.3Z"/><path fill="#34A853" d="M12 22c2.7 0 5-.9 6.7-2.4l-3.3-2.5c-.9.6-2.1 1-3.4 1-2.6 0-4.8-1.8-5.6-4.2H3v2.6A10 10 0 0 0 12 22Z"/><path fill="#FBBC05" d="M6.4 13.9A6 6 0 0 1 6.1 12c0-.7.1-1.3.3-1.9V7.5H3A10 10 0 0 0 2 12c0 1.6.4 3.1 1 4.5l3.4-2.6Z"/><path fill="#EA4335" d="M12 5.9c1.5 0 2.8.5 3.8 1.5l2.9-2.8A9.7 9.7 0 0 0 3 7.5l3.4 2.6C7.2 7.7 9.4 5.9 12 5.9Z"/></svg></span><b>Continuar con Google</b></button>
@@ -85,9 +116,11 @@
             </div>
             <p class="auth-message" data-auth-message></p>
             <p class="auth-config-note" ${configured ? 'hidden' : ''}>Modo visual activo. Pega tu <strong>Project URL</strong> y tu <strong>anon/public key</strong> en <code>js/supabase-config.js</code>. Después activa Google y Discord en Supabase Authentication → Providers.</p>
+            <footer class="auth-v19-footer"><span><i></i>NEITH AUTH ONLINE</span><b>SESSION ENCRYPTED</b></footer>
           </section>
         </div>
       `);
+      hydrateRememberedIdentity();
     }
 
     if (!document.getElementById('neith-account-menu')) {
@@ -105,9 +138,9 @@
           <div class="account-menu-status"><i></i><span>Cuenta Neith</span><b data-account-menu-status>ACTIVO</b></div>
           <nav class="account-menu-links" aria-label="Cuenta Neith">
             <a href="${siteUrl('dashboard/')}" role="menuitem"><span class="account-menu-icon">◈</span><span><b>MI PANEL</b><small>Ir al panel</small></span><em>›</em></a>
-            <a href="${siteUrl('dashboard/#account')}" role="menuitem"><span class="account-menu-icon">◎</span><span><b>MI CUENTA</b><small>Gestionar cuenta</small></span><em>›</em></a>
-            <a href="${siteUrl('dashboard/#license')}" role="menuitem"><span class="account-menu-icon">◇</span><span><b>LICENCIA Y PLAN</b><small>Licencia y plan</small></span><em>›</em></a>
-            <a href="${siteUrl('dashboard/#security')}" role="menuitem"><span class="account-menu-icon">⌾</span><span><b>SEGURIDAD</b><small>Seguridad</small></span><em>›</em></a>
+            <a href="${siteUrl('mi-cuenta/')}" role="menuitem"><span class="account-menu-icon">◎</span><span><b>MI CUENTA</b><small>Gestionar cuenta</small></span><em>›</em></a>
+            <a href="${siteUrl('licencia/')}" role="menuitem"><span class="account-menu-icon">◇</span><span><b>LICENCIA Y PLAN</b><small>Licencia y plan</small></span><em>›</em></a>
+            <a href="${siteUrl('seguridad/')}" role="menuitem"><span class="account-menu-icon">⌾</span><span><b>SEGURIDAD</b><small>Seguridad</small></span><em>›</em></a>
           </nav>
           <button class="account-menu-logout" type="button" data-logout role="menuitem"><span>⏻</span><b>CERRAR SESIÓN</b></button>
         </section>
@@ -129,6 +162,7 @@
       button.setAttribute('aria-haspopup', 'dialog');
       button.setAttribute('aria-controls', 'neith-auth-modal');
       button.innerHTML = '<span class="nav-auth-led"></span><span data-auth-nav-label>INICIAR SESIÓN</span>';
+      button.dataset.accountTrigger = 'true';
       if (download) actions.insertBefore(button, download); else actions.prepend(button);
     });
 
@@ -181,10 +215,36 @@
   }
 
 
+  function hydrateRememberedIdentity() {
+    const form = document.querySelector('[data-auth-form="login"]');
+    if (!form) return;
+    const email = form.querySelector('input[name="email"]');
+    const remember = form.querySelector('[data-auth-remember]');
+    let saved = '';
+    let pref = true;
+    try {
+      saved = localStorage.getItem(REMEMBER_EMAIL_KEY) || '';
+      const rawPref = localStorage.getItem(REMEMBER_PREF_KEY);
+      pref = rawPref === null ? true : rawPref === '1';
+    } catch (_) {}
+    if (remember) remember.checked = pref;
+    if (email && saved && !email.value) email.value = saved;
+  }
+
+  function persistRememberedIdentity(email, enabled) {
+    try {
+      localStorage.setItem(REMEMBER_PREF_KEY, enabled ? '1' : '0');
+      if (enabled && email) localStorage.setItem(REMEMBER_EMAIL_KEY, String(email).trim());
+      else localStorage.removeItem(REMEMBER_EMAIL_KEY);
+    } catch (_) {}
+  }
+
+
   function openAuth(tab = 'login') {
     closeAccountMenu();
     injectAuthUI();
     setTab(tab);
+    if (tab === 'login') hydrateRememberedIdentity();
     const modal = document.getElementById('neith-auth-modal');
     modal?.classList.add('open');
     modal?.setAttribute('aria-hidden', 'false');
@@ -213,6 +273,7 @@
     if (tabs) tabs.hidden = tab === 'recover';
     const title = document.getElementById('auth-title');
     if (title) title.textContent = tab === 'recover' ? 'RECUPERAR CONTRASEÑA' : 'ACCESO NEITH';
+    if (tab === 'login') hydrateRememberedIdentity();
     setMessage('');
   }
 
@@ -263,15 +324,21 @@
       btn.classList.toggle('signed-in', Boolean(user));
       if (!user) {
         btn.style.removeProperty('--avatar');
-        if (label) label.textContent = 'INICIAR SESIÓN';
+        btn.removeAttribute('data-account-trigger');
+        btn.removeAttribute('data-initials');
+        btn.classList.remove('nav-account-trigger');
+        btn.innerHTML = '<span class="nav-auth-led" aria-hidden="true"></span><span data-auth-nav-label>INICIAR SESIÓN</span>';
         return;
       }
       const avatar = avatarUrl(user) || state.profile?.avatar_url || '';
       const name = state.profile?.display_name || displayName(user);
-      if (label) label.textContent = name;
-      if (avatar) btn.style.setProperty('--avatar', `url("${avatar.replace(/"/g, '%22')}")`);
-      else btn.style.removeProperty('--avatar');
       btn.dataset.initials = initials(user);
+      btn.dataset.accountTrigger = 'true';
+      btn.classList.add('nav-account-trigger');
+      const avatarMarkup = avatar
+        ? `<img src="${escapeHtml(avatar)}" alt="Avatar de ${escapeHtml(name)}">`
+        : `<span>${escapeHtml(initials(user))}</span>`;
+      btn.innerHTML = `<span class="nav-account-avatar" aria-hidden="true">${avatarMarkup}</span><span class="nav-account-name" data-auth-nav-label>${escapeHtml(name)}</span><span class="nav-account-divider" aria-hidden="true"></span><span class="nav-auth-chevron" aria-hidden="true"><svg viewBox="0 0 16 16" focusable="false"><path d="M3.2 5.8 8 10.2l4.8-4.4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`;
     });
 
     document.querySelectorAll('[data-auth-nav]').forEach(btn => {
@@ -412,6 +479,8 @@
         form.reset();
         setMessage('Si existe una cuenta con ese correo, recibirás un enlace para crear una nueva contraseña.', 'success');
       } else {
+        const remember = Boolean(form.querySelector('[data-auth-remember]')?.checked);
+        persistRememberedIdentity(data.email, remember);
         const { error } = await state.client.auth.signInWithPassword({ email: data.email, password: data.password });
         if (error) throw error;
         closeAuth();
