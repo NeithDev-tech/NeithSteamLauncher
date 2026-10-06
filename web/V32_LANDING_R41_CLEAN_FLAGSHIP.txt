@@ -1,0 +1,12 @@
+NEITH OFFICIAL WEB V32 — LANDING R41 CLEAN FLAGSHIP
+===================================================
+
+- Hero principal completamente reorganizado y más limpio.
+- Se elimina la antigua ruleta/carrusel visual del hero.
+- Se usa una captura real del launcher como protagonista de la derecha.
+- Jerarquía clara: marca, mensaje, CTA, captura real y módulos principales.
+- Franja compacta de capacidades clave debajo del hero.
+- Sección de funciones simplificada visualmente y con nueva jerarquía.
+- Nuevo bloque "Menos pestañas. Más control." antes de planes.
+- Traducciones ES/EN añadidas para todos los textos nuevos.
+- Responsive reforzado sin tocar autenticación, Supabase, Admin Center ni páginas internas.

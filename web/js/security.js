@@ -11,6 +11,41 @@
     el.dataset.type = type;
   }
 
+
+  function formatDate(value) {
+    if (!value) return '—';
+    try {
+      const lang = document.documentElement.lang === 'en' ? 'en-GB' : 'es-ES';
+      return new Intl.DateTimeFormat(lang, { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }).format(new Date(value));
+    } catch { return '—'; }
+  }
+
+  function setText(selector, value, statusClass = '') {
+    document.querySelectorAll(selector).forEach(el => {
+      el.textContent = value || '—';
+      if (statusClass) el.className = statusClass;
+    });
+  }
+
+  function renderAccountStatus() {
+    const user = window.NeithAuth?.session?.user;
+    if (!user) {
+      setText('[data-security-email]', '—');
+      setText('[data-security-email-status]', t('SIN SESIÓN'));
+      setText('[data-security-provider]', '—');
+      setText('[data-security-created]', '—');
+      setText('[data-security-last-signin]', '—');
+      return;
+    }
+    const provider = user.app_metadata?.provider || user.app_metadata?.providers?.[0] || (user.email ? 'email' : '—');
+    const providerLabels = { email: 'Email', google: 'Google', discord: 'Discord' };
+    setText('[data-security-email]', user.email || '—');
+    setText('[data-security-email-status]', user.email_confirmed_at ? t('VERIFICADO') : t('PENDIENTE'), user.email_confirmed_at ? 'good' : 'warning');
+    setText('[data-security-provider]', providerLabels[String(provider).toLowerCase()] || String(provider));
+    setText('[data-security-created]', formatDate(user.created_at));
+    setText('[data-security-last-signin]', formatDate(user.last_sign_in_at));
+  }
+
   function togglePassword(button) {
     const shell = button.closest('.security-password-shell');
     const input = shell?.querySelector('input');
@@ -48,10 +83,20 @@
     setStatus(t('Verificando tu contraseña actual…'), '');
 
     try {
-      const { error: verifyError } = await auth.client.auth.signInWithPassword({ email: user.email, password: currentPassword });
-      if (verifyError) throw new Error(t('La contraseña actual no es correcta.'));
-      const { error: updateError } = await auth.client.auth.updateUser({ password: newPassword });
-      if (updateError) throw updateError;
+      // Supabase Secure Password Change can require the current password in the
+      // SAME updateUser request. Verifying it with signInWithPassword first is
+      // not sufficient and causes: "Current password required when setting new password."
+      const { error: updateError } = await auth.client.auth.updateUser({
+        password: newPassword,
+        current_password: currentPassword,
+      });
+      if (updateError) {
+        const message = String(updateError.message || '').toLowerCase();
+        if (message.includes('current password') || message.includes('invalid login credentials')) {
+          throw new Error(t('La contraseña actual no es correcta.'));
+        }
+        throw updateError;
+      }
       form.reset();
       form.querySelectorAll('[data-security-password-toggle]').forEach(btn => {
         btn.classList.remove('is-visible');
@@ -68,6 +113,9 @@
   }
 
   function init() {
+    renderAccountStatus();
+    window.addEventListener('neith:authchange', renderAccountStatus);
+    window.addEventListener('neith:languagechange', renderAccountStatus);
     document.addEventListener('click', event => {
       const button = event.target.closest('[data-security-password-toggle]');
       if (button) togglePassword(button);

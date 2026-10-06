@@ -1,0 +1,11 @@
+NEITH WEB V32 — ADMIN DASHBOARD R25 RESPONSIVE LAYOUT
+
+- Base: R24 estable.
+- Cambio limitado exclusivamente al Dashboard / Resumen del Admin Center.
+- Reestructura el cuerpo en dos columnas independientes para eliminar huecos verticales artificiales.
+- Métricas adaptadas al ancho REAL del panel mediante container queries.
+- Mejor espaciado superior bajo la navbar.
+- Launcher + Accesos rápidos comparten columna izquierda.
+- Actividad reciente + Seguridad comparten columna derecha.
+- Responsive controlado: 2 columnas -> 1 columna según ancho disponible del panel.
+- Sin cambios en lógica, Supabase, RPC, Usuarios, Auditoría, Avisos, Feature Flags, Launcher ni autenticación.

@@ -28,22 +28,22 @@ La Publishable Key de Supabase es pública por diseño. Nunca añadas `sb_secret
 Google/Discord, Lemon Squeezy y las licencias están intencionadamente fuera de esta fase.
 
 
-## Recuperación de contraseña (V7)
+## Recuperación de contraseña (V23)
 
-En Supabase > Authentication > URL Configuration > Redirect URLs añade exactamente:
+En Supabase > Authentication > URL Configuration > Redirect URLs añade:
 
-https://neithlauncher.com/reset-password/
+- `https://neithlauncher.com/recuperar-password/`
+- `http://localhost:8080/recuperar-password/` (solo para pruebas locales)
 
-Flujo:
-1. El usuario pulsa `¿Olvidaste tu contraseña?` en el login.
-2. La web llama a `resetPasswordForEmail` con `redirectTo=https://neithlauncher.com/reset-password/`.
-3. Brevo entrega el correo de recuperación.
-4. Supabase abre `/reset-password/` con una sesión temporal de recuperación.
-5. `js/reset-password.js` valida la sesión y permite cambiar la contraseña mediante `updateUser`.
-6. Tras actualizarla, se cierra la sesión temporal y se vuelve al login.
+Flujo oficial:
+1. El usuario pulsa `¿Olvidaste tu contraseña?` en el acceso Neith.
+2. La web llama a `resetPasswordForEmail` con `redirectTo=https://neithlauncher.com/recuperar-password/`.
+3. Supabase/Brevo entrega el correo de recuperación.
+4. El enlace abre `/recuperar-password/`, Supabase valida la sesión temporal y Neith permite establecer la nueva contraseña.
+5. La contraseña se actualiza con `updateUser`, se cierra la sesión temporal y se vuelve al login.
+6. Si un correo generado desde Supabase aterriza en la URL principal con señal `type=recovery`, V23 lo detecta y lo deriva automáticamente a `/recuperar-password/`.
 
-Los campos de contraseña incluyen un botón accesible para mostrar/ocultar el valor.
-
+La ruta antigua `/reset-password/` se mantiene solo como compatibilidad y redirige a la ruta oficial.
 
 ## OAuth Google + Discord (V8)
 
@@ -60,3 +60,7 @@ Este script actualiza el trigger de perfiles para normalizar nombre/avatar de Go
 Todos los usuarios OAuth nacen con el plan `free` por defecto.
 
 La web usa `signInWithOAuth()` y retorna a `/dashboard/`. No contiene Client Secrets de Google/Discord; esos secretos permanecen únicamente en Supabase.
+
+## V23 — PLANTILLAS PREMIUM DE CORREO
+
+V23 incluye `SUPABASE_EMAILS_PREMIUM.md` y la carpeta `supabase/email-templates/` con plantillas HTML listas para pegar en **Authentication → Email Templates** de Supabase. Para que el remitente también aparezca como Neith (nombre/dominio), configura Custom SMTP siguiendo la guía incluida.

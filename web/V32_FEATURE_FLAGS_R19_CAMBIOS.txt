@@ -1,0 +1,11 @@
+NEITH WEB V32 — FEATURE FLAGS R19 PREMIUM DEPLOYMENT
+
+- Feature Flags separadas del bootstrap con RPC paginado propio.
+- 20 flags por página, búsqueda y filtros por audiencia/estado.
+- Diseño Deployment Control PREMIUM aislado en css/admin-flags-r19.css.
+- Rollout visual con barra de progreso y porcentaje.
+- Estado ACTIVA/INACTIVA y audiencia visibles en cada tarjeta.
+- Guardar solo se habilita cuando existen cambios reales.
+- Confirmación dedicada al activar/desactivar una flag.
+- Las escrituras siguen usando neith_admin_upsert_feature_flag y quedan en Auditoría.
+- Usuarios R15, Auditoría R16 y Avisos R18 no se modifican visualmente.

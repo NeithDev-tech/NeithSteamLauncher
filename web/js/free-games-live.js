@@ -20,6 +20,7 @@
 
   let games = [];
   let selectedIndex = 0;
+  let currentGame = null;
   let countdownTimer = null;
   let refreshTimer = null;
 
@@ -80,6 +81,7 @@
   function setHero(game, index) {
     if (!game) return;
     selectedIndex = index;
+    currentGame = game;
     const image = safeImage(game.image || game.thumbnail);
     titleEl.textContent = game.title || t('Juego gratuito', 'Free game');
     platformEl.textContent = `${game.platform || 'PC'} // ${t('OFERTA REAL', 'REAL OFFER')}`;
@@ -106,15 +108,17 @@
       card.setAttribute('aria-pressed', i === index ? 'true' : 'false');
     });
     clearInterval(countdownTimer);
-    countdownTimer = setInterval(() => paintCountdown(game), 1000);
+    countdownTimer = setInterval(() => { if (!document.hidden) paintCountdown(game); }, 1000);
   }
 
   function renderCards() {
     cardsHost.innerHTML = '';
-    games.slice(0, 4).forEach((game, index) => {
+    games.forEach((game, index) => {
       const button = document.createElement('button');
       button.type = 'button';
       button.className = 'freegames-live-card';
+      const platformKey = String(game.platform || 'pc').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+      if (platformKey) button.classList.add(`platform-${platformKey}`);
       button.setAttribute('aria-pressed', index === selectedIndex ? 'true' : 'false');
       button.setAttribute('aria-label', `${t('Mostrar', 'Show')} ${game.title}`);
 
@@ -142,7 +146,13 @@
       platform.textContent = game.platform;
       const free = document.createElement('strong');
       free.textContent = t('GRATIS · -100%', 'FREE · -100%');
-      copy.append(name, platform, free);
+      const remaining = document.createElement('em');
+      remaining.className = 'freegames-live-card-time';
+      const parts = remainingParts(game.endAt);
+      remaining.textContent = parts.days > 0
+        ? `${t('TERMINA EN', 'ENDS IN')} ${parts.days} ${t('DÍAS', 'DAYS')}`
+        : `${t('TERMINA EN', 'ENDS IN')} ${String(parts.hours).padStart(2,'0')}H ${String(parts.minutes).padStart(2,'0')}M`;
+      copy.append(name, platform, free, remaining);
       button.append(media, copy);
       button.addEventListener('click', () => setHero(game, index));
       cardsHost.appendChild(button);
@@ -154,6 +164,7 @@
     clearInterval(countdownTimer);
     games = [];
     selectedIndex = 0;
+    currentGame = null;
     spotlight.setAttribute('aria-busy', 'false');
     titleEl.textContent = kind === 'empty'
       ? t('No hay ofertas verificadas ahora mismo', 'No verified offers right now')
@@ -171,7 +182,7 @@
 
   function normalizeGamerPower(items) {
     const supported = [
-      ['Epic Games Store', 'EPIC GAMES'], ['Steam', 'STEAM'], ['GOG', 'GOG'], ['Ubisoft Connect', 'UBISOFT CONNECT']
+      ['Epic Games Store', 'EPIC GAMES'], ['Steam', 'STEAM'], ['GOG', 'GOG'], ['Ubisoft Connect', 'UBISOFT CONNECT'], ['Prime Gaming', 'PRIME GAMING']
     ];
     return (Array.isArray(items) ? items : []).filter(item => {
       if (!item || String(item.status).toLowerCase() !== 'active' || String(item.type).toLowerCase() !== 'game') return false;
@@ -181,7 +192,10 @@
       const endAt = item.end_date && item.end_date !== 'N/A' ? Date.parse(item.end_date.replace(' ', 'T') + 'Z') : NaN;
       if (!Number.isFinite(endAt) || endAt <= Date.now()) return false;
       const text = `${item.title || ''} ${item.description || ''} ${item.instructions || ''}`.toLowerCase();
-      return !/\bkey giveaway\b|\brequires?\b[^.]{0,50}\b(?:arp|points?|credits?)\b|\b(?:arp|points?) required\b/.test(text);
+      if (/\bkey giveaway\b|\brequires?\b[^.]{0,50}\b(?:arp|points?|credits?)\b|\b(?:arp|points?) required\b/.test(text)) return false;
+      if (/\b(?:dlc|demo|prologue|playtest|trial|beta|free weekend|season pass|battle pass|starter pack|skin pack|currency pack)\b|in[- ]game loot/.test(text)) return false;
+      const worth = parseFloat(String(item.worth || '').replace(/[^0-9.]/g, '')) || 0;
+      return worth > 0;
     }).map(item => {
       const platforms = String(item.platforms || '');
       const found = supported.find(([needle]) => platforms.toLowerCase().includes(needle.toLowerCase()));
@@ -195,7 +209,7 @@
         endDate: item.end_date,
         endAt: Date.parse(item.end_date.replace(' ', 'T') + 'Z')
       };
-    }).sort((a, b) => a.endAt - b.endAt).slice(0, 8);
+    }).sort((a, b) => a.endAt - b.endAt);
   }
 
   function showGames(list) {
@@ -247,9 +261,12 @@
   });
 
   load();
-  refreshTimer = setInterval(load, 15 * 60 * 1000);
-  window.addEventListener('beforeunload', () => {
-    clearInterval(countdownTimer);
-    clearInterval(refreshTimer);
-  }, { once: true });
+  /* R58 visibility-aware free-games timers */
+  refreshTimer = setInterval(() => { if (!document.hidden) load(); }, 15 * 60 * 1000);
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden && currentGame) paintCountdown(currentGame);
+  }, {passive:true});
+  // No beforeunload handler: keeping the document BFCache-eligible makes
+  // back/forward and repeated navigation substantially smoother. Browsers
+  // suspend timers automatically while a document is in BFCache.
 })();

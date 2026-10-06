@@ -1,0 +1,15 @@
+BASE LIMPIA: Neith_Official_Web_V33_R95_PRIME_BOOSTPC_TRUTH_SYNC.zip
+RECONSTRUIDO DESDE CERO: capa visual de capturas de 7 secciones.
+NO SE USÓ R106/R107/R108/R109 COMO BASE.
+
+Inicio: 1 captura actual=True; showcase aprobado=True; legacy=0
+Cuentas: 1 captura actual=True; showcase aprobado=True; legacy=0
+Biblioteca: 1 captura actual=True; showcase aprobado=True; legacy=0
+Boost PC: 1 captura actual=True; showcase aprobado=True; legacy=0
+Hour Boost: 1 captura actual=True; showcase aprobado=True; legacy=0
+Juegos Gratis: 1 captura actual=True; showcase aprobado=True; legacy=0
+Logros: 1 captura actual=True; showcase aprobado=True; legacy=0
+
+CSS nuevo aislado: css/neith-approved-mockup.css
+Biblioteca: composición del boceto Inicio adaptada, porque no existe boceto separado recuperado.
+Capturas actuales copiadas byte-a-byte desde los JPG enviados.

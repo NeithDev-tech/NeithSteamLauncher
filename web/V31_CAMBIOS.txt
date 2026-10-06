@@ -1,0 +1,20 @@
+NEITH OFFICIAL WEB V31
+======================
+
+OBJETIVO
+- Unificar la descarga oficial en todas las secciones publicas con una CTA PREMIUM coherente.
+- Eliminar botones redundantes de descarga/volver arriba en Hour Boost y Boost PC sin dejar huecos visuales.
+- Corregir el contraste del boton Google en Acceso Neith.
+
+CAMBIOS
+- Nueva CTA universal: Ultima version oficial / Descarga Neith / Instala la version estable mas reciente desde el canal oficial.
+- Boton unificado: Descargar Neith.
+- Misma seccion PREMIUM animada en Inicio, Hour Boost, Boost PC, Logros, Juegos Gratis, Cuentas, Documentacion, FAQ y Free/Premium.
+- Animaciones ligeras basadas en transform/opacity para conservar la fluidez recuperada en V30.
+- Hour Boost y Boost PC: eliminados los dos botones superiores Descargar Neith + Volver al inicio.
+- El hueco se remata con un acento visual decorativo ligero para mantener la composicion premium.
+- Boton Google: texto oscuro de alto contraste sobre fondo blanco.
+
+RENDIMIENTO
+- Se conserva integramente la arquitectura V30: navegacion nativa, servidor HTTP/1.1 concurrente y fast-path Auth.
+- No se reintroducen beforeunload, overlays de navegacion, blur pesado ni audio hover.

@@ -1,0 +1,10 @@
+NEITH OFFICIAL WEB V22 — SECURITY & RECOVERY
+
+- Ruta oficial /recuperar-password/ para recuperación Supabase.
+- Puente automático desde enlaces recovery que aterricen en Inicio.
+- /reset-password/ se conserva como compatibilidad y redirige a la nueva ruta.
+- Cambio de contraseña de recuperación con validación, cierre de sesión local y enlace de un solo uso práctico.
+- Seguridad: nuevo bloque Estado de cuenta (correo, verificación, proveedor, creación y último acceso).
+- Cierre de sesión local limpio, sin borrar la preferencia de recordar email.
+- Mensajes y textos nuevos ES/EN.
+- Servidor local actualizado a V22 y compatible con /recuperar-password/.

@@ -1,0 +1,29 @@
+{
+  "revision": "R64-FINAL-PERFORMANCE-AUDIT-CLEAN",
+  "total_files": 200,
+  "total_size_mb": 3.52,
+  "style_css_kb": 323.8,
+  "i18n_engine_kb": 7.5,
+  "auth_public_loader_kb": 4.2,
+  "email_templates_cleaned": [
+    "email_change.html",
+    "identity_linked_notification.html",
+    "magic_link.html",
+    "password_changed_notification.html",
+    "confirmation.html",
+    "phone_changed_notification.html",
+    "invite.html",
+    "recovery.html",
+    "identity_unlinked_notification.html",
+    "email_changed_notification.html",
+    "verification_method_removed_notification.html",
+    "verification_method_added_notification.html",
+    "reauthentication.html"
+  ],
+  "reset_password_interval": {
+    "status": "bounded_and_intentional",
+    "max_duration_ms": 1800
+  },
+  "structural_issues": [],
+  "web_pages_checked": 17
+}

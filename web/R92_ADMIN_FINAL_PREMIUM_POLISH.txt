@@ -1,0 +1,8 @@
+R92 — Admin Center final premium visual pass
+- Users: cleaner cards and safer action controls.
+- Notices: premium toggles, hierarchy and responsive actions.
+- Feature Flags: polished switches, rollout and actions.
+- Launcher: command deck/savebar consistency.
+- Settings: safety/runtime cards refined.
+- Responsive protections to avoid clipped controls.
+- No backend/SQL/functionality changes.

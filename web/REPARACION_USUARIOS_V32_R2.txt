@@ -1,0 +1,14 @@
+NEITH WEB — V32 USERS REBUILD R2
+
+Base: V32 original limpia.
+
+Correcciones:
+1. Usuarios espera a que termine bootstrap/auth del Admin antes de consultar Supabase.
+2. 20 usuarios por página mediante neith_admin_list_users().
+3. Fallback V32 conservado solo para compatibilidad; si el backend antiguo reporta usuarios pero devuelve 0 filas, muestra el error real en vez de "Directorio vacío".
+4. Eliminado de raíz el efecto CSS de rayos ::before/::after del logo superior que atravesaba la N y el texto. Se conserva el emblema SVG, glow y pulso limpio.
+5. auth.js y header-controller.js permanecen EXACTAMENTE como en V32 original.
+
+SUPABASE:
+Ejecutar UNA VEZ: supabase/V32_USERS_PAGINATION.sql
+Es idempotente (CREATE OR REPLACE), no borra usuarios, roles ni configuración y mantiene el RPC anterior.

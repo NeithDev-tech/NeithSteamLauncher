@@ -1,0 +1,10 @@
+NEITH OFFICIAL WEB V32 — HOUR BOOST R37
+
+- Hero reconstruido como flagship cinematic session engine.
+- Nucleo visual central con boost 24/7, cuenta, 3 juegos, uptime y telemetria.
+- Flujo 01→04 visible sin bloques largos de texto.
+- Galeria real equilibrada 50/50: dos capturas distintas por columna.
+- Las 4 capturas usan exactamente la misma caja visual y object-fit: contain.
+- Sin capturas repetidas ni deformadas.
+- Responsive reforzado y reduced-motion respetado.
+- Sin cambios en auth, Supabase, Admin Center ni logica del launcher.

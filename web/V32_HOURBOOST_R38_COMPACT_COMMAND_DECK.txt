@@ -1,0 +1,9 @@
+Neith Official Web V32 — HOUR BOOST R38
+
+Cambios principales:
+- Rediseño premium de la cabecera Hour Boost con composición más compacta.
+- Nuevo bloque flagship tipo COMMAND DECK con mejor densidad visual.
+- Sustitución de slots 01/02/03 por logos visuales de Counter-Strike 2, Team Fortress 2 y Half-Life 2.
+- Más microdetalles premium: cinta superior, tarjetas laterales, ruta operativa y métricas compactas.
+- Estructura visual preparada para futura ampliación de cuentas premium y más juegos de boost.
+- Se mantiene la galería real R37 inferior sin romper el equilibrio ya aprobado.

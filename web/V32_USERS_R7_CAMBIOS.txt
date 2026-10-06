@@ -1,0 +1,15 @@
+NEITH WEB V32 — USUARIOS R7 PREMIUM POLISH
+
+Base: R6 Responsive Premium Security estable.
+
+Cambios:
+- Sin cambios de backend ni SQL.
+- APLICAR solo se activa cuando Rol o Plan cambian realmente.
+- Estado visual de cambios pendientes y confirmación tras guardar.
+- Suspensión muestra fecha límite cuando existe.
+- Security Vault muestra protección activa / cuenta suspendida.
+- Modal destructivo refinado; borrado solo se desbloquea con correo exacto.
+- Confirmaciones de suspensión/reactivación/borrado indican registro en Auditoría.
+- Aviso de backend compatible más compacto; desaparece automáticamente con RPC v3/R4 instalado.
+- Layout R6 preservado sin cambios estructurales.
+- auth.js, header-controller.js y style.css no modificados.

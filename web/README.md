@@ -50,3 +50,34 @@ La página `/juegos-gratis/` consulta `/api/free-games`, una Pages Function que 
 
 ### Fallback de vista previa local (2026-09-22)
 Si `/api/free-games` no está disponible (por ejemplo al abrir una copia estática/local), la interfaz intenta primero la API pública de GamerPower y, si el navegador bloquea CORS, usa un snapshot real verificado incluido en la build. Las promociones caducadas se descartan automáticamente; en producción, `/api/free-games` sigue siendo la fuente prioritaria y se refresca cada 15 minutos.
+
+## V23 — Auth close + Emails Premium
+
+- El botón X de Acceso Neith usa una hitbox real y centrada de 44×44 px (42×42 en móvil).
+- Se incluyen plantillas PREMIUM de Supabase en `supabase/email-templates/`.
+- Consulta `SUPABASE_EMAILS_PREMIUM.md` para pegarlas y configurar los asuntos/remitente.
+
+## V28 — Render Budget + Zero White Frame
+- Fondo crítico oscuro desde el primer paint en todas las rutas.
+- Escudo de navegación oscuro para evitar frames blancos durante cambios entre páginas.
+- Cabecera y hovers optimizados para propiedades compositor-friendly.
+- Blur/backdrop global eliminado de superficies grandes para reducir repaints GPU.
+- Animaciones infinitas con filtros/sombras/fondos animados pausadas; se mantienen las basadas en transform/opacity.
+- Animaciones fuera de pantalla pausadas automáticamente.
+- i18n evita recorrer todo el DOM al cargar en español; ES/EN sigue aplicándose al cambiar idioma.
+- Logo principal de portada servido como WebP de alta calidad y menor peso.
+- Servidor local con caché coherente para CSS/JS/media.
+
+## V29 - servidor local concurrente
+
+La V29 sustituye el antiguo servidor local secuencial por un servidor HTTP concurrente en .NET. `_PROBAR_WEB.bat` ejecuta primero una autoprueba paralela de 8 recursos y solo abre el navegador si todos responden correctamente. Esta version no modifica de nuevo la interfaz, AUTH ni Supabase: sirve como base fiable para medir el rendimiento real antes de seguir optimizando.
+
+## V30 — Auth Critical Path + Native Navigation
+
+V30 reemplaza el servidor local TCP artesanal por un servidor HTTP/1.1 concurrente estándar en Python, elimina `beforeunload` y el escudo de navegación que ocultaba el documento completo, y saca la revalidación de Supabase del primer render de las páginas públicas. El menú de cuenta se monta bajo demanda y las páginas públicas ya no recorren todos los selectores de Dashboard al iniciar una sesión.
+
+Para probar: ejecuta `_PROBAR_WEB.bat`. El BAT detecta `py`/`python`, lanza el servidor, ejecuta la autoprueba y abre el navegador automáticamente.
+
+
+## V32 · Admin Center
+Consulta `SETUP_ADMIN_CENTER_V32.md` y ejecuta `supabase/admin-center-v32.sql` antes de usar `/admin/`. Los permisos se validan server-side en Supabase; ocultar botones en el navegador no concede privilegios.

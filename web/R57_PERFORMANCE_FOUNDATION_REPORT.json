@@ -1,0 +1,28 @@
+{
+  "revision": "R57",
+  "phase": "performance-foundation",
+  "removed_assets": [
+    "img/actualizaciones.webp",
+    "img/ajustes.webp",
+    "img/biblioteca.webp",
+    "img/hourboost-logo-cs2.svg",
+    "img/hourboost-logo-hl2.svg",
+    "img/hourboost-logo-tf2.svg",
+    "img/logros.webp",
+    "img/neith-master-logo-integrated.png",
+    "img/neith-master-logo-premium-transparent.png",
+    "img/neith-master-logo-premium.png",
+    "css/admin-ultra-r30.css",
+    "css/hourboost-r36.css",
+    "css/landing-r41.css",
+    "audio/ui-hover.wav"
+  ],
+  "removed_bytes": 4218497,
+  "billing_pages": [
+    "index.html",
+    "free-premium/index.html"
+  ],
+  "cache_headers": true,
+  "audio_lazy_init": true,
+  "validation_issues": []
+}

@@ -1,0 +1,12 @@
+backend cap12 removed: True
+client cap4 removed: True
+fallback cap8 removed: True
+index.html: clickable=True
+cuentas/index.html: clickable=True
+biblioteca/index.html: clickable=True
+boostpc/index.html: clickable=True
+hourboost/index.html: clickable=True
+juegos-gratis/index.html: clickable=True
+logros/index.html: clickable=True
+cuentas premium info=True
+logros premium info=True

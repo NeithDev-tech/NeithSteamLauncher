@@ -1,0 +1,35 @@
+NEITH OFFICIAL WEB - V29
+CONCURRENT LOCAL SERVER BASELINE
+
+OBJETIVO
+-------
+Aislar y eliminar primero el cuello de botella del entorno local antes de volver a modificar CSS, animaciones, AUTH o navegacion.
+
+CAMBIO ESTRUCTURAL PRINCIPAL
+----------------------------
+- Sustituido por completo el servidor TCP secuencial anterior.
+- El nuevo servidor acepta conexiones continuamente y procesa cada peticion en paralelo mediante ThreadPool .NET.
+- Una conexion lenta, cancelada o mantenida por Chrome ya NO puede bloquear las demas peticiones.
+- Timeouts independientes por conexion.
+- Los cierres/cancelaciones normales del navegador no se tratan como fallos globales.
+- Rutas limpias, 404, /descargar, MIME types y politicas de cache se mantienen.
+- No requiere Python, Node ni instalacion adicional.
+
+VALIDACION AUTOMATICA
+---------------------
+Antes de abrir Chrome, el propio servidor ejecuta una autoprueba de 8 recursos simultaneos:
+  /
+  /css/style.css
+  /js/main.js
+  /js/auth.js
+  /logros/
+  /cuentas/
+  /site.webmanifest
+  /__neith_health
+
+Si cualquiera falla o se bloquea, la web NO se abre y el BAT muestra el error.
+
+AISLAMIENTO DE CAUSA
+--------------------
+En V29 NO se han vuelto a tocar CSS, AUTH, Supabase, animaciones ni el diseno visual de V28.
+Esto es intencionado: primero debemos medir la web con un servidor local correcto. Si la diferencia invitado/logueado persiste con V29, el siguiente trabajo sera sobre la arquitectura de navegacion/autenticacion, ya con una medicion fiable.

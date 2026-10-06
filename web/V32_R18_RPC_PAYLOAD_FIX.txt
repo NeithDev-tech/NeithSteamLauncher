@@ -1,0 +1,6 @@
+NEITH WEB V32 - R18 RPC PAYLOAD FIX
+
+Corrección aislada:
+- Avisos: neith_admin_save_announcement ahora recibe p_payload: payload.
+- Launcher: neith_admin_save_launcher_config ahora recibe p_payload: payload.
+- Sin cambios de diseño ni Supabase.

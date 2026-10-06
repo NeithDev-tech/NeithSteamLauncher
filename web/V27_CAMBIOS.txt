@@ -1,0 +1,23 @@
+NEITH OFFICIAL WEB — V27
+
+OBJETIVO
+- Corregir de raíz los flashes blancos entre páginas.
+- Mejorar la fluidez global, especialmente hover del menú superior y navegación.
+
+CAMBIOS ESTRUCTURALES
+1. Navegación con escudo oscuro Neith pintado antes del commit entre documentos.
+2. Eliminado backdrop-filter en superficies grandes/solapadas para evitar repaints GPU costosos.
+3. Cabecera sticky optimizada: hover basado en transform/color y sin animar blur/filtros/sombras.
+4. Presupuesto de animación: las animaciones infinitas que repintan filter/shadow/background se pausan; se mantienen las seguras de transform/opacity.
+5. Animaciones fuera de pantalla pausadas por IntersectionObserver.
+6. Eliminado el prefetch global agresivo de V26 que podía generar trabajo de red/parsing mientras el usuario movía el ratón.
+7. Logo principal de la home convertido a WebP de alta calidad: misma geometría, ~75% menos peso.
+8. Fondo crítico oscuro reforzado en todas las rutas antes de cargar CSS.
+9. Servidor local: caché coherente para assets, sin cabeceras no-cache contradictorias.
+
+NO SE TOCA
+- Autenticación / Supabase.
+- Menú de usuario validado en V25.
+- Sistema ES/EN validado en V25.
+- Pagos.
+- Rutas o contenido funcional.

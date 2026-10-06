@@ -1,6 +1,8 @@
 (() => {
   'use strict';
 
+  const COPY = 'La tienda LIVE de Neith está pendiente de activación. Tu plan y precios ya están definidos, pero la compra pública se habilitará cuando el procesador de pagos active la tienda.';
+
   document.addEventListener('click', e => {
     const button = e.target.closest('[data-premium-checkout]');
     if (!button) return;
@@ -11,6 +13,6 @@
       return;
     }
 
-    window.alert(window.NeithI18n?.t('Neith Premium todavía no está a la venta. El sistema de licencias se activará más adelante.') || 'Neith Premium todavía no está a la venta. El sistema de licencias se activará más adelante.');
+    window.alert(window.NeithI18n?.t(COPY) || COPY);
   });
 })();

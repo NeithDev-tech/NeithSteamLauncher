@@ -1,0 +1,8 @@
+NEITH OFFICIAL WEB V32 — HOUR BOOST R36
+
+- Reequilibrio completo del bloque de presentación Hour Boost.
+- Galería 2x2 con 4 capturas reales distintas.
+- Las cuatro capturas usan exactamente la misma caja visual y object-fit: contain.
+- Panel izquierdo compacto con estado de cuentas, juegos, motor y registro.
+- Mantiene lightbox/zoom existente y no toca auth, Admin Center ni Supabase.
+- Traducción ES/EN añadida para el nuevo contenido.

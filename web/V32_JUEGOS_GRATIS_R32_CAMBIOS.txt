@@ -1,0 +1,8 @@
+NEITH OFFICIAL WEB V32 — JUEGOS GRATIS R32
+
+- Radar multitenda más visible y compacto.
+- Criterios de selección explicados: juego completo, -100% temporal, caducidad y acceso desde Neith.
+- Tarjetas en directo muestran tiempo restante.
+- Se corrige la comunicación: la web muestra la oferta; el acceso/reclamación se realiza desde el launcher.
+- Traducción ES/EN ampliada para todos los nuevos textos.
+- Sin cambios en Admin Center, autenticación, Supabase ni resto de páginas.

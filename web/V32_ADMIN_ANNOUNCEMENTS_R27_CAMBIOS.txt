@@ -1,0 +1,1 @@
+R27: los avisos permanecen guardados. Al pasar PUBLICACIÓN ACTIVA de OFF a ON, Supabase incrementa publication y el launcher lo recibe de nuevo una sola vez. Editar sigue incrementando revision. Eliminar sigue siendo explícito y auditado.

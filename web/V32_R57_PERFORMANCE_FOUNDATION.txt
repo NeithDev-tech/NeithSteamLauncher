@@ -1,0 +1,8 @@
+R57 — Performance foundation
+- Added long-lived immutable caching for static CSS/JS/images/audio on Cloudflare Pages.
+- Billing script now loads only on pages that actually expose Premium checkout controls.
+- Navbar logo has intrinsic dimensions and high fetch priority to stabilize first paint.
+- Footer logo has intrinsic dimensions; Docs screenshot is lazy/async.
+- UI click audio is instantiated only after a real relevant interaction.
+- Removed assets/styles proven unreferenced by the current project.
+- No visual redesign or Auth/Supabase/Admin behavior changes.

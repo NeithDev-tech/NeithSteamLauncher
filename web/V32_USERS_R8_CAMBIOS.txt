@@ -1,0 +1,9 @@
+NEITH WEB V32 — USERS R8 ACCESS ALIGNMENT
+
+Base: R7 PREMIUM Polish.
+
+- Corrección aislada del bloque CONTROL DE ACCESO.
+- Cabecera de estado en fila propia.
+- ROL + PLAN + APLICAR permanecen en una única fila en escritorio.
+- Responsive controlado: en tablet Rol/Plan permanecen juntos y Aplicar baja completo; en móvil se apila todo.
+- Sin cambios en Supabase, RPC, auth, header, logo, avatar, Security Vault o layout principal de Usuarios.

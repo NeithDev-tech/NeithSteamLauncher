@@ -1,0 +1,4 @@
+V24 local test fix
+- _PROBAR_WEB.bat now validates V24
+- _neith_local_server.ps1 defaults to V24
+- No public web/auth behavior changed

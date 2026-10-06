@@ -1,0 +1,23 @@
+NEITH OFFICIAL WEB — V21
+
+ALCANCE DE ESTA VERSION
+- No se modifica el contenido ni el comportamiento de la web publicada de V20.
+- V21 se centra exclusivamente en reconstruir el entorno de prueba local.
+
+CAMBIOS
+1. _PROBAR_WEB.bat ya no depende de Python.
+2. Nuevo servidor local nativo para Windows mediante PowerShell + TcpListener.
+3. Soporte generico de rutas limpias: /dashboard, /mi-cuenta, /licencia, /seguridad y cualquier carpeta con index.html.
+4. /ruta y /ruta/ resuelven al mismo index.html local.
+5. Cache desactivada en todas las respuestas locales.
+6. Cabeceras X-Neith-Build y X-Neith-Local-Test para identificar la build servida.
+7. Cierra solo servidores locales antiguos de Neith; no mata aplicaciones ajenas.
+8. Si el puerto 8080 esta ocupado por otro programa, se detiene y muestra el proceso en vez de abrir una web equivocada.
+9. Reproduce localmente el redirect /descargar hacia la release oficial.
+10. Si el servidor falla, la ventana permanece visible con el codigo de error para poder diagnosticarlo mediante una captura.
+
+PRUEBA
+- Extraer el ZIP completo en una carpeta nueva.
+- Doble click en _PROBAR_WEB.bat.
+- Debe aparecer "NEITH WEB V21 - SERVIDOR LOCAL WINDOWS / SIN CACHE".
+- La ventana debe permanecer abierta durante la prueba.

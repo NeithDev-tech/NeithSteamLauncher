@@ -1,4 +1,5 @@
 const neithText=(es,en)=>document.documentElement.lang==='en'?en:es;
+const neithPointerFrame=handler=>{let frame=0,lastEvent=null;return event=>{lastEvent=event;if(frame)return;frame=requestAnimationFrame(()=>{frame=0;handler(lastEvent)})}};
 const menu=document.querySelector('.menu'),nav=document.querySelector('.navlinks');
 menu?.addEventListener('click',()=>nav.classList.toggle('open'));
 document.querySelectorAll('.navlinks a').forEach(a=>a.addEventListener('click',()=>nav?.classList.remove('open')));
@@ -8,9 +9,11 @@ document.querySelectorAll('.reveal').forEach(x=>io.observe(x));
 document.querySelectorAll('[data-year]').forEach(x=>x.textContent=new Date().getFullYear());
 
 const topbar=document.querySelector('.topbar');
-const syncTopbar=()=>topbar?.classList.toggle('scrolled',window.scrollY>18);
+let topbarFrame=0;
+const syncTopbar=()=>{topbarFrame=0;topbar?.classList.toggle('scrolled',window.scrollY>18)};
+const requestTopbarSync=()=>{if(topbarFrame)return;topbarFrame=requestAnimationFrame(syncTopbar)};
 syncTopbar();
-window.addEventListener('scroll',syncTopbar,{passive:true});
+window.addEventListener('scroll',requestTopbarSync,{passive:true});
 
 /* Visual-only screenshot treatment: no structure/text/routes changed. */
 document.querySelectorAll('.product-shot,.shot').forEach(frame=>{
@@ -43,15 +46,19 @@ document.querySelectorAll('.product-shot,.shot').forEach(frame=>{
   catch { base = new URL('./', window.location.href); }
   const asset = p => new URL(String(p).replace(/^\/+/, ''), base).href;
 
-  const hoverSound = new Audio(asset('audio/ui-hover.wav'));
-  const clickSound = new Audio(asset('audio/ui-click.wav'));
-  hoverSound.preload = 'auto';
-  clickSound.preload = 'auto';
-  hoverSound.volume = 0.055;
-  clickSound.volume = 0.09;
+  // V30: hover audio was restarted on every pointer transition after the first
+  // interaction. On some Windows audio stacks that creates visible micro-stutter
+  // in the top navigation. Keep the click feedback, remove hover playback.
+  let clickSound = null;
+  const getClickSound = () => {
+    if (clickSound) return clickSound;
+    clickSound = new Audio(asset('audio/ui-click.wav'));
+    clickSound.preload = 'none';
+    clickSound.volume = 0.09;
+    return clickSound;
+  };
 
   let armed = false;
-  let lastHover = 0;
   const arm = () => {
     armed = true;
     document.documentElement.classList.add('neith-audio-ready');
@@ -78,20 +85,11 @@ document.querySelectorAll('.product-shot,.shot').forEach(frame=>{
     '.auth-close'
   ].join(',');
 
-  document.addEventListener('pointerover', e => {
-    const target = e.target.closest?.(interactiveSelector);
-    if (!target || target.contains(e.relatedTarget)) return;
-    const now = performance.now();
-    if (now - lastHover < 85) return;
-    lastHover = now;
-    play(hoverSound);
-  }, {passive:true});
-
   document.addEventListener('click', e => {
     const target = e.target.closest?.(interactiveSelector);
     if (!target) return;
     arm();
-    play(clickSound, true);
+    play(getClickSound(), true);
   });
 
   /* Scrollbar energy color follows page progress: cyan -> cyber purple. */
@@ -155,7 +153,7 @@ document.querySelectorAll('.product-shot,.shot').forEach(frame=>{
     const base = Number(el.dataset.start || 0);
     el.dataset.current = String(base);
     if (reduced) return;
-    setInterval(() => {
+    NeithVisibleTimers.every(() => {
       const current = Number(el.dataset.current || base) + (0.1 + i * 0.03);
       el.dataset.current = current.toFixed(1);
       el.textContent = `${current.toFixed(1)} ${neithText('h','hrs')}`;
@@ -163,7 +161,7 @@ document.querySelectorAll('.product-shot,.shot').forEach(frame=>{
     }, 2600 + i * 450);
   });
   if (runtime && !reduced) {
-    setInterval(() => {
+    NeithVisibleTimers.every(() => {
       elapsed += 1;
       const h = String(Math.floor(elapsed / 3600)).padStart(2,'0');
       const m = String(Math.floor((elapsed % 3600) / 60)).padStart(2,'0');
@@ -183,7 +181,7 @@ document.querySelectorAll('.product-shot,.shot').forEach(frame=>{
   if (hours) {
     let value = Number(hours.dataset.start || 14208);
     if (!reduced) {
-      setInterval(() => {
+      NeithVisibleTimers.every(() => {
         value += Math.floor(1 + Math.random() * 4);
         hours.textContent = `+${value.toLocaleString(document.documentElement.lang==='en'?'en-US':'es-ES')} ${neithText('h','hrs')}`;
         hours.animate([{opacity:.72,transform:'translateY(1px)'},{opacity:1,transform:'translateY(0)'}],{duration:320,easing:'ease-out'});
@@ -193,9 +191,9 @@ document.querySelectorAll('.product-shot,.shot').forEach(frame=>{
   if (sessions && !reduced) {
     const states = () => [neithText('24/7 EN LÍNEA','24/7 ONLINE'),neithText('24/7 EN LÍNEA','24/7 ONLINE'),neithText('24/7 EN LÍNEA','24/7 ONLINE')];
     let i = 0;
-    setInterval(() => {
+    NeithVisibleTimers.every(() => {
       const liveStates=states(); sessions.textContent = liveStates[(++i) % liveStates.length];
-      sessions.animate([{filter:'brightness(.8)'},{filter:'brightness(1.2)'},{filter:'brightness(1)'}],{duration:420,easing:'ease-out'});
+      sessions.animate([{opacity:.78},{opacity:1}],{duration:300,easing:'ease-out'});
     }, 3200);
   }
 })();
@@ -206,7 +204,7 @@ document.querySelectorAll('.product-shot,.shot').forEach(frame=>{
   if(!cards.length)return;
   const coarse=window.matchMedia('(pointer: coarse)');
   cards.forEach(card=>{
-    card.addEventListener('pointermove',e=>{
+    card.addEventListener('pointermove',neithPointerFrame(e=>{
       if(coarse.matches)return;
       const r=card.getBoundingClientRect();
       const x=(e.clientX-r.left)/r.width;
@@ -217,7 +215,7 @@ document.querySelectorAll('.product-shot,.shot').forEach(frame=>{
       card.style.setProperty('--spec-ry',`${ry.toFixed(2)}deg`);
       card.style.setProperty('--spec-mx',`${(x*100).toFixed(1)}%`);
       card.style.setProperty('--spec-my',`${(y*100).toFixed(1)}%`);
-    },{passive:true});
+    }),{passive:true});
     card.addEventListener('pointerleave',()=>{
       card.style.setProperty('--spec-rx','0deg');
       card.style.setProperty('--spec-ry','0deg');
@@ -283,13 +281,13 @@ document.querySelectorAll('.product-shot,.shot').forEach(frame=>{
   const canTilt = window.matchMedia('(pointer:fine)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (canTilt) {
     cards.forEach((card) => {
-      card.addEventListener('pointermove', (event) => {
+      card.addEventListener('pointermove', neithPointerFrame((event) => {
         const r = card.getBoundingClientRect();
         const x = (event.clientX - r.left) / r.width - 0.5;
         const y = (event.clientY - r.top) / r.height - 0.5;
         card.style.setProperty('--ry', `${(x * 8).toFixed(2)}deg`);
         card.style.setProperty('--rx', `${(-y * 7).toFixed(2)}deg`);
-      }, { passive: true });
+      }), { passive: true });
       card.addEventListener('pointerleave', () => {
         card.style.setProperty('--ry', '0deg');
         card.style.setProperty('--rx', '0deg');
@@ -306,7 +304,7 @@ document.querySelectorAll('.product-shot,.shot').forEach(frame=>{
     if (ram) ram.textContent = `+${[88,89,91,90,92,88][step]}% ${neithText('LIBRE','FREE')}`;
     if (latency) latency.textContent = `${neithText('CERO RETRASO','ZERO LAG')} · ${['0.2','0.2','0.1','0.2','0.3','0.2'][step]}ms`;
   };
-  window.setInterval(tick, 1800);
+  NeithVisibleTimers.every(tick, 1800);
 })();
 
 /* ===== NEITH MASTER VISUAL FRAMEWORK — universal secondary-page interactions ===== */
@@ -316,13 +314,13 @@ document.querySelectorAll('.product-shot,.shot').forEach(frame=>{
   const fine = matchMedia('(pointer:fine)').matches;
   if (fine && !reduced) {
     cards.forEach(card => {
-      card.addEventListener('pointermove', e => {
+      card.addEventListener('pointermove', neithPointerFrame(e => {
         const r = card.getBoundingClientRect();
         const x = (e.clientX - r.left) / Math.max(1, r.width) - .5;
         const y = (e.clientY - r.top) / Math.max(1, r.height) - .5;
         card.style.setProperty('--ry', `${(x * 7).toFixed(2)}deg`);
         card.style.setProperty('--rx', `${(-y * 6).toFixed(2)}deg`);
-      }, {passive:true});
+      }), {passive:true});
       card.addEventListener('pointerleave', () => {
         card.style.setProperty('--ry','0deg');
         card.style.setProperty('--rx','0deg');
@@ -333,7 +331,7 @@ document.querySelectorAll('.product-shot,.shot').forEach(frame=>{
   const counters = [...document.querySelectorAll('[data-master-counter]')];
   if (reduced || !counters.length) return;
   let n = 0;
-  setInterval(() => {
+  NeithVisibleTimers.every(() => {
     n++;
     counters.forEach(el => {
       switch (el.dataset.masterCounter) {
@@ -343,7 +341,7 @@ document.querySelectorAll('.product-shot,.shot').forEach(frame=>{
         case 'deals': el.textContent = String(6 + (n%3)).padStart(2,'0'); break;
         case 'accounts': el.textContent = String(5 + (n%2)).padStart(2,'0'); break;
       }
-      el.animate([{opacity:.62,filter:'brightness(.9)'},{opacity:1,filter:'brightness(1.22)'},{filter:'brightness(1)'}],{duration:420,easing:'ease-out'});
+      el.animate([{opacity:.72,transform:'translateY(1px)'},{opacity:1,transform:'translateY(0)'}],{duration:320,easing:'ease-out'});
     });
   }, 2100);
 })();
@@ -362,63 +360,40 @@ document.querySelectorAll('.product-shot,.shot').forEach(frame=>{
 })();
 
 
-/* ===== Hour Boost premium capture lightbox ===== */
-(() => {
-  const triggers = [...document.querySelectorAll('[data-hourboost-lightbox]')];
-  const modal = document.querySelector('[data-hourboost-modal]');
-  if (!triggers.length || !modal) return;
-  const image = modal.querySelector('[data-hourboost-modal-image]');
-  const caption = modal.querySelector('[data-hourboost-caption]');
-  const prev = modal.querySelector('[data-hourboost-prev]');
-  const next = modal.querySelector('[data-hourboost-next]');
-  const closes = [...modal.querySelectorAll('[data-hourboost-close]')];
-  let index = 0;
-  let lastFocus = null;
+/* Gallery/lightbox controller moved to js/neith-gallery-lightbox.js in R86. */
 
-  const render = (animate = true) => {
-    const trigger = triggers[index];
-    if (!trigger || !image) return;
-    const src = trigger.dataset.full;
-    const text = trigger.dataset.caption || trigger.querySelector('img')?.alt || neithText('Captura de Hour Boost','Hour Boost capture');
-    image.classList.remove('is-zoomed');
-    if (animate) {
-      image.animate([{opacity:.28,transform:'scale(.975)'},{opacity:1,transform:'scale(1)'}],{duration:260,easing:'cubic-bezier(.2,.8,.2,1)'});
+/* === R58 VISIBILITY-AWARE DECORATIVE TIMERS ===
+   Decorative/demo timers stop while the document is hidden and resume
+   when it becomes visible again. */
+const NeithVisibleTimers = (() => {
+  const tasks = new Set();
+
+  const start = task => {
+    if (document.hidden || task.id !== null) return;
+    task.id = window.setInterval(task.fn, task.delay);
+  };
+  const stop = task => {
+    if (task.id === null) return;
+    window.clearInterval(task.id);
+    task.id = null;
+  };
+  const sync = () => {
+    for (const task of tasks) document.hidden ? stop(task) : start(task);
+  };
+
+  document.addEventListener('visibilitychange', sync, {passive:true});
+
+  return {
+    every(fn, delay) {
+      const task = {fn, delay, id:null};
+      tasks.add(task);
+      start(task);
+      return task;
+    },
+    cancel(task) {
+      if (!task) return;
+      stop(task);
+      tasks.delete(task);
     }
-    image.src = src;
-    image.alt = text;
-    if (caption) caption.textContent = text;
   };
-
-  const open = (idx) => {
-    index = idx;
-    lastFocus = document.activeElement;
-    render(false);
-    modal.classList.add('is-open');
-    modal.setAttribute('aria-hidden','false');
-    document.body.classList.add('hourboost-lightbox-open');
-    requestAnimationFrame(() => modal.querySelector('.hourboost-lightbox-close')?.focus({preventScroll:true}));
-  };
-  const close = () => {
-    modal.classList.remove('is-open');
-    modal.setAttribute('aria-hidden','true');
-    document.body.classList.remove('hourboost-lightbox-open');
-    image?.classList.remove('is-zoomed');
-    lastFocus?.focus?.({preventScroll:true});
-  };
-  const move = (step) => {
-    index = (index + step + triggers.length) % triggers.length;
-    render(true);
-  };
-
-  triggers.forEach((trigger, idx) => trigger.addEventListener('click', () => open(idx)));
-  closes.forEach(el => el.addEventListener('click', close));
-  prev?.addEventListener('click', () => move(-1));
-  next?.addEventListener('click', () => move(1));
-  image?.addEventListener('click', () => image.classList.toggle('is-zoomed'));
-  document.addEventListener('keydown', (event) => {
-    if (!modal.classList.contains('is-open')) return;
-    if (event.key === 'Escape') close();
-    if (event.key === 'ArrowLeft') move(-1);
-    if (event.key === 'ArrowRight') move(1);
-  });
 })();

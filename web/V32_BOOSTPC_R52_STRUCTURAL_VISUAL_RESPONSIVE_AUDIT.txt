@@ -1,0 +1,8 @@
+R52 — Boost PC structural / visual / responsive audit
+- Corrected malformed preconnect link markup in Boost PC head.
+- Removed empty src from Boost PC lightbox image.
+- Added native width/height to all 3 real launcher captures to reduce layout shift.
+- Added keyboard focus state to gallery controls.
+- Limited hover transforms to fine-pointer devices.
+- Added compact mobile tuning without redesigning desktop/tablet layouts.
+- Preserved R51 and all previously validated sections.

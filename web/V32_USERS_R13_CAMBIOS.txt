@@ -1,0 +1,7 @@
+NEITH WEB V32 — USERS R13
+
+- ROL y PLAN permanecen juntos en una fila.
+- Los selectores reservan ancho suficiente para SUPERADMIN y PREMIUM.
+- APLICAR queda en una segunda fila centrado bajo ROL + PLAN.
+- No se modifica la lógica de usuarios, seguridad, Supabase, avatar, logo ni cabecera.
+- El aviso de backend NO se oculta artificialmente: desaparece automáticamente cuando neith_admin_list_users_v3 está disponible.

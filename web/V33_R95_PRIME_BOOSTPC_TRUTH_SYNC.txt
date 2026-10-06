@@ -1,0 +1,8 @@
+NEITH OFFICIAL WEB V33 R95
+
+- JUEGOS GRATIS: Prime Gaming vuelve a formar parte del radar web mediante el mismo catálogo público game-only usado por el launcher tras la migración de Amazon a Luna.
+- Prime cruza Atom + HTML, exige precio recomendado > 0, caducidad válida y juego base; excluye loot/F2P/demos/trials/betas.
+- Cloudflare Pages Function y fallback Netlify actualizados.
+- BOOST PC: documentación ampliada con el comportamiento real de OPTIMIZAR AHORA y todas las herramientas actuales.
+- Eliminadas promesas visuales engañosas de latencia/FPS y cierres/suspensiones automáticas.
+- Nueva sección responsive boostpc-r95-current-features.css.

@@ -1,0 +1,34 @@
+NEITH OFFICIAL WEB V30
+======================
+
+Objetivo: aislar y corregir la ralentizacion autenticada y los flashes residuales sin parches visuales.
+
+CAMBIOS ESTRUCTURALES
+- Sustituido el servidor TCP/PowerShell de pruebas por un servidor HTTP/1.1 concurrente basado en Python ThreadingHTTPServer.
+- _PROBAR_WEB.bat arranca el servidor automaticamente; no hay que escribir comandos Python manualmente.
+- Autoprueba concurrente antes de abrir la web.
+- Keep-Alive HTTP/1.1 y cache diferenciada para HTML/assets.
+- Eliminados los listeners beforeunload que impedían/penalizaban BFCache.
+- Eliminado el interceptado artificial de enlaces y el ocultado completo del body durante navegacion.
+- El navegador vuelve a gestionar la navegacion nativa sobre un lienzo oscuro desde el primer paint.
+
+AUTH V30
+- El header autenticado usa inmediatamente la sesion persistida local de Supabase solo como fast-path visual.
+- La validacion oficial con Supabase se hace fuera del camino critico en paginas publicas.
+- Las paginas protegidas siguen validando la sesion inmediatamente.
+- El menu de cuenta ya no se inyecta en cada pagina: se crea solo al abrirlo.
+- Se evitan mas de 20 barridos querySelectorAll de campos de Dashboard en paginas publicas.
+- El inicio de sesion actualiza el estado local de inmediato y luego queda sincronizado por Supabase.
+- Cache de perfil V30 con compatibilidad de lectura del cache V28.
+
+RENDIMIENTO UI
+- Eliminado el audio de hover que se reiniciaba continuamente al mover el raton por controles superiores.
+- Se mantiene el feedback de click.
+- Se conservan presupuestos de animacion por visibilidad y pausa de animaciones infinitas costosas.
+- Corregido un bloque CSS antiguo de Auth que contenia separadores literales 'n' y estaba mal serializado.
+
+VALIDACION
+- Todos los JS pasan node --check.
+- CSS completo parseado con 0 errores.
+- 16 paginas mantienen fondo oscuro de primer paint y theme-color oscuro.
+- Servidor probado con 32 solicitudes concurrentes: respuestas locales en decenas de ms, sin bloqueos de 2 s.

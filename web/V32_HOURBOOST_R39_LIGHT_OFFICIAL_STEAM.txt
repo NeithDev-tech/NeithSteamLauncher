@@ -1,0 +1,7 @@
+Neith Official Web V32 — HOUR BOOST R39
+
+- Simplificación profunda del Command Deck: se elimina información repetida y bloques secundarios.
+- Vista superior más ligera con solo cuenta, 24/7, juegos activos, uptime y estado.
+- Tarjetas de juego compactas con arte oficial servido por la CDN de Steam.
+- Las imágenes usan object-fit: contain para respetar proporción completa sin deformar ni recortar.
+- Se mantiene la galería real inferior y el resto de la web intactos.

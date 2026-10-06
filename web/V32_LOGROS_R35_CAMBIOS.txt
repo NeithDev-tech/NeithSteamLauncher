@@ -1,0 +1,8 @@
+V32 LOGROS R35 — PRECISION POLISH
+- Centrado matemático del núcleo de trofeos.
+- Alturas y alineación coherentes en las 4 fases.
+- Jerarquía visual más limpia en Ascensión.
+- Mayor protagonismo para las capturas reales.
+- Capturas inferiores equilibradas en tamaño visual.
+- Responsive reforzado y reduced-motion respetado.
+- Sin cambios de lógica, autenticación, Supabase ni Admin Center.

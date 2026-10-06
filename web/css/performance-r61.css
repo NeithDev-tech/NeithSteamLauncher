@@ -1,0 +1,112 @@
+
+/* =========================================================
+   R61 — VISUAL PERFORMANCE / GPU COMPOSITING
+   Conservative runtime optimizations only.
+   ========================================================= */
+
+/* Skip layout/paint for large below-the-fold blocks until needed. */
+@supports (content-visibility:auto) {
+  main > section,
+  .section,
+  .home44-section,
+  .download-section,
+  .home44-footer,
+  .footer-premium {
+    content-visibility:auto;
+    contain-intrinsic-size:1px 900px;
+  }
+
+  /* Keep the first visible region immediately rendered. */
+  main > section:first-of-type,
+  .hero,
+  .home44-hero {
+    content-visibility:visible;
+    contain-intrinsic-size:auto;
+  }
+}
+
+/* Contain heavy visual cards so their paint does not leak across the page. */
+.real-shot,
+.hourboost-shot,
+.boostpc-r40-zoom,
+.logros-shot,
+.freegames-shot,
+.freegames-main-shot,
+.accounts-shot,
+.accounts-r34-shot,
+.home44-footer {
+  contain:layout paint style;
+}
+
+/* Promote only actively animated/interactive media during interaction. */
+@media (hover:hover) and (pointer:fine) {
+  .real-shot:hover,
+  .hourboost-shot:hover,
+  .boostpc-r40-zoom:hover,
+  .logros-shot:hover,
+  .freegames-shot:hover,
+  .freegames-main-shot:hover,
+  .accounts-shot:hover,
+  .accounts-r34-shot:hover {
+    will-change:transform;
+  }
+}
+
+/* Release expensive effects on hidden/background pages.
+   visibilityState is mirrored by performance.js onto html.neith-page-hidden. */
+html.neith-page-hidden *,
+html.neith-page-hidden *::before,
+html.neith-page-hidden *::after {
+  animation-play-state:paused !important;
+}
+
+/* Reduce unnecessary compositing pressure on touch devices. */
+@media (hover:none), (pointer:coarse) {
+  .real-shot,
+  .hourboost-shot,
+  .boostpc-r40-zoom,
+  .logros-shot,
+  .freegames-shot,
+  .freegames-main-shot,
+  .accounts-shot,
+  .accounts-r34-shot {
+    will-change:auto !important;
+    transform-style:flat;
+  }
+}
+
+/* Images remain sharp while avoiding expensive decode contention. */
+img[loading="lazy"] {
+  content-visibility:auto;
+}
+
+/* Respect system preference globally, beyond page-specific rules. */
+@media (prefers-reduced-motion:reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior:auto !important;
+    animation-duration:.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;
+  }
+}
+
+
+/* R62 OFFSCREEN PAINT SUPPRESSION
+   Zones become active 180px before entering the viewport, so visible content
+   keeps its full premium effects while distant sections cost less to paint. */
+[data-neith-perf-zone]:not(.neith-zone-active) *{
+  transition:none!important;
+}
+[data-neith-perf-zone]:not(.neith-zone-active) .neith-cinematic-reflection,
+[data-neith-perf-zone]:not(.neith-zone-active) .neith-cinematic-scan{
+  animation-play-state:paused!important;
+}
+
+
+/* R63 CRITICAL PAINT
+   Prevent subtle first-paint flicker without hiding the document. */
+html:not(.neith-css-ready) body{
+  text-rendering:optimizeLegibility;
+}

@@ -1,0 +1,20 @@
+NEITH OFFICIAL WEB V32 — BOOST PC R40
+=====================================
+
+MEJORAS APLICADAS EN BOOST PC
+- Rediseño del bloque principal de Boost PC con una composición más equilibrada entre lado izquierdo y derecho.
+- Nueva cabina táctica premium con jerarquía visual más clara y menos saturación.
+- Copy reducido a lo importante: estado real del sistema, procesos y acciones directas.
+- Galería real reorganizada:
+  * captura principal amplia del módulo completo
+  * dos capturas secundarias compactas y equilibradas
+  * mismas reglas premium de adaptación visual sin deformar imágenes
+- Nuevo bloque operativo “Cómo trabaja Boost PC” más limpio y fácil de entender.
+- Hero ligeramente compactado para que la sección respire mejor y no se perciba sobredimensionada.
+- Se añade hoja de estilos dedicada boostpc-r40.css para encapsular el ajuste sin romper otras páginas.
+
+OBJETIVO VISUAL
+- Más premium.
+- Más limpio.
+- Más útil para el usuario real.
+- Menos ruido visual y mejor lectura del producto.

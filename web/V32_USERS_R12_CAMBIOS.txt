@@ -1,0 +1,7 @@
+NEITH WEB V32 — USERS R12 APPLY BUTTON FIT
+
+Corrección aislada sobre R11.
+- El botón APLICAR ya no desborda el panel de Control de acceso.
+- La fila reserva 82 px exactos para APLICAR.
+- Rol y Plan conservan su diseño y lógica; solo pueden ceder ancho de forma fluida dentro del mismo panel.
+- Sin cambios en HTML funcional, JavaScript, Supabase, Security Vault, avatar, logo o cabecera.

@@ -1,7 +1,7 @@
 (() => {
   'use strict';
-  window.__NEITH_WEB_BUILD__ = 'V20';
-  console.info('[NEITH WEB] Build V20 activo · auth blindado + seguridad + local parity');
+  window.__NEITH_WEB_BUILD__ = 'V32';
+  console.info('[NEITH WEB] Build V32 activo · admin roles seguros + auth fast path');
   const scriptUrl = document.currentScript?.src || '';
   const siteBase = (() => {
     try { return new URL('../', scriptUrl || window.location.href); }
@@ -9,8 +9,94 @@
   })();
   const siteUrl = path => new URL(String(path || '').replace(/^\/+/, ''), siteBase).href;
 
+  const RECOVERY_BRIDGE_KEY = 'neith_password_recovery_bridge';
+  const RECOVERY_VERIFIED_KEY = 'neith_password_recovery_verified';
+  const currentHref = String(window.location.href);
+  const recoverySignal = /(?:[?#&](?:type|flow)=recovery(?:[&#]|$))/i.test(currentHref);
+  if (recoverySignal) {
+    try { sessionStorage.setItem(RECOVERY_BRIDGE_KEY, '1'); } catch {}
+  }
+  const onRecoveryPage = /\/(?:recuperar-password|reset-password)\/?$/i.test(window.location.pathname);
+  function shouldBridgeRecovery() {
+    if (onRecoveryPage) return false;
+    try { return recoverySignal || sessionStorage.getItem(RECOVERY_BRIDGE_KEY) === '1'; } catch { return recoverySignal; }
+  }
+  function goToRecoveryPage() {
+    if (!shouldBridgeRecovery()) return false;
+    try {
+      sessionStorage.removeItem(RECOVERY_BRIDGE_KEY);
+      sessionStorage.setItem(RECOVERY_VERIFIED_KEY, '1');
+    } catch {}
+    window.location.replace(siteUrl('recuperar-password/'));
+    return true;
+  }
+
   const REMEMBER_EMAIL_KEY = 'neith_auth_remembered_email';
   const REMEMBER_PREF_KEY = 'neith_auth_remember_identity';
+  const PROFILE_CACHE_KEY = 'neith_auth_profile_v30';
+  const PROFILE_CACHE_TTL_MS = 5 * 60 * 1000;
+
+  function readProfileCache(userId, allowStale = false) {
+    if (!userId) return null;
+    try {
+      const raw = sessionStorage.getItem(PROFILE_CACHE_KEY) || sessionStorage.getItem('neith_auth_profile_v28');
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      if (!parsed || parsed.userId !== userId || !parsed.profile) return null;
+      const age = Date.now() - Number(parsed.savedAt || 0);
+      if (!allowStale && age > PROFILE_CACHE_TTL_MS) return null;
+      return { profile: parsed.profile, age };
+    } catch { return null; }
+  }
+
+  function writeProfileCache(userId, profile) {
+    if (!userId || !profile) return;
+    try { sessionStorage.setItem(PROFILE_CACHE_KEY, JSON.stringify({ userId, profile, savedAt: Date.now() })); } catch {}
+  }
+
+  function clearProfileCache() {
+    try { sessionStorage.removeItem(PROFILE_CACHE_KEY); sessionStorage.removeItem('neith_auth_profile_v28'); } catch {}
+  }
+
+  const ADMIN_ROLE_CACHE_KEY = 'neith_admin_role_v32';
+  const ADMIN_ROLE_CACHE_TTL_MS = 10 * 60 * 1000;
+  function readAdminRoleCache(userId) {
+    if (!userId) return null;
+    try {
+      const raw = sessionStorage.getItem(ADMIN_ROLE_CACHE_KEY);
+      if (!raw) return null;
+      const data = JSON.parse(raw);
+      if (data?.userId !== userId || !data?.role) return null;
+      if (Date.now() - Number(data.savedAt || 0) > ADMIN_ROLE_CACHE_TTL_MS) return null;
+      return data.role;
+    } catch { return null; }
+  }
+  function writeAdminRoleCache(userId, role) {
+    if (!userId || !role) return;
+    try { sessionStorage.setItem(ADMIN_ROLE_CACHE_KEY, JSON.stringify({ userId, role, savedAt: Date.now() })); } catch {}
+  }
+  function clearAdminRoleCache() { try { sessionStorage.removeItem(ADMIN_ROLE_CACHE_KEY); } catch {} }
+  async function loadAdminRole({ force = false } = {}) {
+    const userId = state.session?.user?.id;
+    if (!state.client || !userId) return 'user';
+    if (!force) { const cached = readAdminRoleCache(userId); if (cached) return cached; }
+    try {
+      const { data, error } = await state.client.rpc('neith_my_role');
+      if (error) throw error;
+      const role = String(data || 'user');
+      writeAdminRoleCache(userId, role);
+      return role;
+    } catch {
+      return 'user';
+    }
+  }
+  async function syncAdminMenuLink() {
+    const link = document.querySelector('[data-admin-menu-link]');
+    if (!link || !state.session?.user) return;
+    const role = await loadAdminRole();
+    link.hidden = !['admin','superadmin'].includes(role);
+    link.dataset.adminRole = role;
+  }
 
 
   const cfg = window.NEITH_CONFIG || {};
@@ -23,13 +109,39 @@
     !cfg.supabaseAnonKey.includes('YOUR_SUPABASE_ANON_KEY')
   );
 
+  // V30: public pages render the authenticated header from Supabase's persisted
+  // browser session immediately. This cache is used only for first-paint UI;
+  // the official Supabase client revalidates it shortly afterwards.
+  function readPersistedSupabaseSession() {
+    if (!cfg.supabaseUrl) return null;
+    try {
+      const projectRef = new URL(cfg.supabaseUrl).hostname.split('.')[0];
+      const preferredKey = `sb-${projectRef}-auth-token`;
+      const keys = [preferredKey, ...Object.keys(localStorage).filter(k => /^sb-.*-auth-token$/i.test(k) && k !== preferredKey)];
+      for (const key of keys) {
+        const raw = localStorage.getItem(key);
+        if (!raw) continue;
+        let parsed;
+        try { parsed = JSON.parse(raw); } catch { continue; }
+        const candidates = [parsed, parsed?.currentSession, parsed?.session, parsed?.data?.session];
+        for (const candidate of candidates) {
+          if (candidate?.access_token && candidate?.user?.id) return candidate;
+        }
+      }
+    } catch {}
+    return null;
+  }
+
+  const persistedSession = readPersistedSupabaseSession();
   const state = {
     client: configured ? window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey, {
       auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
     }) : null,
-    session: null,
+    session: persistedSession,
     profile: null
   };
+  let authSubscriptionBound = false;
+  let bootstrapValidated = false;
 
   const escapeHtml = (value = '') => String(value).replace(/[&<>'"]/g, ch => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
@@ -48,8 +160,8 @@
     return user?.user_metadata?.avatar_url || user?.user_metadata?.picture || '';
   }
 
-  function injectAuthUI() {
-    if (!document.getElementById('neith-auth-modal')) {
+  function injectAuthUI(kind = 'both') {
+    if (kind !== 'menu' && !document.getElementById('neith-auth-modal')) {
       document.body.insertAdjacentHTML('beforeend', `
         <div class="auth-modal auth-modal-v19 auth-modal-v20" id="neith-auth-modal" aria-hidden="true">
           <div class="auth-backdrop" data-auth-close></div>
@@ -57,7 +169,7 @@
             <span class="auth-corner auth-corner-a" aria-hidden="true"></span>
             <span class="auth-corner auth-corner-b" aria-hidden="true"></span>
             <div class="auth-scanline" aria-hidden="true"></div>
-            <button class="auth-close" type="button" aria-label="Cerrar" data-auth-close>×</button>
+            <button class="auth-close" type="button" aria-label="Cerrar" data-auth-close><span class="auth-close-icon" aria-hidden="true">×</span></button>
 
             <header class="auth-v19-head">
               <div class="auth-v19-emblem" aria-hidden="true"><span>N</span><i></i></div>
@@ -125,7 +237,7 @@
       hydrateRememberedIdentity();
     }
 
-    if (!document.getElementById('neith-account-menu')) {
+    if (kind !== 'modal' && !document.getElementById('neith-account-menu')) {
       document.body.insertAdjacentHTML('beforeend', `
         <section class="neith-account-menu" id="neith-account-menu" role="menu" aria-hidden="true" aria-label="Cuenta Neith">
           <div class="account-menu-glow" aria-hidden="true"></div>
@@ -143,6 +255,7 @@
             <a href="${siteUrl('mi-cuenta/')}" role="menuitem"><span class="account-menu-icon">◎</span><span><b>MI CUENTA</b><small>Gestionar cuenta</small></span><em>›</em></a>
             <a href="${siteUrl('licencia/')}" role="menuitem"><span class="account-menu-icon">◇</span><span><b>LICENCIA Y PLAN</b><small>Licencia y plan</small></span><em>›</em></a>
             <a href="${siteUrl('seguridad/')}" role="menuitem"><span class="account-menu-icon">⌾</span><span><b>SEGURIDAD</b><small>Seguridad</small></span><em>›</em></a>
+            <a href="${siteUrl('admin/')}" role="menuitem" data-admin-menu-link hidden><span class="account-menu-icon">◆</span><span><b>ADMIN CENTER</b><small>Control de Neith</small></span><em>›</em></a>
           </nav>
           <button class="account-menu-logout" type="button" data-logout role="menuitem"><span>⏻</span><b>CERRAR SESIÓN</b></button>
         </section>
@@ -200,6 +313,7 @@
   }
 
   function openAccountMenu(anchor) {
+    if (state.session?.user && !document.getElementById('neith-account-menu')) injectAuthUI('menu');
     const menu = document.getElementById('neith-account-menu');
     if (!menu || !state.session?.user) return;
     accountMenuAnchor = anchor;
@@ -208,12 +322,21 @@
     document.querySelectorAll('[data-auth-nav]').forEach(btn => btn.setAttribute('aria-expanded', btn === anchor ? 'true' : 'false'));
     positionAccountMenu();
     requestAnimationFrame(positionAccountMenu);
+    syncAdminMenuLink().then(() => { positionAccountMenu(); requestAnimationFrame(positionAccountMenu); }).catch(() => {});
   }
 
   function toggleAccountMenu(anchor) {
     const menu = document.getElementById('neith-account-menu');
     if (menu?.classList.contains('open') && accountMenuAnchor === anchor) closeAccountMenu();
     else openAccountMenu(anchor);
+  }
+
+  function handleHeaderTrigger(anchor) {
+    if (!anchor) return;
+    anchor.removeAttribute('href');
+    anchor.removeAttribute('onclick');
+    if (state.session?.user) toggleAccountMenu(anchor);
+    else openAuth('login');
   }
 
 
@@ -278,7 +401,7 @@
 
   function openAuth(tab = 'login') {
     closeAccountMenu();
-    injectAuthUI();
+    injectAuthUI('modal');
     setTab(tab);
     if (tab === 'login') hydrateRememberedIdentity();
     const modal = document.getElementById('neith-auth-modal');
@@ -321,15 +444,44 @@
     el.dataset.type = type;
   }
 
-  async function loadProfile() {
-    if (!state.client || !state.session?.user) return null;
+  async function loadProfile({ force = false } = {}) {
+    const userId = state.session?.user?.id;
+    if (!state.client || !userId) return null;
+
+    if (!force) {
+      const cached = readProfileCache(userId);
+      if (cached) {
+        state.profile = cached.profile;
+        return state.profile;
+      }
+    }
+
     const { data, error } = await state.client
       .from('profiles')
       .select('display_name,avatar_url,plan,subscription_status')
-      .eq('id', state.session.user.id)
+      .eq('id', userId)
       .maybeSingle();
-    if (!error) state.profile = data || null;
+
+    if (!error) {
+      state.profile = data || null;
+      if (data) writeProfileCache(userId, data);
+    }
     return state.profile;
+  }
+
+  function scheduleProfileRevalidation() {
+    const userId = state.session?.user?.id;
+    if (!userId || !state.client) return;
+    const cached = readProfileCache(userId, true);
+    if (cached && cached.age <= PROFILE_CACHE_TTL_MS) return;
+
+    const run = async () => {
+      const before = JSON.stringify(state.profile || null);
+      await loadProfile({ force: true });
+      if (JSON.stringify(state.profile || null) !== before) syncUI();
+    };
+    if ('requestIdleCallback' in window) requestIdleCallback(() => run(), { timeout: 1200 });
+    else setTimeout(run, 250);
   }
 
   function normalizeAuthTriggers() {
@@ -355,27 +507,34 @@
 
   function syncUI() {
     const user = state.session?.user;
-    normalizeAuthTriggers();
     document.querySelectorAll('[data-auth-nav]').forEach(btn => {
-      const label = btn.querySelector('[data-auth-nav-label]');
       btn.classList.toggle('signed-in', Boolean(user));
       if (!user) {
-        btn.style.removeProperty('--avatar');
-        btn.removeAttribute('data-account-trigger');
-        btn.removeAttribute('data-initials');
-        btn.classList.remove('nav-account-trigger');
-        btn.innerHTML = '<span class="nav-auth-led" aria-hidden="true"></span><span data-auth-nav-label>INICIAR SESIÓN</span>';
+        const signature = 'guest';
+        if (btn.dataset.authSignature !== signature) {
+          btn.style.removeProperty('--avatar');
+          btn.removeAttribute('data-account-trigger');
+          btn.removeAttribute('data-initials');
+          btn.classList.remove('nav-account-trigger');
+          btn.innerHTML = '<span class="nav-auth-led" aria-hidden="true"></span><span data-auth-nav-label>INICIAR SESIÓN</span>';
+          btn.dataset.authSignature = signature;
+        }
         return;
       }
       const avatar = avatarUrl(user) || state.profile?.avatar_url || '';
       const name = state.profile?.display_name || displayName(user);
-      btn.dataset.initials = initials(user);
+      const init = initials(user);
+      const signature = `user:${user.id}:${name}:${avatar}:${init}`;
+      btn.dataset.initials = init;
       btn.dataset.accountTrigger = 'true';
       btn.classList.add('nav-account-trigger');
-      const avatarMarkup = avatar
-        ? `<img src="${escapeHtml(avatar)}" alt="Avatar de ${escapeHtml(name)}">`
-        : `<span>${escapeHtml(initials(user))}</span>`;
-      btn.innerHTML = `<span class="nav-account-avatar" aria-hidden="true">${avatarMarkup}</span><span class="nav-account-name" data-auth-nav-label>${escapeHtml(name)}</span><span class="nav-account-divider" aria-hidden="true"></span><span class="nav-auth-chevron" aria-hidden="true"><svg viewBox="0 0 16 16" focusable="false"><path d="M3.2 5.8 8 10.2l4.8-4.4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`;
+      if (btn.dataset.authSignature !== signature) {
+        const avatarMarkup = avatar
+          ? `<img src="${escapeHtml(avatar)}" alt="Avatar de ${escapeHtml(name)}" decoding="async">`
+          : `<span>${escapeHtml(init)}</span>`;
+        btn.innerHTML = `<span class="nav-account-avatar" aria-hidden="true">${avatarMarkup}</span><span class="nav-account-name" data-auth-nav-label>${escapeHtml(name)}</span><span class="nav-account-divider" aria-hidden="true"></span><span class="nav-auth-chevron" aria-hidden="true"><svg viewBox="0 0 16 16" focusable="false"><path d="M3.2 5.8 8 10.2l4.8-4.4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`;
+        btn.dataset.authSignature = signature;
+      }
     });
 
     document.querySelectorAll('[data-auth-nav]').forEach(btn => {
@@ -405,6 +564,10 @@
     const menuStatus = document.querySelector('[data-account-menu-status]');
     if (menuPlan) { menuPlan.textContent = plan; menuPlan.dataset.plan = plan.toLowerCase(); }
     if (menuStatus) menuStatus.textContent = subscription === 'active' ? 'ACTIVO' : (plan === 'PREMIUM' ? 'ACTIVO' : 'FREE');
+
+    // Public product pages have no dashboard fields. Avoid 20+ document-wide
+    // selector scans on every authenticated page load.
+    if (!document.querySelector('[data-auth-required], [data-dashboard-name], [data-dashboard-email]')) return;
 
     document.querySelectorAll('[data-dashboard-name]').forEach(el => el.textContent = user ? (state.profile?.display_name || displayName(user)) : 'Usuario');
     document.querySelectorAll('[data-dashboard-email]').forEach(el => el.textContent = user?.email || '—');
@@ -542,7 +705,7 @@
         prepareRegisterForm({ clear: true });
         setMessage(`${window.NeithI18n?.t?.('Cuenta creada. Correo de confirmación solicitado para:') || 'Cuenta creada. Correo de confirmación solicitado para:'} ${email}`, 'success');
       } else if (form.dataset.authForm === 'recover') {
-        const redirectTo = siteUrl('reset-password/');
+        const redirectTo = siteUrl('recuperar-password/');
         const { error } = await state.client.auth.resetPasswordForEmail(data.email, { redirectTo });
         if (error) throw error;
         form.reset();
@@ -550,8 +713,15 @@
       } else {
         const remember = Boolean(form.querySelector('[data-auth-remember]')?.checked);
         const email = normalizeEmail(data.email);
-        const { error } = await state.client.auth.signInWithPassword({ email, password: data.password });
+        const { data: signInData, error } = await state.client.auth.signInWithPassword({ email, password: data.password });
         if (error) throw error;
+        if (signInData?.session) {
+          state.session = signInData.session;
+          const cached = readProfileCache(state.session.user?.id, true);
+          if (cached) state.profile = cached.profile;
+          syncUI();
+          window.dispatchEvent(new CustomEvent('neith:authchange', { detail: { session: state.session, event: 'SIGNED_IN' } }));
+        }
         persistRememberedIdentity(email, remember);
         closeAuth();
       }
@@ -600,28 +770,20 @@
 
   async function logout() {
     if (!state.client) return;
-    await state.client.auth.signOut();
+    await state.client.auth.signOut({ scope: 'local' });
+    state.session = null;
+    state.profile = null;
+    clearProfileCache();
+    clearAdminRoleCache();
+    syncUI();
+    window.dispatchEvent(new CustomEvent('neith:authchange', { detail: { session: null } }));
     window.location.href = siteUrl('');
   }
 
   async function initAuth() {
-    injectAuthUI();
     normalizeAuthTriggers();
 
     document.addEventListener('click', e => {
-      const authTrigger = e.target.closest('[data-auth-nav]');
-      if (authTrigger) {
-        // Single source of truth for the header account control. This listener runs
-        // in capture phase, cancels every legacy navigation behavior, and either
-        // opens the account menu (signed in) or the auth modal (signed out).
-        e.preventDefault();
-        e.stopPropagation();
-        e.stopImmediatePropagation();
-        if (state.session?.user) toggleAccountMenu(authTrigger);
-        else openAuth('login');
-        return;
-      }
-
       const accountMenu = document.getElementById('neith-account-menu');
       if (accountMenu?.classList.contains('open') && !e.target.closest('#neith-account-menu')) closeAccountMenu();
 
@@ -668,24 +830,100 @@
     if (url.searchParams.get('register') === '1') openAuth('register');
 
     if (configured) {
-      const { data } = await state.client.auth.getSession();
-      state.session = data.session;
-      await loadProfile();
-      syncUI();
-      await requireDashboardSession();
+      const protectedPage = Boolean(document.querySelector('[data-auth-required]'));
+      const bootUserId = state.session?.user?.id || null;
 
-      state.client.auth.onAuthStateChange(async (_event, session) => {
-        state.session = session;
-        state.profile = null;
-        await loadProfile();
-        syncUI();
-        await requireDashboardSession();
-      });
+      // Critical first paint: no network/auth lock and no account-menu injection.
+      // The menu is created lazily only when the user actually opens it.
+      if (bootUserId) {
+        const cached = readProfileCache(bootUserId, true);
+        if (cached) state.profile = cached.profile;
+      }
+      syncUI();
+
+      const bindAuthSubscription = () => {
+        if (authSubscriptionBound || !state.client) return;
+        authSubscriptionBound = true;
+        state.client.auth.onAuthStateChange((authEvent, session) => {
+          const previousUserId = state.session?.user?.id || null;
+          const nextUserId = session?.user?.id || null;
+          state.session = session;
+
+          if ((authEvent === 'PASSWORD_RECOVERY' || (session?.user && shouldBridgeRecovery())) && goToRecoveryPage()) return;
+          if (authEvent === 'INITIAL_SESSION' && bootstrapValidated && nextUserId === previousUserId) return;
+          if (authEvent === 'TOKEN_REFRESHED' && nextUserId === previousUserId) return;
+
+          if (!nextUserId) {
+            state.profile = null;
+            clearAdminRoleCache();
+            clearProfileCache();
+            syncUI();
+            window.dispatchEvent(new CustomEvent('neith:authchange', { detail: { session: null, event: authEvent } }));
+            requireDashboardSession();
+            return;
+          }
+
+          if (nextUserId !== previousUserId) clearAdminRoleCache();
+          const cached = readProfileCache(nextUserId, true);
+          if (cached) state.profile = cached.profile;
+          else if (nextUserId !== previousUserId) state.profile = null;
+
+          syncUI();
+          requireDashboardSession();
+          window.dispatchEvent(new CustomEvent('neith:authchange', { detail: { session: state.session, event: authEvent } }));
+
+          if (authEvent === 'SIGNED_IN' || authEvent === 'USER_UPDATED' || nextUserId !== previousUserId) {
+            loadProfile({ force: true }).then(() => syncUI()).catch(() => {});
+          } else {
+            scheduleProfileRevalidation();
+          }
+        });
+      };
+
+      const validateBootstrapSession = async () => {
+        bindAuthSubscription();
+        const previousUserId = state.session?.user?.id || null;
+        try {
+          const { data } = await state.client.auth.getSession();
+          state.session = data?.session || null;
+          bootstrapValidated = true;
+          const nextUserId = state.session?.user?.id || null;
+
+          if (state.session?.user && shouldBridgeRecovery() && goToRecoveryPage()) return;
+
+          if (nextUserId) {
+            const cached = readProfileCache(nextUserId, true);
+            if (cached) state.profile = cached.profile;
+            else if (nextUserId !== previousUserId) state.profile = null;
+          } else {
+            state.profile = null;
+            if (previousUserId) clearProfileCache();
+          }
+
+          if (nextUserId !== previousUserId || protectedPage) syncUI();
+          await requireDashboardSession();
+          window.dispatchEvent(new CustomEvent('neith:authchange', { detail: { session: state.session, event: 'BOOTSTRAP' } }));
+          scheduleProfileRevalidation();
+        } catch (error) {
+          console.warn('[NEITH AUTH] Revalidacion de sesion aplazada:', error?.message || error);
+          await requireDashboardSession();
+        }
+      };
+
+      if (protectedPage || shouldBridgeRecovery()) {
+        await validateBootstrapSession();
+      } else {
+        // Let first paint + first input win. Session validation is not on the
+        // navigation critical path for public product pages.
+        const schedule = window.requestIdleCallback
+          ? cb => requestIdleCallback(cb, { timeout: 1400 })
+          : cb => setTimeout(cb, 550);
+        schedule(() => validateBootstrapSession());
+      }
     } else {
       syncUI();
       await requireDashboardSession();
-    }
-  }
+    }  }
 
   window.NeithAuth = {
     get configured() { return configured; },
@@ -697,8 +935,10 @@
     openAccountMenu,
     closeAccountMenu,
     toggleAccountMenu,
+    handleHeaderTrigger,
     syncUI,
-    refreshProfile: async () => { await loadProfile(); syncUI(); return state.profile; }
+    getAdminRole: loadAdminRole,
+    refreshProfile: async () => { await loadProfile({ force: true }); syncUI(); return state.profile; }
   };
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initAuth, { once: true });

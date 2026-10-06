@@ -1,3 +1,5 @@
+/recuperar-password /recuperar-password/ 301
+/reset-password /recuperar-password/ 301
 /boostpc /boostpc/ 301
 /hourboost /hourboost/ 301
 /logros /logros/ 301

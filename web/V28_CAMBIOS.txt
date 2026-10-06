@@ -1,0 +1,24 @@
+NEITH OFFICIAL WEB — V28
+AUTH FAST PATH + ZERO WHITE FRAME
+
+1. Autenticación optimizada de raíz:
+   - La sesión de Supabase se resuelve desde el almacenamiento local sin esperar una consulta de perfil.
+   - El perfil se cachea por sesión durante 5 minutos y se revalida en segundo plano.
+   - Se evita procesar dos veces INITIAL_SESSION tras getSession().
+   - TOKEN_REFRESHED ya no provoca reconstrucciones completas de la interfaz.
+   - El perfil solo se vuelve a consultar cuando hay un motivo real (login, cambio de usuario o caché caducada).
+
+2. DOM de autenticación más ligero:
+   - El modal de login/registro se crea solo cuando se necesita.
+   - El menú de cuenta se crea solo para usuarios autenticados.
+   - El botón de cuenta no se reconstruye si usuario/nombre/avatar no han cambiado.
+   - El observador del header deja de vigilar todo el documento y se limita a la cabecera.
+
+3. Navegación / flashes:
+   - Desactivadas las View Transitions entre documentos para evitar snapshots transparentes/blancos en ciertos equipos/DPI.
+   - Lienzo de salida sólido #000813 en click, beforeunload y pagehide.
+   - Fondo/theme-color oscuro desde el primer paint en todas las páginas.
+
+4. Compatibilidad:
+   - Sin cambios de rutas, Supabase, diseño, idioma ni estructura de páginas.
+   - Conserva menú de usuario, ES/EN, dashboard, recuperación, seguridad y páginas públicas.

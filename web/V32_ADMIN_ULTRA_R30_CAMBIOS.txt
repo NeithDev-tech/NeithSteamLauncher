@@ -1,0 +1,15 @@
+NEITH OFFICIAL WEB — ADMIN CENTER R30 ULTRA PREMIUM
+
+Base: R29 validada funcionalmente.
+Tipo de cambio: exclusivamente visual/UX.
+
+- Consolida estética de Resumen, Launcher, Feature Flags, Avisos, Usuarios, Auditoría y Configuración.
+- Sidebar premium con estados activo/hover más claros.
+- Superficies, bordes, sombras y jerarquía tipográfica unificadas.
+- Inputs/selectores/textareas con estados hover/focus coherentes.
+- Botones con feedback hover/pressed y foco de teclado visible.
+- Tarjetas y métricas con profundidad sutil sin animaciones continuas nuevas.
+- Scrollbars coherentes con Neith.
+- Mejoras responsive y DPI en sidebar, stats, paneles y toolbar.
+- Respeta prefers-reduced-motion.
+- Sin cambios de SQL, Supabase, RPC, permisos, RLS ni lógica de Admin Center.

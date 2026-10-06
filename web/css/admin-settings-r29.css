@@ -1,0 +1,130 @@
+/* NEITH V32 · Admin Settings R29 */
+.neith-settings-panel{--settings-line:rgba(73,218,255,.18);--settings-soft:rgba(10,36,58,.72)}
+.neith-settings-head{align-items:flex-start;gap:18px}
+.neith-settings-secure{display:flex;align-items:center;gap:10px;padding:11px 14px;border:1px solid rgba(74,229,255,.22);border-radius:14px;background:linear-gradient(180deg,rgba(11,44,69,.9),rgba(4,22,37,.9));font:700 11px/1 'Orbitron',sans-serif;letter-spacing:.12em;color:#bff7ff;white-space:nowrap}
+.neith-settings-secure i{width:8px;height:8px;border-radius:50%;background:#56f3c1;box-shadow:0 0 0 4px rgba(86,243,193,.09),0 0 16px rgba(86,243,193,.72)}
+.neith-settings-hero{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(260px,.65fr);gap:16px;margin:18px 0}
+.neith-settings-hero>article{min-height:132px;padding:20px;border:1px solid var(--settings-line);border-radius:20px;background:radial-gradient(circle at 88% 12%,rgba(21,174,255,.14),transparent 38%),linear-gradient(145deg,rgba(4,27,46,.98),rgba(3,15,28,.98));box-shadow:inset 0 1px rgba(255,255,255,.025),0 18px 45px rgba(0,0,0,.16)}
+.neith-settings-hero small,.neith-settings-card-head small,.neith-settings-field>span,.neith-settings-diagnostic small,.neith-settings-savebar small{font:700 10px/1.2 'Orbitron',sans-serif;letter-spacing:.12em;color:#6ea3b8}
+.neith-settings-hero h3{margin:8px 0 6px;font:800 clamp(21px,2vw,30px)/1.05 'Orbitron',sans-serif;letter-spacing:.04em;color:#effcff}
+.neith-settings-hero p{max-width:720px;margin:0;color:#8eb3c3;font-size:13px;line-height:1.65}
+.neith-settings-role{display:flex;flex-direction:column;justify-content:center}
+.neith-settings-role strong{margin-top:9px;font:800 24px/1 'Orbitron',sans-serif;color:#6deaff;text-transform:uppercase}
+.neith-settings-role span{margin-top:10px;color:#86aabd;font-size:12px;line-height:1.55}
+.neith-settings-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.neith-settings-card{border:1px solid var(--settings-line);border-radius:20px;background:linear-gradient(155deg,rgba(5,26,44,.98),rgba(2,15,28,.98));overflow:hidden}
+.neith-settings-card.wide{grid-column:1/-1}
+.neith-settings-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:19px 20px;border-bottom:1px solid rgba(74,207,255,.1);background:linear-gradient(90deg,rgba(8,44,70,.35),transparent)}
+.neith-settings-card-head h3{margin:6px 0 5px;font:800 17px/1.15 'Orbitron',sans-serif;color:#f1fcff;letter-spacing:.035em}
+.neith-settings-card-head p{margin:0;color:#779caf;font-size:12px;line-height:1.5}
+.neith-settings-chip{padding:7px 10px;border:1px solid rgba(89,230,255,.2);border-radius:999px;background:rgba(24,144,190,.08);font:700 9px/1 'Orbitron',sans-serif;letter-spacing:.1em;color:#8eefff;white-space:nowrap}
+.neith-settings-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;padding:18px 20px 20px}
+.neith-settings-field{display:flex;flex-direction:column;gap:8px;padding:13px;border:1px solid rgba(73,218,255,.11);border-radius:14px;background:rgba(0,10,20,.36)}
+.neith-settings-field select{width:100%;min-height:42px;border:1px solid rgba(76,216,255,.18);border-radius:10px;background:#061a2a;color:#e9fbff;padding:0 12px;font:700 12px 'Inter',sans-serif;outline:none;transition:border-color .16s,box-shadow .16s,transform .12s}
+.neith-settings-field select:focus{border-color:rgba(85,229,255,.68);box-shadow:0 0 0 3px rgba(62,211,255,.08)}
+.neith-settings-field small{color:#63899b;line-height:1.5}
+.neith-settings-diagnostics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding:18px 20px 20px}
+.neith-settings-diagnostic{min-height:98px;padding:15px;border:1px solid rgba(74,210,255,.1);border-radius:15px;background:rgba(1,13,25,.48);display:flex;flex-direction:column;justify-content:center}
+.neith-settings-diagnostic strong{margin:7px 0 4px;font:800 14px/1.2 'Orbitron',sans-serif;color:#e9fbff;overflow-wrap:anywhere}
+.neith-settings-diagnostic span{color:#6f98aa;font-size:11px;line-height:1.45}
+.neith-settings-diagnostic.ok strong{color:#68f0c4}.neith-settings-diagnostic.warn strong{color:#ffd36a}.neith-settings-diagnostic.error strong{color:#ff738e}
+.neith-settings-safety{display:grid;gap:10px;padding:18px 20px 20px}
+.neith-settings-safety-row{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:14px 15px;border:1px solid rgba(73,218,255,.1);border-radius:14px;background:rgba(0,12,23,.43)}
+.neith-settings-safety-row div{display:flex;flex-direction:column;gap:4px}.neith-settings-safety-row b{color:#dff9ff;font-size:12px}.neith-settings-safety-row small{color:#6f93a4;line-height:1.45}.neith-settings-lock{padding:7px 10px;border-radius:999px;background:rgba(82,240,193,.08);border:1px solid rgba(82,240,193,.2);font:700 9px 'Orbitron',sans-serif;color:#6ff1c7;white-space:nowrap}
+.neith-settings-savebar{position:sticky;bottom:12px;z-index:3;display:flex;align-items:center;justify-content:space-between;gap:18px;margin-top:17px;padding:14px 16px;border:1px solid rgba(64,219,255,.24);border-radius:17px;background:rgba(1,14,27,.94);box-shadow:0 18px 55px rgba(0,0,0,.3),inset 0 1px rgba(255,255,255,.025);backdrop-filter:blur(16px)}
+.neith-settings-savebar>div:first-child{display:flex;flex-direction:column;gap:4px}.neith-settings-savebar strong{font:800 12px 'Orbitron',sans-serif;color:#dff9ff}.neith-settings-savebar span[data-settings-status]{min-height:15px;color:#79a0b1;font-size:11px}
+.neith-settings-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}.neith-settings-actions button{min-height:42px;padding:0 15px;border-radius:11px;font:800 10px 'Orbitron',sans-serif;letter-spacing:.055em;cursor:pointer;transition:transform .12s,filter .16s,border-color .16s}.neith-settings-actions button:active{transform:translateY(1px) scale(.985)}.neith-settings-actions .ghost{color:#9ec7d6;background:rgba(11,44,62,.38);border:1px solid rgba(97,199,232,.19)}.neith-settings-actions .test{color:#9ff3ff;background:rgba(15,118,159,.14);border:1px solid rgba(64,217,255,.26)}.neith-settings-actions .save{color:#00131d;background:linear-gradient(180deg,#66ecff,#24bce7);border:1px solid #73f0ff;box-shadow:0 0 20px rgba(40,201,239,.14)}.neith-settings-actions button:disabled{opacity:.38;cursor:not-allowed;filter:saturate(.45)}
+@media(max-width:1050px){.neith-settings-hero{grid-template-columns:1fr}.neith-settings-diagnostics{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:720px){.neith-settings-grid{grid-template-columns:1fr}.neith-settings-card.wide{grid-column:auto}.neith-settings-fields,.neith-settings-diagnostics{grid-template-columns:1fr}.neith-settings-savebar{position:static;align-items:stretch;flex-direction:column}.neith-settings-actions{justify-content:stretch}.neith-settings-actions button{flex:1}.neith-settings-safety-row{align-items:flex-start;flex-direction:column}}
+
+
+/* R34 — Configuración: functional + premium audit */
+.neith-settings-role em{display:block;margin-top:12px;padding-top:10px;border-top:1px solid rgba(74,218,255,.09);color:#587f91;font:700 9px/1.35 'Orbitron',sans-serif;font-style:normal;letter-spacing:.08em}
+.neith-settings-runtime{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:0 0 16px}
+.neith-settings-runtime article{position:relative;overflow:hidden;min-height:96px;padding:15px 16px;border:1px solid rgba(75,220,255,.13);border-radius:16px;background:linear-gradient(145deg,rgba(5,25,43,.92),rgba(2,13,25,.96));box-shadow:inset 0 1px 0 rgba(255,255,255,.02)}
+.neith-settings-runtime article:after{content:"";position:absolute;left:-18%;right:46%;bottom:0;height:1px;background:linear-gradient(90deg,transparent,#58eaff,transparent);opacity:.48}
+.neith-settings-runtime small{display:block;color:#557f91;font:700 9px/1 'Orbitron',sans-serif;letter-spacing:.11em}
+.neith-settings-runtime strong{display:block;margin:9px 0 5px;color:#eafcff;font:800 19px/1 'Orbitron',sans-serif;letter-spacing:.03em}
+.neith-settings-runtime span{color:#658c9e;font-size:11px}
+.neith-settings-fields--single{grid-template-columns:1fr}
+.neith-settings-form{}.neith-settings-panel [data-settings-form].is-readonly .neith-settings-field{opacity:.72}
+.neith-settings-panel [data-settings-form].is-readonly select{cursor:not-allowed;color:#86a4b2;background:#041522;border-color:rgba(76,216,255,.08)}
+.neith-settings-panel [data-settings-form].has-pending-changes .neith-settings-savebar{border-color:rgba(255,195,75,.28);box-shadow:0 18px 55px rgba(0,0,0,.3),0 0 28px rgba(255,181,56,.055),inset 0 1px rgba(255,255,255,.025)}
+.neith-settings-panel [data-settings-form].has-pending-changes [data-settings-state]{color:#ffd36a}
+.neith-settings-savebar.is-readonly{border-color:rgba(91,159,184,.13);background:rgba(2,13,24,.92)}
+.neith-settings-savebar.is-readonly [data-settings-state]{color:#789aaa}
+.neith-settings-diagnostic{position:relative;overflow:hidden}
+.neith-settings-diagnostic:before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:#2d6d82;opacity:.4}
+.neith-settings-diagnostic.ok:before{background:#58e7be;box-shadow:0 0 14px rgba(88,231,190,.5)}
+.neith-settings-diagnostic.warn:before{background:#ffd36a}.neith-settings-diagnostic.error:before{background:#ff637f;box-shadow:0 0 12px rgba(255,99,127,.35)}
+.neith-settings-field select:disabled{opacity:.72}
+@media(max-width:1050px){.neith-settings-runtime{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.neith-settings-runtime{grid-template-columns:1fr}.neith-settings-runtime article{min-height:82px}}
+
+
+/* R88 — Settings visual alignment fix */
+.neith-settings-safety-row{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) max-content;
+  align-items:center;
+  column-gap:24px;
+  row-gap:10px;
+  min-height:78px;
+  padding:16px 18px;
+}
+.neith-settings-safety-row>div{min-width:0;padding-right:4px}
+.neith-settings-safety-row small{display:block;max-width:100%;overflow-wrap:anywhere}
+.neith-settings-lock{
+  justify-self:end;
+  align-self:center;
+  min-width:max-content;
+  margin:0;
+  padding:8px 12px;
+  text-align:center;
+}
+@media(max-width:760px){
+  .neith-settings-safety-row{grid-template-columns:1fr;align-items:start}
+  .neith-settings-lock{justify-self:start}
+}
+
+
+/* R93 — Settings header chips aligned and squared */
+.neith-settings-card-head{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 154px;
+  align-items:center;
+  column-gap:18px;
+  min-height:108px;
+}
+.neith-settings-card-head>div{min-width:0}
+.neith-settings-chip{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:154px;
+  min-width:154px;
+  height:32px;
+  box-sizing:border-box;
+  padding:0 12px;
+  margin:0;
+  border-radius:999px;
+  text-align:center;
+  line-height:1;
+  justify-self:end;
+  align-self:center;
+}
+@media(max-width:860px){
+  .neith-settings-card-head{
+    grid-template-columns:1fr;
+    align-items:start;
+    min-height:0;
+  }
+  .neith-settings-chip{
+    width:auto;
+    min-width:0;
+    max-width:100%;
+    justify-self:start;
+    margin-top:2px;
+    padding-inline:13px;
+  }
+}

@@ -1,0 +1,19 @@
+NEITH OFFICIAL WEB V32 — LANDING R45 REAL LAUNCHER CINEMATIC
+=============================================================
+
+OBJETIVO
+- Mantener la pantalla REAL de Neith como protagonista de la portada.
+- Elevar su presentación visual sin inventar otro launcher ni alterar su estructura.
+- Convertir la franja de juegos en un carrusel cinematográfico premium independiente.
+
+CAMBIOS
+- Hero reconstruido con jerarquía más profesional y compacta.
+- Captura real inicio.webp conservada al 100% como contenido principal.
+- Tratamiento premium sobre la captura: chasis, profundidad, glow reactivo, scan, reflejo, esquinas HUD y microanimaciones.
+- La captura sigue abriéndose en grande mediante el lightbox ya existente.
+- Nuevo carrusel cinematográfico de juegos, separado del launcher.
+- Carrusel con controles izquierda/derecha, autoavance, pausa al interactuar y desplazamiento táctil/nativo.
+- Arte de juegos cargado desde la CDN oficial de Steam.
+- Añadidas microanimaciones premium y soporte prefers-reduced-motion.
+- Nuevos textos incluidos en ES/EN.
+- Auth, Supabase, Admin Center, Hour Boost, Boost PC, Logros, Juegos Gratis y Cuentas no modificados.

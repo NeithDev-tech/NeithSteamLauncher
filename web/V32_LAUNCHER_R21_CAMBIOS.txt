@@ -1,0 +1,12 @@
+NEITH WEB V32 · LAUNCHER CONTROL R21
+
+- Control del Launcher rediseñado como Deployment Control premium.
+- Estado actual: versión estable, mínima, canal y política remota.
+- Bloques separados para release, políticas críticas y mensajes.
+- Vista previa local del payload que recibirá el launcher.
+- Guardado activado solo cuando hay cambios reales.
+- Confirmación premium para cambios críticos (minimum version, force update, maintenance).
+- Botón para comprobar el RPC público neith_launcher_public_config.
+- Validación cliente + servidor de versiones, HTTPS y mensajes de mantenimiento.
+- Registro de cambios mantiene launcher_config.updated en Auditoría.
+- Usuarios, Auditoría, Avisos y Feature Flags permanecen congelados.
