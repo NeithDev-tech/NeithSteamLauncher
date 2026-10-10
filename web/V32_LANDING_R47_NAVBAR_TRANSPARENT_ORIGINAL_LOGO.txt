@@ -1,8 +1,0 @@
-R47 — Corrección quirúrgica desde R45 original.
-- Descartada R46 como base.
-- Logo original aportado por el propietario, sin generación.
-- Fondo oscuro eliminado y exportado con canal alpha real.
-- Misma reserva de anchura del branding anterior para no mover navegación.
-- Proporción intacta, object-fit contain, sin estirar.
-- Efecto eléctrico CSS absoluto, sin afectar layout.
-- Aplicado a todas las cabeceras para mantener consistencia global.

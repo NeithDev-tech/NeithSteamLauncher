@@ -1,7 +1,0 @@
-NEITH WEB V32 · USUARIOS R15
-
-- Eliminado exclusivamente el aviso amarillo de sincronización del backend en Usuarios.
-- Se mantienen las comprobaciones internas y las funciones de seguridad sin mostrar un aviso persistente.
-- No se modifica el layout R13/R14 de Rol, Plan y Aplicar.
-- No se modifica Supabase ni se requiere ejecutar SQL adicional.
-- No se modifican avatar, logo, cabecera, Security Vault ni autenticación.

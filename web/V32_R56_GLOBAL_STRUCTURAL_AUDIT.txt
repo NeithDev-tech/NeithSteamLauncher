@@ -1,7 +1,0 @@
-R56 — Global structural audit
-- Unified the validated Home premium footer on every page that has a footer, including public, account and Admin pages.
-- Fixed root landing empty lightbox src and invalid closing meta tags.
-- Fixed Seguridad invalid closing link tag.
-- Fixed remaining Hour Boost defer=True boolean attribute.
-- Validated local references while treating /descargar as the intentional redirect endpoint from _redirects.
-- Historical assets have not been deleted yet; removal is deferred to the performance phase after dependency verification.

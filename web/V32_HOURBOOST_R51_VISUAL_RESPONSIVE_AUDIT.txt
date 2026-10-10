@@ -1,7 +1,0 @@
-R51 — Hour Boost visual/responsive audit
-- Corregida sintaxis HTML de width/height/fetchpriority en las 4 capturas reales.
-- Añadido foco visible accesible a los disparadores de la galería.
-- Hover de zoom neutralizado en dispositivos táctiles para evitar estados pegados.
-- Galería compactada en teléfonos pequeños sin alterar escritorio/portátil.
-- Overlay de cada captura permanece horizontal hasta 430 px para evitar altura innecesaria.
-- Sin cambios en landing, Auth, Supabase, Admin Center ni otras secciones.

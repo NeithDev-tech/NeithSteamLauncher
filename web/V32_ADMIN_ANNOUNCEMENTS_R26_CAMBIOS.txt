@@ -1,1 +1,0 @@
-R26: borrado seguro de avisos con confirmación y auditoría. Cada edición incrementa revision para que el launcher la reciba como una nueva revisión.

@@ -1,6 +1,0 @@
-NEITH WEB V32 USERS R11 — APPLY BUTTON FIX
-
-- Corrección quirúrgica del botón APLICAR en Control de acceso.
-- El botón ya no desborda ni queda cortado por el borde derecho.
-- Se mantiene intacto Rol, Plan, Security Vault y toda la lógica funcional de R10.
-- Sin cambios en Supabase.

@@ -1,6 +1,0 @@
-NEITH V32 · ADMIN DASHBOARD R23 PREMIUM
-- Dashboard principal reconstruido.
-- Métricas operativas y actividad reciente.
-- Accesos rápidos.
-- RPC dedicado de resumen; fallback compatible con R22.
-- Usuarios/Auditoría/Avisos/Flags/Launcher sin cambios estructurales.

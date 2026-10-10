@@ -1,9 +1,0 @@
-NEITH WEB V32 — USERS R6
-
-- Base: R4 FIX estable.
-- Se descarta el layout experimental R5.
-- Tarjetas de usuario reconstruidas con un máximo de 2 columnas.
-- Security Vault ocupa siempre una fila completa.
-- Responsive basado en el ancho real disponible del Admin Center.
-- Sin cambios de RPC, Supabase, auth, header-controller ni acciones de seguridad.
-- No requiere SQL nuevo si R4 ya estaba instalado.

@@ -1,4 +1,0 @@
-1) Supabase > SQL Editor.
-2) Ejecuta supabase/V32_AUDIT_DELETE_R33_FIX.sql una sola vez.
-3) Recarga Admin Center.
-4) Prueba primero LIMPIAR AUDITORÍA.

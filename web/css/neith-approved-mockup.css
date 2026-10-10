@@ -41,3 +41,142 @@
 .neith-approved-poster-zoom small{font:700 .58rem/1 Orbitron,sans-serif;letter-spacing:.18em;color:#72ddff}.neith-approved-poster-zoom b{font:800 .9rem/1 Orbitron,sans-serif;color:#f4fbff}
 @media(max-width:980px){.neith-premium-info-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:620px){.neith-premium-info-grid{grid-template-columns:1fr}.neith-approved-poster-zoom{right:12px;bottom:12px}}
+
+/* R114 — Home premium commercial trailer */
+.neith-home-video-card{padding:14px;overflow:visible}
+.neith-home-video-shell{position:relative;aspect-ratio:16/9;border-radius:20px;overflow:hidden;background:#020a12;border:1px solid rgba(94,231,255,.28);box-shadow:0 0 0 1px rgba(255,255,255,.03) inset,0 24px 65px rgba(0,0,0,.42),0 0 42px rgba(0,205,255,.14)}
+.neith-home-video-shell::before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(135deg,rgba(88,238,255,.10),transparent 24%,transparent 70%,rgba(71,116,255,.08));mix-blend-mode:screen}
+.neith-home-video{display:block;width:100%;height:100%;object-fit:cover;background:#020a12}
+.neith-home-video-play{position:absolute;inset:0;z-index:4;display:flex;align-items:center;justify-content:center;gap:16px;border:0;background:linear-gradient(180deg,rgba(0,10,20,.03),rgba(0,10,20,.34));color:#fff;cursor:pointer;transition:opacity .22s ease,visibility .22s ease}
+.neith-home-video-play::before{content:"";position:absolute;width:min(26vw,360px);height:min(26vw,360px);border-radius:50%;background:radial-gradient(circle,rgba(43,224,255,.16),rgba(43,224,255,.03) 45%,transparent 68%);filter:blur(4px);animation:neithVideoPulse 2.2s ease-in-out infinite}
+.neith-home-video-play__icon{position:relative;display:grid;place-items:center;width:66px;height:66px;padding-left:5px;border-radius:50%;background:linear-gradient(135deg,#80f7ff,#20c8ff 58%,#6a7cff);box-shadow:0 0 0 1px rgba(255,255,255,.65) inset,0 0 26px rgba(42,218,255,.72),0 15px 35px rgba(0,0,0,.4);color:#00101a;font-size:25px}
+.neith-home-video-play__copy{position:relative;display:flex;flex-direction:column;align-items:flex-start;text-align:left;padding:12px 16px;border-radius:14px;background:rgba(0,10,20,.66);border:1px solid rgba(92,228,255,.25);backdrop-filter:blur(8px)}
+.neith-home-video-play__copy small{font:800 .62rem/1 Orbitron,sans-serif;letter-spacing:.18em;color:#70e9ff}
+.neith-home-video-play__copy b{margin-top:6px;font:900 .92rem/1.1 Orbitron,sans-serif;letter-spacing:.04em;color:#f5feff}
+.neith-home-video-badge{position:absolute;z-index:3;right:14px;top:14px;padding:8px 11px;border-radius:999px;background:rgba(0,9,18,.72);border:1px solid rgba(92,228,255,.22);color:#a9f7ff;font:800 .62rem/1 Orbitron,sans-serif;letter-spacing:.12em;backdrop-filter:blur(8px)}
+.neith-home-video-shell.is-playing .neith-home-video-play{opacity:0;visibility:hidden;pointer-events:none}
+@keyframes neithVideoPulse{0%,100%{transform:scale(.92);opacity:.72}50%{transform:scale(1.06);opacity:1}}
+@media(max-width:720px){.neith-home-video-card{padding:8px}.neith-home-video-shell{border-radius:14px}.neith-home-video-play{gap:10px}.neith-home-video-play__icon{width:52px;height:52px;font-size:20px}.neith-home-video-play__copy{padding:9px 11px}.neith-home-video-play__copy b{font-size:.72rem}.neith-home-video-play__copy small{font-size:.52rem}.neith-home-video-badge{top:9px;right:9px;font-size:.52rem}}
+/* R115 — 4K sharp playback + premium end card */
+.neith-home-video-shell::before{display:none!important}
+.neith-home-video{object-fit:contain!important;transform:none!important;filter:none!important;backdrop-filter:none!important}
+.neith-home-video-shell:fullscreen,.neith-home-video-shell:-webkit-full-screen{background:#000;border:0;border-radius:0}
+.neith-home-video-shell:fullscreen .neith-home-video,.neith-home-video-shell:-webkit-full-screen .neith-home-video{width:100vw;height:100vh;object-fit:contain!important}
+.neith-home-video-end{position:absolute;inset:0;z-index:6;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;pointer-events:none;background:#020914 url('../img/neith-commercial-trailer-v6-poster-4k.png') center/cover no-repeat;transition:opacity .28s ease,visibility .28s ease}
+.neith-home-video-end__veil{position:absolute;inset:0;background:radial-gradient(circle at 50% 42%,rgba(0,208,255,.08),rgba(0,8,18,.34) 45%,rgba(0,5,12,.76) 100%),linear-gradient(180deg,rgba(0,7,16,.18),rgba(0,7,16,.62))}
+.neith-home-video-end__content{position:relative;z-index:2;text-align:center;padding:24px;color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.72)}
+.neith-home-video-end__content small{display:block;margin-bottom:12px;font:800 clamp(.62rem,1vw,.82rem)/1 Orbitron,sans-serif;letter-spacing:.24em;color:#6feaff}
+.neith-home-video-end__content strong{display:block;font:900 clamp(1.45rem,3vw,3.2rem)/.98 Orbitron,sans-serif;letter-spacing:-.025em;color:#f5feff}
+.neith-home-video-end__content>span{display:block;margin-top:14px;font:800 clamp(.58rem,.9vw,.76rem)/1 Orbitron,sans-serif;letter-spacing:.22em;color:#84eaff}
+.neith-home-video-end__actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:20px}
+.neith-home-video-end__actions button,.neith-home-video-end__actions a{appearance:none;border:1px solid rgba(111,236,255,.42);border-radius:12px;padding:11px 16px;background:rgba(0,17,30,.82);color:#f4feff;text-decoration:none;font:900 clamp(.64rem,.85vw,.78rem)/1 Orbitron,sans-serif;letter-spacing:.05em;cursor:pointer;box-shadow:0 0 24px rgba(0,208,255,.10)}
+.neith-home-video-end__actions a{background:linear-gradient(135deg,#7af6ff,#25ccff 58%,#6c7dff);color:#00111b;border-color:rgba(255,255,255,.58);box-shadow:0 0 26px rgba(40,218,255,.42)}
+.neith-home-video-shell.is-ended .neith-home-video-end{opacity:1;visibility:visible;pointer-events:auto}
+.neith-home-video-shell.is-ended .neith-home-video-play{opacity:0;visibility:hidden;pointer-events:none}
+@media(max-width:720px){.neith-home-video-end__content{padding:14px}.neith-home-video-end__actions{margin-top:12px}.neith-home-video-end__actions button,.neith-home-video-end__actions a{padding:9px 11px}}
+
+
+/* R116 — high-fidelity embedded 4K player */
+.neith-home-video-shell{
+  aspect-ratio:16/9;
+  isolation:isolate;
+  contain:layout paint;
+  transform:translate3d(0,0,0);
+  -webkit-transform:translate3d(0,0,0);
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+  will-change:transform;
+}
+.neith-home-video{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:contain!important;
+  object-position:center center;
+  image-rendering:-webkit-optimize-contrast;
+  image-rendering:crisp-edges;
+  transform:translate3d(0,0,0)!important;
+  -webkit-transform:translate3d(0,0,0)!important;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+  will-change:transform;
+  filter:none!important;
+  -webkit-filter:none!important;
+  opacity:1;
+}
+.neith-home-video-card,
+.neith-home-video-card *{
+  -webkit-font-smoothing:antialiased;
+  text-rendering:geometricPrecision;
+}
+.neith-home-video-shell:fullscreen .neith-home-video,
+.neith-home-video-shell:-webkit-full-screen .neith-home-video,
+.neith-home-video:fullscreen,
+.neith-home-video:-webkit-full-screen{
+  width:100vw!important;
+  height:100vh!important;
+  object-fit:contain!important;
+  image-rendering:auto;
+  background:#000;
+}
+@media (min-width:1200px){
+  .neith-home-video-card{padding:10px}
+}
+
+
+/* R117 — aggressive native-resolution video rendering */
+.neith-home-video-card{
+  overflow:visible;
+}
+.neith-home-video-shell{
+  width:100%;
+  max-width:3840px;
+  aspect-ratio:16/9;
+  overflow:hidden;
+  transform:translateZ(0);
+  -webkit-transform:translateZ(0);
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+  perspective:1000px;
+  -webkit-perspective:1000px;
+}
+.neith-home-video-shell video.neith-home-video{
+  display:block;
+  width:100%!important;
+  min-width:100%!important;
+  max-width:3840px!important;
+  height:auto!important;
+  aspect-ratio:16/9;
+  object-fit:contain!important;
+  object-position:50% 50%;
+  image-rendering:-webkit-optimize-contrast;
+  image-rendering:crisp-edges;
+  image-rendering:pixelated;
+  transform:translateZ(0)!important;
+  -webkit-transform:translateZ(0)!important;
+  backface-visibility:hidden!important;
+  -webkit-backface-visibility:hidden!important;
+  will-change:transform;
+  filter:none!important;
+  -webkit-filter:none!important;
+}
+.neith-home-video-shell:fullscreen video.neith-home-video,
+.neith-home-video-shell:-webkit-full-screen video.neith-home-video,
+video.neith-home-video:fullscreen,
+video.neith-home-video:-webkit-full-screen{
+  width:100vw!important;
+  min-width:100vw!important;
+  max-width:none!important;
+  height:100vh!important;
+  object-fit:contain!important;
+  image-rendering:auto!important;
+  transform:translateZ(0)!important;
+  background:#000;
+}
+
+
+/* R119 — YouTube 4K/HD trailer embed */
+.neith-home-video-card{padding:14px;overflow:visible}
+.neith-home-youtube-shell{position:relative;width:100%;aspect-ratio:16/9;border-radius:20px;overflow:hidden;background:#020a12;border:1px solid rgba(94,231,255,.28);box-shadow:0 0 0 1px rgba(255,255,255,.03) inset,0 24px 65px rgba(0,0,0,.42),0 0 42px rgba(0,205,255,.14);transform:translateZ(0);backface-visibility:hidden}
+.neith-home-youtube{display:block;width:100%!important;height:auto!important;aspect-ratio:16/9;border:0;image-rendering:-webkit-optimize-contrast;image-rendering:crisp-edges;transform:translateZ(0);backface-visibility:hidden;background:#000}
+@media(max-width:720px){.neith-home-video-card{padding:8px}.neith-home-youtube-shell{border-radius:14px}}

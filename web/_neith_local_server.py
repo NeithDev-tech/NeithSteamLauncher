@@ -19,7 +19,7 @@ from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-BUILD = "V32"
+BUILD = "NEITH_WEB_V34_R122"
 ROOT = Path(__file__).resolve().parent
 
 # Windows-friendly MIME additions.
@@ -65,7 +65,7 @@ class NeithHTTPServer(ThreadingHTTPServer):
 
 class Handler(BaseHTTPRequestHandler):
     protocol_version = "HTTP/1.1"
-    server_version = "NeithLocal/V32"
+    server_version = "NeithLocal/V34-R122"
     sys_version = ""
 
     def log_message(self, fmt, *args):
@@ -160,7 +160,7 @@ class Handler(BaseHTTPRequestHandler):
 
 def _fetch(url: str) -> tuple[str, int, float]:
     started = time.perf_counter()
-    req = urllib.request.Request(url, method="GET", headers={"Connection": "keep-alive", "User-Agent": "NeithV32SelfTest/1.0"})
+    req = urllib.request.Request(url, method="GET", headers={"Connection": "keep-alive", "User-Agent": "NeithV34R122SelfTest/1.0"})
     with contextlib.closing(urllib.request.urlopen(req, timeout=5)) as response:
         response.read()
         return url, response.status, (time.perf_counter() - started) * 1000.0
@@ -194,7 +194,7 @@ def self_test(port: int) -> None:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Servidor local concurrente Neith V32")
+    parser = argparse.ArgumentParser(description="Servidor local concurrente Neith V34 R122")
     parser.add_argument("--port", type=int, default=8080)
     parser.add_argument("--no-browser", action="store_true")
     args = parser.parse_args()
@@ -204,7 +204,7 @@ def main() -> int:
         print("ERROR: falta NEITH_BUILD.txt", file=sys.stderr)
         return 2
     marker_text = marker.read_text(encoding="utf-8-sig", errors="replace").strip()
-    if BUILD not in marker_text.upper().split():
+    if marker_text.strip().upper() != BUILD:
         print(f"ERROR: esta carpeta no esta marcada como {BUILD}.", file=sys.stderr)
         print(f"Contenido de NEITH_BUILD.txt: {marker_text}", file=sys.stderr)
         return 2

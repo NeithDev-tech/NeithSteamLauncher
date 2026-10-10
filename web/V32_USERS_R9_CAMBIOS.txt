@@ -1,9 +1,0 @@
-NEITH WEB V32 — USERS R9 ACCESS STRUCTURE FIX
-
-- Corrección estructural del bloque CONTROL DE ACCESO.
-- Eliminadas geometrías heredadas/duplicadas de R6/R7/R8.
-- Nuevo contenedor independiente .neith-access-controls.
-- Escritorio: ROL | PLAN | APLICAR en una sola fila real.
-- Tablet: ROL | PLAN y APLICAR a ancho completo debajo.
-- Móvil: una columna controlada.
-- Sin cambios en Supabase, RPC, seguridad, avatar, cabecera, logo o carga de usuarios.

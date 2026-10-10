@@ -1,4 +1,0 @@
-R48
-- Logo navbar: desplazamiento visual de 10 mm a la derecha sin alterar su caja de layout.
-- Capturas reales de Hour Boost, Boost PC, Logros, Juegos Gratis y Cuentas: vignette, reflection sweep, scan line, esquinas HUD, glow y micro-tilt reactivo.
-- No se modifican grids, tamaños ni estructura funcional de las secciones.

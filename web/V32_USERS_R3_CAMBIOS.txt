@@ -1,3 +1,0 @@
-Neith Official Web — V32 USERS R3
-Base: V32 stable Admin Center
-Fixes: canonical admin header logo gradient + robust paged users RPC v2 compatibility.

@@ -1,8 +1,0 @@
-NEITH V32 USERS R14 — CAPABILITY DETECTION
-
-- Mantiene intacto el layout R13 de ROL + PLAN con APLICAR centrado debajo.
-- Corrige el aviso amarillo: ya no depende de que el listado sea exactamente v3.
-- Añade detección independiente de las capacidades reales de suspensión/borrado.
-- Si R4/R13 ya expone list_users_v3, se mantiene compatibilidad sin falso aviso.
-- Nuevo SQL opcional/seguro: supabase/V32_USERS_CAPABILITIES_R14.sql.
-- No modifica usuarios, roles, planes ni datos.

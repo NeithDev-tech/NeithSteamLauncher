@@ -1,7 +1,0 @@
-index.html: ./img/neith-approved-inicio.png -> True
-cuentas/index.html: ../img/neith-approved-cuentas.png -> True
-biblioteca/index.html: ../img/neith-current-biblioteca.jpg -> True
-boostpc/index.html: ../img/neith-approved-boostpc.png -> True
-hourboost/index.html: ../img/neith-approved-hourboost.png -> True
-juegos-gratis/index.html: ../img/neith-approved-juegos-gratis.png -> True
-logros/index.html: ../img/neith-approved-logros.png -> True

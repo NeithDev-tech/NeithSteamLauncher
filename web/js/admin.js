@@ -25,14 +25,14 @@
   const runIdle = fn => { if('requestIdleCallback' in window) requestIdleCallback(fn,{timeout:900}); else setTimeout(fn,80); };
 
   const USERS_COPY = {
-    es:{eyebrow:'IDENTITY CONTROL',title:'USUARIOS NEITH',subtitle:'Carga automática de 20 identidades por página y control de acceso protegido por SUPERADMIN.',secure:'DIRECTORIO SEGURO',search:'BUSCAR',clear:'LIMPIAR',directory:'DIRECTORIO',loading:'CARGANDO IDENTIDADES NEITH',loading_sub:'Consultando el directorio seguro…',prev:'‹ ANTERIOR',page:'PÁGINA',next:'SIGUIENTE ›',placeholder:'Buscar por correo o nombre de usuario',users:'usuarios',of:'DE',empty:'DIRECTORIO VACÍO',none:'Todavía no hay usuarios disponibles.',noMatches:'SIN COINCIDENCIAS',noMatchesSub:'No hay Neith IDs que coincidan con esta búsqueda.',loadError:'NO SE PUDO CARGAR EL DIRECTORIO',created:'REGISTRO',last:'ÚLTIMO ACCESO',status:'ESTADO',active:'ACTIVO',never:'SIN ACCESO',role:'ROL',plan:'PLAN',apply:'APLICAR',noName:'Sin nombre',security:'SEGURIDAD',suspend:'SUSPENDER',reactivate:'REACTIVAR',delete:'ELIMINAR',banned:'SUSPENDIDO',activeNow:'ACTIVO',self:'CUENTA MAESTRA',manage:'SECURITY VAULT',securityOk:'PROTECCIÓN ACTIVA',securityLocked:'CUENTA SUSPENDIDA',until:'HASTA',pending:'CAMBIOS PENDIENTES',saved:'ACCESO ACTUALIZADO',auditOk:'Registrado en Auditoría'},
-    en:{eyebrow:'IDENTITY CONTROL',title:'NEITH USERS',subtitle:'Automatic loading of 20 identities per page with access control protected by SUPERADMIN.',secure:'SECURE DIRECTORY',search:'SEARCH',clear:'CLEAR',directory:'DIRECTORY',loading:'LOADING NEITH IDENTITIES',loading_sub:'Querying the secure directory…',prev:'‹ PREVIOUS',page:'PAGE',next:'NEXT ›',placeholder:'Search by email or username',users:'users',of:'OF',empty:'EMPTY DIRECTORY',none:'There are no users available yet.',noMatches:'NO MATCHES',noMatchesSub:'No Neith IDs match this search.',loadError:'DIRECTORY COULD NOT BE LOADED',created:'CREATED',last:'LAST SIGN-IN',status:'STATUS',active:'ACTIVE',never:'NO SIGN-IN',role:'ROLE',plan:'PLAN',apply:'APPLY',noName:'No name',security:'SECURITY',suspend:'SUSPEND',reactivate:'REACTIVATE',delete:'DELETE',banned:'SUSPENDED',activeNow:'ACTIVE',self:'MASTER ACCOUNT',manage:'SECURITY VAULT',securityOk:'PROTECTION ACTIVE',securityLocked:'ACCOUNT SUSPENDED',until:'UNTIL',pending:'PENDING CHANGES',saved:'ACCESS UPDATED',auditOk:'Logged in Audit'}
+    es:{eyebrow:'IDENTITY CONTROL',title:'USUARIOS NEITH',subtitle:'Carga automática de 20 identidades por página con estado autoritativo y seguridad protegida por OWNER / ADMIN.',secure:'DIRECTORIO SEGURO',search:'BUSCAR',clear:'LIMPIAR',directory:'DIRECTORIO',loading:'CARGANDO IDENTIDADES NEITH',loading_sub:'Consultando el directorio seguro…',prev:'‹ ANTERIOR',page:'PÁGINA',next:'SIGUIENTE ›',placeholder:'Buscar por correo o nombre de usuario',users:'usuarios',of:'DE',empty:'DIRECTORIO VACÍO',none:'Todavía no hay usuarios disponibles.',noMatches:'SIN COINCIDENCIAS',noMatchesSub:'No hay Neith IDs que coincidan con esta búsqueda.',loadError:'NO SE PUDO CARGAR EL DIRECTORIO',created:'REGISTRO',last:'ÚLTIMO ACCESO',status:'ESTADO',active:'ACTIVO',never:'SIN ACCESO',role:'ROL',plan:'PLAN',apply:'APLICAR',noName:'Sin nombre',security:'SEGURIDAD',suspend:'SUSPENDER',reactivate:'REACTIVAR',delete:'ELIMINAR',banned:'SUSPENDIDO',activeNow:'ACTIVO',self:'CUENTA MAESTRA',manage:'SECURITY VAULT',securityOk:'PROTECCIÓN ACTIVA',securityLocked:'CUENTA SUSPENDIDA',until:'HASTA',pending:'CAMBIOS PENDIENTES',saved:'ACCESO ACTUALIZADO',auditOk:'Registrado en Auditoría'},
+    en:{eyebrow:'IDENTITY CONTROL',title:'NEITH USERS',subtitle:'Automatic loading of 20 identities per page with authoritative state and security protected by OWNER / ADMIN.',secure:'SECURE DIRECTORY',search:'SEARCH',clear:'CLEAR',directory:'DIRECTORY',loading:'LOADING NEITH IDENTITIES',loading_sub:'Querying the secure directory…',prev:'‹ PREVIOUS',page:'PAGE',next:'NEXT ›',placeholder:'Search by email or username',users:'users',of:'OF',empty:'EMPTY DIRECTORY',none:'There are no users available yet.',noMatches:'NO MATCHES',noMatchesSub:'No Neith IDs match this search.',loadError:'DIRECTORY COULD NOT BE LOADED',created:'CREATED',last:'LAST SIGN-IN',status:'STATUS',active:'ACTIVE',never:'NO SIGN-IN',role:'ROLE',plan:'PLAN',apply:'APPLY',noName:'No name',security:'SECURITY',suspend:'SUSPEND',reactivate:'REACTIVATE',delete:'DELETE',banned:'SUSPENDED',activeNow:'ACTIVE',self:'MASTER ACCOUNT',manage:'SECURITY VAULT',securityOk:'PROTECTION ACTIVE',securityLocked:'ACCOUNT SUSPENDED',until:'UNTIL',pending:'PENDING CHANGES',saved:'ACCESS UPDATED',auditOk:'Logged in Audit'}
   };
   const ucopy = key => {
     if(key==='subtitle'){
       return lang()==='en'
-        ? `${state.usersPageSize} identities per page, permissions, plan and account security protected by SUPERADMIN.`
-        : `${state.usersPageSize} identidades por página, permisos, plan y seguridad de cuenta protegidos por SUPERADMIN.`;
+        ? `${state.usersPageSize} identities per page, authoritative plan state and account security protected by OWNER / ADMIN.`
+        : `${state.usersPageSize} identidades por página, estado autoritativo del plan y seguridad protegida por OWNER / ADMIN.`;
     }
     return USERS_COPY[lang()][key] || USERS_COPY.es[key] || key;
   };
@@ -167,7 +167,7 @@
     const canWrite=state.role==='superadmin';
     const dirty=canWrite&&launcherSignature(p)!==state.launcherBaseline;
     const dirtyEl=$('[data-launcher-dirty]'),save=$('[data-launcher-save]');
-    if(dirtyEl){dirtyEl.textContent=!canWrite?'MODO LECTURA · SUPERADMIN':(dirty?'CAMBIOS PENDIENTES':'SIN CAMBIOS PENDIENTES');dirtyEl.classList.toggle('is-dirty',dirty);}
+    if(dirtyEl){dirtyEl.textContent=!canWrite?'MODO LECTURA · OWNER':(dirty?'CAMBIOS PENDIENTES':'SIN CAMBIOS PENDIENTES');dirtyEl.classList.toggle('is-dirty',dirty);}
     if(save)save.disabled=!canWrite||!dirty;
   }
   function fillLauncher(){
@@ -181,7 +181,7 @@
     $$('input,select,textarea',f).forEach(el=>{el.disabled=!canWrite;el.setAttribute('aria-disabled',String(!canWrite));});
     f.classList.toggle('is-readonly',!canWrite);
     syncLauncherPreview();
-    msg($('[data-launcher-status]'),canWrite?'':'MODO LECTURA · solo SUPERADMIN puede publicar cambios.');
+    msg($('[data-launcher-status]'),canWrite?'':'MODO LECTURA · solo OWNER puede publicar cambios.');
   }
   function validateLauncherPayload(p){
     const version=/^v?\d+(?:\.\d+){1,3}(?:[-+][0-9A-Za-z.-]+)?$/;
@@ -209,7 +209,7 @@
   }
   function closeLauncherModal(){const modal=$('[data-launcher-modal]');if(modal)modal.hidden=true;state.pendingLauncherSave=null;}
   async function saveLauncherPayload(payload){
-    if(state.role!=='superadmin') throw new Error('Solo SUPERADMIN puede publicar la configuración del launcher.');
+    if(state.role!=='superadmin') throw new Error('Solo OWNER puede publicar la configuración del launcher.');
     const s=$('[data-launcher-status]'),save=$('[data-launcher-save]');if(save)save.disabled=true;msg(s,'GUARDANDO…');
     try{await rpc('neith_admin_save_launcher_config',{p_payload:payload});await loadBootstrap();switchTab('launcher');msg(s,'CONFIGURACIÓN PUBLICADA','ok');notify('Configuración del launcher actualizada','success');}
     catch(err){msg(s,err?.message||'No se pudo guardar','error');syncLauncherPreview();throw err;}
@@ -524,15 +524,19 @@
       const isSelf=String(u.user_id||'')===String(state.currentUserId||'');
       const banned=Boolean(u.banned_until && new Date(u.banned_until).getTime()>Date.now());
       const securityReady=state.usersSecurityReady===true;
-      const securityDisabled=state.role!=='superadmin'||isSelf||!securityReady;
+      const modernRole=String(state.commercialRole||'').toLowerCase();
+      const canSuspend=modernRole==='owner'||modernRole==='admin'||state.role==='superadmin'||state.role==='admin';
+      const canDelete=modernRole==='owner'||state.role==='superadmin';
+      const suspendDisabled=!canSuspend||isSelf||!securityReady;
+      const deleteDisabled=!canDelete||isSelf||!securityReady;
       const justChanged=String(state.lastChangedUserId||'')===String(u.user_id||'');
       const bannedUntil=banned&&u.banned_until?fmtDate(u.banned_until):'';
       const securitySummary=banned?`${ucopy('securityLocked')}${bannedUntil?` · ${ucopy('until')} ${escapeHtml(bannedUntil)}`:''}`:ucopy('securityOk');
       return `<article class="admin32-user ${banned?'is-banned':''} ${isSelf?'is-self':''} ${justChanged?'just-updated':''}" data-user-id="${escapeHtml(u.user_id)}" data-user-email="${escapeHtml(email)}" data-user-name="${escapeHtml(name)}">
         <div class="neith-user-main"><div class="neith-user-avatar">${escapeHtml(initial)}<i></i></div><div class="neith-user-id"><div class="neith-user-name-line"><b>${escapeHtml(name)}</b><span class="neith-user-plan-badge ${plan==='premium'?'premium':''}">${escapeHtml(plan.toUpperCase())}</span>${isSelf?`<span class="neith-user-self-badge">${ucopy('self')}</span>`:''}</div><small>${escapeHtml(email)}</small><em>NEITH ID · ${escapeHtml(String(u.user_id||'').slice(0,8).toUpperCase())}</em></div></div>
         <div class="admin32-user-meta"><span>${ucopy('created')}<b>${fmtDate(u.created_at)}</b></span><span>${ucopy('last')}<b>${fmtDate(u.last_sign_in_at)}</b></span><span class="neith-status-cell ${banned?'banned':'active'}">${ucopy('status')}<b><i></i>${banned?ucopy('banned'):ucopy('activeNow')}</b>${bannedUntil?`<small>${ucopy('until')} ${escapeHtml(bannedUntil)}</small>`:''}</span></div>
-        <div class="admin32-user-access neith-access-r13"><div class="neith-access-controls"><label class="neith-access-role"><span>${ucopy('role')}</span><select data-user-role data-original="${escapeHtml(role)}" ${state.role!=='superadmin'?'disabled':''}>${['user','premium','staff','admin','superadmin'].map(v=>`<option value="${v}" ${role===v?'selected':''}>${v.toUpperCase()}</option>`).join('')}</select></label><label class="neith-access-plan"><span>${ucopy('plan')}</span><select data-user-plan data-original="${escapeHtml(plan)}" ${state.role!=='superadmin'?'disabled':''}><option value="free" ${plan!=='premium'?'selected':''}>FREE</option><option value="premium" ${plan==='premium'?'selected':''}>PREMIUM</option></select></label><button class="neith-access-apply" type="button" data-save-user disabled><span>${ucopy('apply')}</span><i>›</i></button></div><div class="neith-access-foot"><span>${lang()==='en'?'ACCESS CONTROL':'CONTROL DE ACCESO'}</span><small data-access-state>${lang()==='en'?'NO PENDING CHANGES':'SIN CAMBIOS PENDIENTES'}</small></div></div>
-        <div class="neith-user-security"><div class="neith-security-copy"><span class="neith-security-label">${ucopy('manage')}</span><small>${securitySummary}</small></div><div class="neith-security-actions">${banned?`<button type="button" class="reactivate" data-user-unban ${securityDisabled?'disabled':''}>${ucopy('reactivate')}</button>`:`<button type="button" class="suspend" data-user-ban ${securityDisabled?'disabled':''}>${ucopy('suspend')}</button>`}<button type="button" class="delete" data-user-delete ${securityDisabled?'disabled':''}>${ucopy('delete')}</button></div></div>
+        <div class="admin32-user-access neith-access-r13"><div class="neith-access-controls"><label class="neith-access-role"><span>${ucopy('role')}</span><select data-user-role data-original="${escapeHtml(role)}" disabled>${['user','premium','staff','admin','superadmin'].map(v=>`<option value="${v}" ${role===v?'selected':''}>${v.toUpperCase()}</option>`).join('')}</select></label><label class="neith-access-plan"><span>${ucopy('plan')}</span><select data-user-plan data-original="${escapeHtml(plan)}" disabled><option value="free" ${plan!=='premium'?'selected':''}>FREE</option><option value="premium" ${plan==='premium'?'selected':''}>PREMIUM</option></select></label><button class="neith-access-apply" type="button" data-save-user disabled><span>${ucopy('apply')}</span><i>›</i></button></div><div class="neith-access-foot"><span>${lang()==='en'?'AUTHORITATIVE STATE':'ESTADO AUTORITATIVO'}</span><small data-access-state>${lang()==='en'?'MANAGE PREMIUM IN PREMIUM & KEYS':'GESTIONA PREMIUM EN PREMIUM & CLAVES'}</small></div></div>
+        <div class="neith-user-security"><div class="neith-security-copy"><span class="neith-security-label">${ucopy('manage')}</span><small>${securitySummary}</small></div><div class="neith-security-actions">${banned?`<button type="button" class="reactivate" data-user-unban ${suspendDisabled?'disabled':''}>${ucopy('reactivate')}</button>`:`<button type="button" class="suspend" data-user-ban ${suspendDisabled?'disabled':''}>${ucopy('suspend')}</button>`}<button type="button" class="delete" data-user-delete ${deleteDisabled?'disabled':''}>${ucopy('delete')}</button></div></div>
       </article>`;
     }).join('');
   }
@@ -559,12 +563,6 @@
       return;
     }catch(err){
       if(!isMissingRpc(err,'neith_admin_list_users_v3')) throw err;
-    }
-    try{
-      await loadUsersPagedRpc('neith_admin_list_users_v2','paged-v2');
-      return;
-    }catch(err){
-      if(!isMissingRpc(err,'neith_admin_list_users_v2')) throw err;
     }
     await loadUsersPagedRpc('neith_admin_list_users','paged-v1');
   }
@@ -693,7 +691,7 @@
     state.settingsBaseline=JSON.stringify(consoleSettingsPayloadFromForm());
     const role=$('[data-settings-role]'),copy=$('[data-settings-role-copy]');
     if(role)role.textContent=String(state.role||'admin').toUpperCase();
-    if(copy)copy.textContent=state.role==='superadmin'?'Escritura global habilitada mediante RPC protegida.':'MODO LECTURA · solo SUPERADMIN puede modificar estos ajustes.';
+    if(copy)copy.textContent=state.role==='superadmin'?'Escritura global habilitada mediante RPC protegida.':'MODO LECTURA · solo OWNER puede modificar estos ajustes.';
     const save=$('[data-settings-save]');if(save)save.disabled=true;
     const st=$('[data-settings-state]');if(st)st.textContent=state.role==='superadmin'?'SIN CAMBIOS PENDIENTES':'MODO LECTURA';
     setSettingsDiagnostic('supabase',client()?'ok':'error',client()?'CONECTADO':'NO DISPONIBLE','Cliente Supabase de la sesión');
@@ -733,7 +731,7 @@
     }
   }
   async function saveConsoleSettings(){
-    if(state.role!=='superadmin')throw new Error('Solo SUPERADMIN puede guardar Configuración.');
+    if(state.role!=='superadmin')throw new Error('Solo OWNER puede guardar Configuración.');
     if(state.consoleSettingsBackend!=='rpc')throw new Error('Ejecuta supabase/V32_ADMIN_SETTINGS_R29.sql antes de guardar.');
     const payload=consoleSettingsPayloadFromForm(),status=$('[data-settings-status]'),save=$('[data-settings-save]');
     if(save){save.disabled=true;save.textContent='GUARDANDO…';}
@@ -782,7 +780,9 @@
   }
 
   async function loadBootstrap(){
-    const data=await rpc('neith_admin_bootstrap'); state.data=data||{}; state.role=data?.role||'user';
+    const data=await rpc('neith_admin_bootstrap'); state.data=data||{};
+    const modernRole=String(state.commercialRole||data?.role||'').toLowerCase();
+    state.role=modernRole==='owner'?'superadmin':(modernRole==='admin'?'admin':(modernRole==='support'?'support':String(data?.role||'user').toLowerCase()));
     renderStats(); renderOverview(); fillLauncher(); renderDashboard();
     if(!state.flagsLoaded){state.flags=Array.isArray(state.data?.feature_flags)?state.data.feature_flags:[];state.flagsTotal=state.flags.length;}
     if(!state.announcementsLoaded){state.announcements=Array.isArray(state.data?.announcements)?state.data.announcements:[];state.announcementsTotal=state.announcements.length;}
@@ -824,13 +824,17 @@
       const {data:{session}}=await client().auth.getSession();
       if(!session?.user){ location.href='../?login=1'; return; }
       state.currentUserId=session.user.id;
-      let role;
-      try{ role=await rpc('neith_my_role'); }catch(err){
+      let context=null, legacyRole='user';
+      try{ context=await rpc('neith_admin_context'); }catch(err){ console.warn('Admin context:',err?.message||err); }
+      try{ legacyRole=await rpc('neith_my_role'); }catch(err){
         const message=String(err?.message||'');
-        if(/function|schema cache|neith_my_role/i.test(message)) return setDenied('El backend del Admin Center todavía no está instalado. Ejecuta supabase/admin-center-v32.sql en Supabase.');
-        throw err;
+        if(!context?.is_admin && /function|schema cache|neith_my_role/i.test(message)) return setDenied('El backend del Admin Center todavía no está instalado.');
       }
-      if(!['admin','superadmin'].includes(role)) return setDenied('Tu Neith ID está autenticada, pero no tiene rol ADMIN o SUPERADMIN.');
+      const modernAdmin=Boolean(context?.is_admin);
+      const legacyAdmin=['admin','superadmin'].includes(String(legacyRole||'').toLowerCase());
+      if(!modernAdmin&&!legacyAdmin) return setDenied('Tu Neith ID está autenticada, pero no tiene permisos ADMIN.');
+      if(modernAdmin&&context?.mfa_required) return setDenied('ADMIN requiere verificación 2FA. Completa MFA con tu aplicación autenticadora y vuelve a abrir el panel.');
+      state.commercialRole=String(context?.role||'').toLowerCase();
       await loadBootstrap();
       applyUsersLanguage();
       if(state.activeTab==='users' && !state.usersLoaded && !state.usersLoading){
@@ -843,7 +847,7 @@
   function ensureUserActionModal(){
     let modal=$('[data-user-action-modal]'); if(modal)return modal;
     modal=document.createElement('div'); modal.className='neith-user-action-modal'; modal.dataset.userActionModal=''; modal.hidden=true;
-    modal.innerHTML=`<div class="neith-user-action-backdrop" data-close-user-action></div><section class="neith-user-action-card" role="dialog" aria-modal="true" aria-labelledby="neithUserActionTitle"><button class="neith-user-action-x" type="button" data-close-user-action aria-label="Cerrar">×</button><div class="neith-user-action-top"><div class="neith-user-action-icon" data-user-action-icon>!</div><div><small>NEITH IDENTITY SECURITY</small><span class="neith-user-action-level">SUPERADMIN VERIFIED</span></div></div><h3 id="neithUserActionTitle" data-user-action-title></h3><p data-user-action-copy></p><div class="neith-user-action-target"><small>${lang()==='en'?'TARGET IDENTITY':'IDENTIDAD OBJETIVO'}</small><span data-user-action-name></span><b data-user-action-email></b></div><div data-user-ban-options hidden><label>TIEMPO DE SUSPENSIÓN<select data-user-ban-duration><option value="1d">1 DÍA</option><option value="7d">7 DÍAS</option><option value="30d">30 DÍAS</option><option value="permanent">PERMANENTE</option></select></label></div><div class="neith-delete-warning" data-user-delete-confirm hidden><p>${lang()==='en'?'Permanent deletion cannot be undone. Type the exact email to unlock the action.':'El borrado permanente no se puede deshacer. Escribe el correo exacto para desbloquear la acción.'}</p><label>ESCRIBE EL CORREO PARA CONFIRMAR<input data-user-delete-email autocomplete="off" spellcheck="false"></label></div><div class="neith-user-action-footer"><button type="button" class="cancel" data-close-user-action>CANCELAR</button><button type="button" class="confirm" data-confirm-user-action>CONFIRMAR</button></div></section>`;
+    modal.innerHTML=`<div class="neith-user-action-backdrop" data-close-user-action></div><section class="neith-user-action-card" role="dialog" aria-modal="true" aria-labelledby="neithUserActionTitle"><button class="neith-user-action-x" type="button" data-close-user-action aria-label="Cerrar">×</button><div class="neith-user-action-top"><div class="neith-user-action-icon" data-user-action-icon>!</div><div><small>NEITH IDENTITY SECURITY</small><span class="neith-user-action-level">OWNER / MFA VERIFIED</span></div></div><h3 id="neithUserActionTitle" data-user-action-title></h3><p data-user-action-copy></p><div class="neith-user-action-target"><small>${lang()==='en'?'TARGET IDENTITY':'IDENTIDAD OBJETIVO'}</small><span data-user-action-name></span><b data-user-action-email></b></div><div data-user-ban-options hidden><label>TIEMPO DE SUSPENSIÓN<select data-user-ban-duration><option value="1d">1 DÍA</option><option value="7d">7 DÍAS</option><option value="30d">30 DÍAS</option><option value="permanent">PERMANENTE</option></select></label></div><div class="neith-delete-warning" data-user-delete-confirm hidden><p>${lang()==='en'?'Permanent deletion cannot be undone. Type the exact email to unlock the action.':'El borrado permanente no se puede deshacer. Escribe el correo exacto para desbloquear la acción.'}</p><label>ESCRIBE EL CORREO PARA CONFIRMAR<input data-user-delete-email autocomplete="off" spellcheck="false"></label></div><div class="neith-user-action-footer"><button type="button" class="cancel" data-close-user-action>CANCELAR</button><button type="button" class="confirm" data-confirm-user-action>CONFIRMAR</button></div></section>`;
     document.body.appendChild(modal); return modal;
   }
   function openUserAction(row, action){
@@ -863,8 +867,13 @@
     const modal=$('[data-user-action-modal]'); if(!modal||modal.hidden)return;
     const action=modal.dataset.action,id=modal.dataset.userId,email=modal.dataset.userEmail,button=$('[data-confirm-user-action]',modal); button.disabled=true;
     try{
-      if(action==='ban') await rpc('neith_admin_set_user_ban',{p_user_id:id,p_banned:true,p_duration:$('[data-user-ban-duration]',modal).value});
-      else if(action==='unban') await rpc('neith_admin_set_user_ban',{p_user_id:id,p_banned:false,p_duration:'permanent'});
+      if(action==='ban'){
+        const duration=$('[data-user-ban-duration]',modal).value;
+        const days={ '1d':1,'7d':7,'30d':30 }[duration]||0;
+        const until=days?new Date(Date.now()+days*86400000).toISOString():null;
+        await rpc('neith_admin_set_suspension',{p_user_id:id,p_until:until,p_reason:`Web Admin · ${duration}`});
+      }
+      else if(action==='unban') await rpc('neith_admin_reactivate_user',{p_user_id:id,p_reason:'Web Admin · reactivación'});
       else if(action==='delete'){
         const typed=$('[data-user-delete-email]',modal).value.trim();
         if(typed.toLowerCase()!==String(email).toLowerCase()) throw new Error(lang()==='en'?'Type the exact email to confirm deletion.':'Escribe exactamente el correo del usuario para confirmar el borrado.');
@@ -888,9 +897,9 @@
     if(e.target.closest('[data-audit-clear]')){if(await confirmAuditDelete({title:'LIMPIAR TODA LA AUDITORÍA',copy:'Se eliminará TODO el registro de auditoría de forma permanente. Esta operación vaciará el historial administrativo completo.',target:'TODOS LOS EVENTOS DE AUDITORÍA',confirmLabel:'SÍ, LIMPIAR AUDITORÍA'})){try{const n=await deleteAuditRecords({all:true});notify(`Auditoría limpiada · ${n} evento(s) eliminado(s)`,'success');}catch(err){notify(err?.message||String(err),'error');}}return;}
     if(e.target.closest('[data-close-user-action]')){closeUserAction();return;}
     if(e.target.closest('[data-confirm-user-action]')){await confirmUserAction();return;}
-    const banUser=e.target.closest('[data-user-ban]'); if(banUser){if(state.role!=='superadmin'){notify('Acción reservada a SUPERADMIN','error');return;}openUserAction(banUser.closest('[data-user-id]'),'ban');return;}
-    const unbanUser=e.target.closest('[data-user-unban]'); if(unbanUser){if(state.role!=='superadmin'){notify('Acción reservada a SUPERADMIN','error');return;}openUserAction(unbanUser.closest('[data-user-id]'),'unban');return;}
-    const deleteUser=e.target.closest('[data-user-delete]'); if(deleteUser){if(state.role!=='superadmin'){notify('Acción reservada a SUPERADMIN','error');return;}openUserAction(deleteUser.closest('[data-user-id]'),'delete');return;}
+    const banUser=e.target.closest('[data-user-ban]'); if(banUser){if(!['owner','admin'].includes(String(state.commercialRole||'').toLowerCase())&&!['superadmin','admin'].includes(state.role)){notify('Acción reservada a OWNER / ADMIN','error');return;}openUserAction(banUser.closest('[data-user-id]'),'ban');return;}
+    const unbanUser=e.target.closest('[data-user-unban]'); if(unbanUser){if(!['owner','admin'].includes(String(state.commercialRole||'').toLowerCase())&&!['superadmin','admin'].includes(state.role)){notify('Acción reservada a OWNER / ADMIN','error');return;}openUserAction(unbanUser.closest('[data-user-id]'),'unban');return;}
+    const deleteUser=e.target.closest('[data-user-delete]'); if(deleteUser){if(state.role!=='superadmin'){notify('Acción reservada a OWNER','error');return;}openUserAction(deleteUser.closest('[data-user-id]'),'delete');return;}
     if(e.target.closest('[data-users-prev]')){if(String(state.usersBackend).startsWith('paged-')&&state.usersPage>0)loadUsers({page:state.usersPage-1}).catch(err=>notify(err?.message||String(err),'error'));return;}
     if(e.target.closest('[data-users-next]')){if(String(state.usersBackend).startsWith('paged-')&&(state.usersPage+1)*state.usersPageSize<state.usersTotal)loadUsers({page:state.usersPage+1}).catch(err=>notify(err?.message||String(err),'error'));return;}
     if(e.target.closest('[data-user-search-clear]')){const form=$('[data-user-search]');if(form)form.elements.query.value='';loadUsers({page:0,query:'',force:true}).catch(err=>notify(err?.message||String(err),'error'));return;}
@@ -949,14 +958,14 @@
       }
       return;
     }
-    const saveUser=e.target.closest('[data-save-user]'); if(saveUser){if(state.role!=='superadmin'){notify('Control de acceso reservado a SUPERADMIN','error');return;}const row=saveUser.closest('[data-user-id]');saveUser.disabled=true;saveUser.classList.add('is-saving');try{await rpc('neith_admin_set_user_access',{p_user_id:row.dataset.userId,p_role:row.querySelector('[data-user-role]').value,p_plan:row.querySelector('[data-user-plan]').value});state.lastChangedUserId=row.dataset.userId;state.lastChangedAction='access';await loadBootstrap();await loadUsers({page:state.usersPage,query:state.usersQuery,force:true});switchTab('users');notify(lang()==='en'?'User access updated':'Acceso del usuario actualizado','success');}catch(err){notify(err?.message||String(err),'error');saveUser.disabled=false;saveUser.classList.remove('is-saving');}return;}
+    const saveUser=e.target.closest('[data-save-user]'); if(saveUser){notify(lang()==='en'?'Use PREMIUM & KEYS for commercial access management.':'Usa PREMIUM & CLAVES para gestionar el acceso comercial.','info');return;}
   });
 
   $('[data-flag-form]')?.addEventListener('submit',async e=>{e.preventDefault();const f=e.currentTarget,s=$('[data-flag-status]'),submit=f.querySelector('button[type="submit"]');if(submit?.disabled)return;const payload={flag_key:f.elements.flag_key.value.trim().toLowerCase(),label:f.elements.label.value.trim(),description:f.elements.description.value.trim(),enabled:f.elements.enabled.checked,audience:f.elements.audience.value,rollout_percent:Number(f.elements.rollout_percent.value||100)};if(submit)submit.disabled=true;msg(s,'CREANDO…');try{await rpc('neith_admin_upsert_feature_flag',{p_payload:payload});f.hidden=true;await loadBootstrap();await loadFlags({page:0,force:true});switchTab('flags');notify('Feature flag creada','success');}catch(err){msg(s,err?.message||'No se pudo crear','error');}finally{if(submit)submit.disabled=false;}});
 
   $('[data-flags-filter-form]')?.addEventListener('submit',async e=>{e.preventDefault();const f=e.currentTarget;state.flagsQuery=f.elements.query.value.trim();state.flagsAudience=f.elements.audience.value;state.flagsEnabled=f.elements.enabled.value;try{await loadFlags({page:0,force:true});}catch(err){notify(err?.message||'Error cargando feature flags','error');}});
 
-  $('[data-launcher-form]')?.addEventListener('submit',async e=>{e.preventDefault();if(state.role!=='superadmin'){notify('Launcher en modo lectura · requiere SUPERADMIN','error');return;}const payload=launcherPayloadFromForm();try{validateLauncherPayload(payload);const base=state.launcherBaselineObject||{};const critical=(payload.force_update&&!base.force_update)||(payload.maintenance_enabled&&!base.maintenance_enabled)||(payload.minimum_version!==base.minimum_version);if(critical){openLauncherModal(payload);return;}await saveLauncherPayload(payload);}catch(err){msg($('[data-launcher-status]'),err?.message||'No se pudo guardar','error');notify(err?.message||String(err),'error');}});
+  $('[data-launcher-form]')?.addEventListener('submit',async e=>{e.preventDefault();if(state.role!=='superadmin'){notify('Launcher en modo lectura · requiere OWNER','error');return;}const payload=launcherPayloadFromForm();try{validateLauncherPayload(payload);const base=state.launcherBaselineObject||{};const critical=(payload.force_update&&!base.force_update)||(payload.maintenance_enabled&&!base.maintenance_enabled)||(payload.minimum_version!==base.minimum_version);if(critical){openLauncherModal(payload);return;}await saveLauncherPayload(payload);}catch(err){msg($('[data-launcher-status]'),err?.message||'No se pudo guardar','error');notify(err?.message||String(err),'error');}});
   $('[data-launcher-form]')?.addEventListener('input',syncLauncherPreview);
   $('[data-launcher-form]')?.addEventListener('change',syncLauncherPreview);
 

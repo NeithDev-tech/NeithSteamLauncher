@@ -1,7 +1,0 @@
-NEITH ADMIN CENTER R31 — VISIBLE ULTRA PREMIUM
-
-- Rediseño visual global real del Admin Center.
-- No cambia lógica, Supabase, RPC, permisos ni funciones.
-- Paneles, métricas, formularios, listados, botones, filtros, badges, dashboard, launcher, usuarios, avisos, flags, auditoría y configuración reciben acabado premium coherente.
-- Responsive reforzado.
-- Movimiento reducido y barato.

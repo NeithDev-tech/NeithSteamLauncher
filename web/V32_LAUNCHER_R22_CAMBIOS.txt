@@ -1,5 +1,0 @@
-NEITH WEB V32 — LAUNCHER R22
-
-- Mueve PROBAR CONFIG PÚBLICA desde la cabecera al bloque final de acciones.
-- Evita que el botón quede fuera de la zona visible en anchos reales del Admin Center.
-- No cambia RPC, Supabase ni lógica de Launcher Control.

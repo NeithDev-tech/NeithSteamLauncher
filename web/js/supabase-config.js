@@ -5,7 +5,7 @@
   The publishable key is designed to be shipped in frontend code.
 
   NEVER place service_role, sb_secret_*, SMTP credentials,
-  Lemon Squeezy secrets or other server-side secrets here.
+  PayPal secrets or other server-side secrets here.
 */
 window.NEITH_CONFIG = Object.freeze({
   supabaseUrl: 'https://nsqhfbyxqcmdthvptuzp.supabase.co',

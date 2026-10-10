@@ -1,7 +1,0 @@
-NEITH WEB V32 — ADMIN AVISOS R28
-
-- Corrige salto/reflow al activar o pausar avisos.
-- El toggle ya no ejecuta bootstrap completo ni vacía/recrea la lista.
-- Actualización in-place del estado y badge.
-- Mantiene OFF→ON como nueva publicación en backend.
-- Sin cambios SQL.
