@@ -1,0 +1,129 @@
+/* Neith Web R123 — global breathing / commercial polish
+   Fluid spacing only: clamp/rem/%/fr. No rigid primary-panel dimensions. */
+:root{
+  --neith-space-section:clamp(4.5rem,7vw,7.5rem);
+  --neith-space-card:clamp(1.35rem,2.4vw,2.2rem);
+  --neith-space-gap:clamp(1rem,2vw,1.8rem);
+  --neith-copy-width:72ch;
+}
+
+/* Give every content block a cleaner visual rhythm without touching the fixed navigation system. */
+main .section{padding-block:var(--neith-space-section)}
+main .section+.section{border-top:1px solid rgba(76,215,255,.055)}
+main .section-head{margin-bottom:clamp(2rem,4vw,3.6rem)}
+main .section-head .lead,main .page-hero .lead{max-width:var(--neith-copy-width);line-height:1.72}
+main .panel{padding:clamp(1.6rem,3vw,3rem)}
+main .actions{gap:clamp(.8rem,1.5vw,1.2rem);flex-wrap:wrap}
+
+/* Cards breathe internally and between each other. */
+.neith-plan-showcase{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(1.35rem,2.7vw,2.4rem);align-items:stretch}
+.neith-plan-card{padding:clamp(1.7rem,3vw,2.65rem);border-radius:clamp(1.1rem,1.8vw,1.55rem);display:flex;flex-direction:column;gap:clamp(1rem,1.6vw,1.35rem)}
+.neith-plan-card>h2{margin:.15rem 0 0}
+.neith-plan-card>p{margin:0;line-height:1.65;max-width:54ch}
+.neith-plan-card ul{display:grid;gap:.78rem;margin:clamp(.5rem,1.2vw,1rem) 0;padding-left:1.2rem}
+.neith-plan-card li{line-height:1.48}
+.neith-plan-actions{margin-top:auto;padding-top:clamp(.85rem,1.5vw,1.35rem);display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem}
+.neith-plan-card--free .neith-plan-actions{grid-template-columns:1fr}
+.neith-plan-card--premium{position:relative;isolation:isolate;box-shadow:0 2rem 5rem rgba(0,0,0,.28),0 0 3rem rgba(29,218,255,.07),inset 0 0 0 1px rgba(69,239,215,.08)}
+.neith-plan-card--premium:after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(circle at 88% 8%,rgba(35,240,198,.09),transparent 30%),linear-gradient(145deg,rgba(53,219,255,.025),transparent 48%);z-index:-1}
+.neith-plan-dualprice{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(.8rem,1.6vw,1.15rem)}
+.neith-plan-dualprice>div{padding:clamp(1rem,1.8vw,1.35rem);min-width:0}
+.neith-store-state,.neith-commerce-note{margin-top:.35rem;line-height:1.55}
+.neith-compare-wrap{overflow:auto;border-radius:1.15rem}
+.neith-compare th,.neith-compare td{padding:clamp(.9rem,1.6vw,1.25rem) clamp(.8rem,1.5vw,1.15rem)}
+
+/* Account dashboard: clearer commercial hierarchy and less stacking. */
+.dashboard-v11 .dash11-shell{padding-block:clamp(2.2rem,4.5vw,4.5rem)}
+.dashboard-v11 .dash11-command{gap:clamp(1.3rem,2.5vw,2.4rem);padding:clamp(1.5rem,2.7vw,2.45rem)}
+.dashboard-v11 .dash11-telemetry{margin-top:clamp(1rem,2vw,1.6rem);gap:.7rem;flex-wrap:wrap}
+.dashboard-v11 .dash11-grid{gap:clamp(1.1rem,2vw,1.7rem);margin-top:clamp(1.1rem,2vw,1.7rem)}
+.dashboard-v11 .dash11-card{padding:clamp(1.45rem,2.5vw,2.25rem)}
+.dash11-membership-card{overflow:hidden;position:relative}
+.dash11-membership-card:before{content:"";position:absolute;inset:-20% -10% auto 45%;height:70%;pointer-events:none;background:radial-gradient(circle,rgba(33,224,255,.09),transparent 66%)}
+.dash11-membership-hero{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:clamp(1rem,1.8vw,1.35rem);margin-bottom:clamp(1rem,2vw,1.45rem);border:1px solid rgba(63,218,255,.14);border-radius:1rem;background:linear-gradient(135deg,rgba(5,34,56,.82),rgba(2,18,32,.82))}
+.dash11-membership-hero small,.dash11-membership-grid span{display:block;font:700 .68rem Orbitron,sans-serif;letter-spacing:.09em;color:#6d9fb3}
+.dash11-membership-hero strong{display:block;margin-top:.45rem;font:900 clamp(1.15rem,2vw,1.6rem) Orbitron,sans-serif;color:#effcff}
+.dash11-membership-hero>div>span{display:block;margin-top:.35rem;color:#8eb1c0;font-size:.78rem}
+.dash11-membership-signal{display:grid;grid-template-columns:auto 1fr;gap:.2rem .55rem;align-items:center;min-width:max-content}
+.dash11-membership-signal i{grid-row:1/3;width:.55rem;height:.55rem;border-radius:50%;background:#2df3b8;box-shadow:0 0 1rem rgba(45,243,184,.75)}
+.dash11-membership-signal span{font:700 .58rem Orbitron,sans-serif;letter-spacing:.12em;color:#6f9cad}.dash11-membership-signal b{font:700 .72rem Inter,sans-serif;color:#bff7e8}
+.dash11-membership-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.7rem}
+.dash11-membership-grid>div{padding:clamp(.9rem,1.6vw,1.15rem);border:1px solid rgba(67,209,255,.1);border-radius:.85rem;background:rgba(1,16,29,.58);min-width:0}
+.dash11-membership-grid b{display:block;margin-top:.45rem;color:#dff8ff;font:700 .8rem Inter,sans-serif;overflow-wrap:anywhere}
+.dash11-live-note{margin-top:clamp(1rem,1.8vw,1.3rem)}
+.dash11-control-zone{padding-block:var(--neith-space-section)}
+.dash11-quick-grid{gap:clamp(1rem,2vw,1.6rem)}
+.dash11-premium{margin-top:clamp(2.5rem,5vw,4.5rem);padding:clamp(1.8rem,3.8vw,3.4rem)}
+
+/* Admin denied state is now a real security checkpoint, not a loose error banner. */
+.admin32-denied{padding-block:clamp(2.5rem,5vw,5rem)}
+.admin32-denied-card{display:grid!important;grid-template-columns:auto minmax(0,1fr);gap:clamp(1.2rem,2.5vw,2.2rem)!important;padding:clamp(1.6rem,3vw,2.7rem)!important;min-height:0!important;align-items:start!important;box-shadow:0 2rem 5rem rgba(0,0,0,.28),inset 0 0 0 1px rgba(60,217,255,.035)}
+.admin32-denied-card>span{display:grid;place-items:center;width:clamp(3.5rem,6vw,4.8rem);aspect-ratio:1;border-radius:1rem;border:1px solid rgba(60,219,255,.2);background:rgba(7,42,65,.55)}
+.admin32-denied-card p{max-width:70ch;line-height:1.65!important}
+.admin32-denied-actions{margin-top:clamp(1.2rem,2vw,1.65rem)!important;gap:.8rem!important}
+.admin32-denied-actions .btn{min-width:min(100%,13rem);justify-content:center}
+
+/* In-page AAL2 verification. */
+.neith-admin-mfa-modal{position:fixed;inset:0;z-index:9000;display:grid;place-items:center;padding:clamp(1rem,3vw,2.5rem);opacity:0;transition:opacity .16s ease}
+.neith-admin-mfa-modal[hidden]{display:none}.neith-admin-mfa-modal.open{opacity:1}
+.neith-admin-mfa-backdrop{position:absolute;inset:0;background:rgba(0,5,12,.78);backdrop-filter:blur(.75rem)}
+.neith-admin-mfa-card{position:relative;width:min(100%,36rem);padding:clamp(1.5rem,3.2vw,2.6rem);border:1px solid rgba(64,220,255,.24);border-radius:1.3rem;background:linear-gradient(150deg,rgba(4,28,48,.985),rgba(1,13,25,.99));box-shadow:0 2rem 6rem rgba(0,0,0,.58),0 0 3rem rgba(33,213,255,.08);transform:translateY(.65rem);transition:transform .16s ease}
+.neith-admin-mfa-modal.open .neith-admin-mfa-card{transform:none}
+.neith-admin-mfa-x{position:absolute;top:1rem;right:1rem;border:1px solid rgba(67,218,255,.18);border-radius:.65rem;background:rgba(5,31,49,.8);color:#c8f7ff;width:2.4rem;aspect-ratio:1;font-size:1.25rem;cursor:pointer}
+.neith-admin-mfa-top{display:flex;align-items:center;gap:.9rem;padding-right:2.7rem}.neith-admin-mfa-shield{display:grid;place-items:center;width:3rem;aspect-ratio:1;border-radius:.85rem;border:1px solid rgba(45,239,192,.25);background:rgba(11,74,65,.32);color:#48f0c1;box-shadow:0 0 1.5rem rgba(38,233,188,.08)}
+.neith-admin-mfa-top small{display:block;font:700 .6rem Orbitron,sans-serif;letter-spacing:.12em;color:#59dfff}.neith-admin-mfa-top b{display:block;margin-top:.25rem;font:700 .72rem Orbitron,sans-serif;color:#baf5e4}
+.neith-admin-mfa-card h2{margin:clamp(1.4rem,2.5vw,2rem) 0 .7rem;font:800 clamp(1.25rem,2.5vw,1.8rem) Orbitron,sans-serif}.neith-admin-mfa-card>p{margin:0;color:#8db1c1;line-height:1.65}
+.neith-admin-mfa-enroll{display:grid;grid-template-columns:minmax(8rem,.7fr) minmax(0,1fr);gap:1rem;align-items:center;margin-top:1.2rem;padding:1rem;border:1px solid rgba(63,217,255,.13);border-radius:1rem;background:rgba(1,16,29,.55)}
+.neith-admin-mfa-enroll[hidden]{display:none!important}
+.neith-admin-mfa-enroll img{width:100%;aspect-ratio:1;object-fit:contain;border-radius:.65rem;background:#fff;padding:.35rem}.neith-admin-mfa-enroll small{display:block;color:#6f9bab;font:700 .58rem Orbitron,sans-serif}.neith-admin-mfa-enroll code{display:block;margin-top:.5rem;word-break:break-all;color:#dffbff;font-size:.74rem}
+.neith-admin-mfa-code{display:block;margin-top:1.2rem}.neith-admin-mfa-code span{display:block;margin-bottom:.55rem;color:#79a8b9;font:700 .62rem Orbitron,sans-serif;letter-spacing:.08em}.neith-admin-mfa-code input{width:100%;box-sizing:border-box;border:1px solid rgba(66,216,255,.22);border-radius:.8rem;background:#001522;color:#effdff;padding:1rem 1.1rem;font:800 1.15rem Orbitron,sans-serif;letter-spacing:.3em;outline:none}.neith-admin-mfa-code input:focus{border-color:#3ee0ff;box-shadow:0 0 0 .2rem rgba(62,224,255,.08)}
+.neith-admin-mfa-status{min-height:1.25rem;margin-top:.75rem;color:#7fa2b1;font-size:.77rem}.neith-admin-mfa-status[data-type=ok]{color:#61edc4}.neith-admin-mfa-status[data-type=error]{color:#ff7d91}
+.neith-admin-mfa-actions{display:flex;justify-content:flex-end;gap:.75rem;margin-top:1.15rem;flex-wrap:wrap}.neith-admin-mfa-actions button{border-radius:.75rem;padding:.85rem 1.05rem;font:800 .66rem Orbitron,sans-serif;cursor:pointer}.neith-admin-mfa-actions .ghost{border:1px solid rgba(64,210,255,.18);background:rgba(2,24,39,.7);color:#b8e8f2}.neith-admin-mfa-actions .primary{border:1px solid #43dfff;background:linear-gradient(135deg,#13bfe1,#2c74ed);color:#03101a;box-shadow:0 .8rem 1.8rem rgba(18,169,230,.18)}.neith-admin-mfa-actions button:disabled{opacity:.48;cursor:not-allowed}
+
+/* Responsive reflow. */
+@media(max-width:58rem){
+  .neith-plan-showcase{grid-template-columns:1fr}
+  .dashboard-v11 .dash11-command{grid-template-columns:1fr}
+}
+@media(max-width:44rem){
+  :root{--neith-space-section:clamp(3.2rem,11vw,4.8rem)}
+  .neith-plan-dualprice,.neith-plan-actions,.dash11-membership-grid{grid-template-columns:1fr}
+  .dash11-membership-hero{align-items:flex-start;flex-direction:column}
+  .admin32-denied-card{grid-template-columns:1fr}
+  .neith-admin-mfa-enroll{grid-template-columns:1fr}
+  .neith-admin-mfa-enroll img{max-width:13rem;justify-self:center}
+  .neith-admin-mfa-actions{display:grid;grid-template-columns:1fr}
+}
+
+
+/* R125 compact commercial re-balance */
+.dashboard-v11 .dash11-grid,.dashboard-v11 .dash11-grid-primary,.dashboard-v11 .dash11-grid-secondary{align-items:start}
+.dashboard-v11 .dash11-grid-primary{grid-template-columns:minmax(0,1.08fr) minmax(18rem,.92fr)}
+.dashboard-v11 .dash11-card{padding:clamp(1.05rem,1.8vw,1.55rem)}
+.dashboard-v11 .dash11-plan-body{grid-template-columns:minmax(0,1.1fr) minmax(13rem,.9fr);gap:clamp(.8rem,1.4vw,1.15rem);align-items:start}
+.dashboard-v11 .dash11-plan-title strong{display:block;max-width:9ch;font-size:clamp(2.15rem,4.6vw,4rem);line-height:.88;letter-spacing:-.055em;text-wrap:balance}
+.dashboard-v11 .dash11-plan-title p{margin-top:.7rem;max-width:44ch}
+.dashboard-v11 .dash11-access-stack{gap:.6rem;align-content:start}
+.dashboard-v11 .dash11-access{padding:.85rem .9rem;min-height:0}
+.dashboard-v11 .dash11-card-foot{gap:.55rem}
+.dashboard-v11 .dash11-card-foot>span{padding:.8rem .85rem;border-radius:.8rem;background:rgba(2,18,32,.45)}
+.dash11-membership-card:before{inset:-14% -10% auto 56%;height:52%}
+.dash11-membership-hero{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:.85rem;padding:.95rem 1rem;margin-bottom:1rem}
+.dash11-membership-hero strong{font-size:clamp(1.02rem,1.8vw,1.42rem);line-height:1.05;text-wrap:balance;max-width:12ch}
+.dash11-membership-grid{gap:.62rem}
+.dash11-membership-grid>div{padding:.8rem .9rem}
+.dash11-membership-grid b{margin-top:.4rem;font-size:.78rem;line-height:1.34}
+.dash11-live-note{margin-top:.9rem}
+.neith-plan-dualprice{gap:clamp(.7rem,1.2vw,.95rem)}
+.neith-plan-dualprice>div{padding:.9rem 1rem}
+.neith-plan-dualprice b{display:block;font-size:clamp(1.3rem,2.2vw,1.9rem);line-height:1}
+.neith-plan-dualprice span{display:block;margin-top:.28rem;line-height:1.25}
+.neith-plan-dualprice em{display:block;margin-top:.35rem;font-size:.66rem;line-height:1.2}
+@media(max-width:58rem){
+  .dashboard-v11 .dash11-grid-primary{grid-template-columns:1fr}
+  .dashboard-v11 .dash11-plan-body{grid-template-columns:1fr}
+}
+@media(max-width:44rem){
+  .dash11-membership-hero{grid-template-columns:1fr}
+  .dashboard-v11 .dash11-plan-title strong{max-width:none}
+}

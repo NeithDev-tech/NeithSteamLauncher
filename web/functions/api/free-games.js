@@ -49,8 +49,6 @@ function isDirectStoreFreebie(item, now) {
   const text = `${item.title || ''} ${item.description || ''} ${item.instructions || ''}`.toLowerCase();
   if (/\bkey giveaway\b|\brequires?\b[^.]{0,50}\b(?:arp|points?|credits?)\b|\b(?:arp|points?) required\b/.test(text)) return false;
   if (/\b(?:dlc|demo|prologue|playtest|trial|beta|free weekend|season pass|battle pass|starter pack|skin pack|currency pack)\b|in[- ]game loot/.test(text)) return false;
-  const worth = parseFloat(String(item.worth || '').replace(/[^0-9.]/g, '')) || 0;
-  if (worth <= 0) return false;
   return true;
 }
 
@@ -222,12 +220,12 @@ function mergePrime(atomRows = [], htmlRows = [], now = Date.now()) {
   return [...merged.values()].filter(row => {
     const titleBlob = String(row.title || '').toLowerCase();
     if (/\b(?:dlc|demo|prologue|playtest|trial|beta)\b|in[- ]game loot|skin pack|currency pack/.test(titleBlob)) return false;
-    return Number(row.price) > 0 && Number(row.endAt) > now;
+    return Number(row.endAt) > now;
   }).map((row, index) => ({
     id: `prime-${index}-${row.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}`,
     title: row.title,
     platform: 'PRIME GAMING',
-    worth: row.worth || `${Number(row.price).toFixed(2)} €`,
+    worth: row.worth || (Number(row.price) > 0 ? `${Number(row.price).toFixed(2)} €` : null),
     image: row.image || '',
     thumbnail: row.thumbnail || row.image || '',
     endDate: row.endDate,
@@ -272,8 +270,51 @@ async function fetchGamerPower(now) {
     endDate: item.end_date,
     endAt: parseEnd(item.end_date),
     publishedDate: item.published_date || null,
+    url: item.open_giveaway_url || item.gamerpower_url || '',
     source: 'GamerPower'
   }));
+}
+
+async function fetchEpicGames(now) {
+  const endpoint = 'https://store-site-backend-static-ipv4.ak.epicgames.com/freeGamesPromotions?locale=es-ES&country=ES&allowCountries=ES';
+  const response = await fetch(endpoint, {
+    headers: { accept: 'application/json', 'user-agent': 'NeithLauncherWeb/1.0 (+https://www.neithlauncher.com)' },
+    cf: { cacheTtl: 600, cacheEverything: true }
+  });
+  if (!response.ok) throw new Error('epic_unavailable');
+  const payload = await response.json();
+  const elements = payload?.data?.Catalog?.searchStore?.elements;
+  if (!Array.isArray(elements)) throw new Error('invalid_epic_payload');
+  const rows = [];
+  for (const item of elements) {
+    const offers = item?.promotions?.promotionalOffers || [];
+    const active = offers.flatMap(group => group?.promotionalOffers || []).find(offer => {
+      const start = Date.parse(offer?.startDate || '');
+      const end = Date.parse(offer?.endDate || '');
+      return Number.isFinite(start) && Number.isFinite(end) && start <= now && end > now && Number(offer?.discountSetting?.discountPercentage) === 0;
+    });
+    if (!active) continue;
+    const price = Number(item?.price?.totalPrice?.originalPrice || 0) / 100;
+    if (price <= 0) continue; // exclude permanently free-to-play titles
+    const title = cleanTitle(item?.title || '');
+    if (!title) continue;
+    const imageNode = (item?.keyImages || []).find(img => /DieselStoreFrontWide|OfferImageWide|Thumbnail/i.test(String(img?.type || ''))) || (item?.keyImages || [])[0];
+    const productSlug = item?.productSlug || item?.urlSlug || '';
+    rows.push({
+      id: `epic-${item?.id || title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`,
+      title,
+      platform: 'EPIC GAMES',
+      worth: price > 0 ? `${price.toFixed(2)} €` : null,
+      image: imageNode?.url || '',
+      thumbnail: imageNode?.url || '',
+      endDate: active.endDate,
+      endAt: Date.parse(active.endDate),
+      publishedDate: active.startDate || null,
+      url: productSlug ? `https://store.epicgames.com/es-ES/p/${productSlug}` : 'https://store.epicgames.com/es-ES/free-games',
+      source: 'Epic Games Store official'
+    });
+  }
+  return rows;
 }
 
 async function fetchPrime(now) {
@@ -289,26 +330,28 @@ async function fetchPrime(now) {
 
 function dedupeAndSort(rows, now) {
   const seen = new Map();
+  const priority = game => /Epic Games Store official/i.test(String(game?.source || '')) ? 3 : /Prime Gaming Luna Feed/i.test(String(game?.source || '')) ? 2 : 1;
   for (const game of rows || []) {
     if (!game || Number(game.endAt) <= now) continue;
-    const key = `${String(game.platform || '').toLowerCase()}|${cleanTitle(game.title).toLowerCase()}`;
-    if (!key || seen.has(key)) continue;
-    seen.set(key, game);
+    const key = cleanTitle(game.title).toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+    if (!key) continue;
+    const current = seen.get(key);
+    if (!current || priority(game) > priority(current)) seen.set(key, game);
   }
   return [...seen.values()]
-    .sort((a, b) => (Number(a.endAt) - Number(b.endAt)) || ((parseFloat(String(b.worth).replace(/[^0-9.]/g, '')) || 0) - (parseFloat(String(a.worth).replace(/[^0-9.]/g, '')) || 0)))
-    .slice(0, 12);
+    .sort((a, b) => (Number(a.endAt) - Number(b.endAt)) || ((parseFloat(String(b.worth || '').replace(/[^0-9.]/g, '')) || 0) - (parseFloat(String(a.worth || '').replace(/[^0-9.]/g, '')) || 0)));
 }
 
 export async function onRequestGet() {
   const now = Date.now();
   try {
-    const [gamerPowerResult, primeResult] = await Promise.allSettled([fetchGamerPower(now), fetchPrime(now)]);
+    const [gamerPowerResult, epicResult, primeResult] = await Promise.allSettled([fetchGamerPower(now), fetchEpicGames(now), fetchPrime(now)]);
     const games = dedupeAndSort([
       ...(gamerPowerResult.status === 'fulfilled' ? gamerPowerResult.value : []),
+      ...(epicResult.status === 'fulfilled' ? epicResult.value : []),
       ...(primeResult.status === 'fulfilled' ? primeResult.value : [])
     ], now);
-    if (!games.length && gamerPowerResult.status === 'rejected' && primeResult.status === 'rejected') {
+    if (!games.length && gamerPowerResult.status === 'rejected' && epicResult.status === 'rejected' && primeResult.status === 'rejected') {
       return json({ ok: false, error: 'upstreams_unavailable', games: [] }, 502, { 'cache-control': 'no-store' });
     }
     return json({
@@ -317,6 +360,7 @@ export async function onRequestGet() {
       source: 'Neith verified multi-store feed',
       sources: {
         gamerPower: gamerPowerResult.status === 'fulfilled',
+        epicGames: epicResult.status === 'fulfilled',
         primeGaming: primeResult.status === 'fulfilled'
       },
       games

@@ -81,3 +81,20 @@ main{background:linear-gradient(180deg,#000c17 0%,#00101f 26%,#00101f 74%,#000b1
 }
 @media(max-width:500px){.home42-metrics{grid-template-columns:1fr!important}.home43-gamebelt-track{grid-template-columns:repeat(2,minmax(0,1fr))!important}.home43-gamecard:nth-child(n+3){display:none!important}.home44-footer-links{grid-template-columns:1fr}.home44-footer-divider b{font-size:.38rem}.home44-membership-head h2{font-size:1.78rem!important}}
 @media(prefers-reduced-motion:reduce){.home42-stage,.home44-membership-ambient i,.home44-plan-beam,.home44-plan-orbit,.home44-membership-kicker i,.home44-premium-label i,.home44-footer-atmosphere i,.home44-footer-status i,.home44-footer-pulse i{animation:none!important}.home44-plan,.home44-plan-action,.home44-footer-links a,.home44-footer-links a::after{transition:none!important}}
+
+
+/* R125 home plans: compact but breathable */
+.home44-plan-grid{gap:14px;align-items:start}
+.home44-plan{min-height:0;padding:19px 20px;border-radius:20px}
+.home44-plan-top{gap:12px}.home44-plan-top>b{font-size:2rem}
+.home44-premium-label{top:58px;right:18px}
+.home44-plan-name{margin-top:18px}.home44-plan-name h3{font-size:clamp(1.38rem,1.9vw,1.8rem)}.home44-plan-name p{margin-top:8px;line-height:1.52}
+.home44-plan ul{gap:8px;margin:14px 0 0}.home44-plan li{font-size:.9rem;line-height:1.38}
+.home44-plan-action{min-height:54px;margin-top:18px;padding:0 18px;font-size:.57rem;letter-spacing:.045em}
+.home44-plan-action span{flex:1;min-width:0;white-space:normal;line-height:1.22;padding:4px 0}
+
+
+/* R126 home plan equal-height alignment */
+.home44-plan-grid{grid-auto-rows:1fr;align-items:stretch}
+.home44-plan{height:100%}
+.home44-plan ul{flex:1 1 auto}

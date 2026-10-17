@@ -19,8 +19,22 @@ from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-BUILD = "NEITH_WEB_V34_R122"
+try:
+    from _neith_free_games_api import get_payload as _free_games_payload
+except Exception:
+    _free_games_payload = None
+
 ROOT = Path(__file__).resolve().parent
+BUILD_MARKER = ROOT / "NEITH_BUILD.txt"
+REVISION_MARKER = ROOT / "NEITH_REVISION.txt"
+
+def _read_marker(path: Path) -> str:
+    if not path.is_file():
+        return ""
+    return path.read_text(encoding="utf-8-sig", errors="replace").strip()
+
+BUILD = _read_marker(BUILD_MARKER)
+REVISION = _read_marker(REVISION_MARKER) or (BUILD.rsplit("_", 1)[-1] if BUILD else "LOCAL")
 
 # Windows-friendly MIME additions.
 mimetypes.add_type("application/manifest+json", ".webmanifest")
@@ -65,7 +79,7 @@ class NeithHTTPServer(ThreadingHTTPServer):
 
 class Handler(BaseHTTPRequestHandler):
     protocol_version = "HTTP/1.1"
-    server_version = "NeithLocal/V34-R122"
+    server_version = f"NeithLocal/{REVISION}"
     sys_version = ""
 
     def log_message(self, fmt, *args):
@@ -117,6 +131,24 @@ class Handler(BaseHTTPRequestHandler):
             self._finish_log(200, target, started, "health")
             return
 
+        if target == "/api/free-games":
+            if _free_games_payload is None:
+                body = json.dumps({"ok": False, "error": "free_games_api_unavailable", "games": []}, separators=(",", ":")).encode("utf-8")
+                self._write_bytes(503, body, "application/json; charset=utf-8", "no-store", head_only)
+                self._finish_log(503, target, started, "free-games api no disponible")
+                return
+            try:
+                payload = _free_games_payload()
+                body = json.dumps(payload, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+                status = 200 if payload.get("ok") else 502
+                self._write_bytes(status, body, "application/json; charset=utf-8", "no-store", head_only)
+                self._finish_log(status, target, started, f"free-games {len(payload.get('games') or [])} juegos")
+            except Exception as exc:
+                body = json.dumps({"ok": False, "error": str(exc), "games": []}, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+                self._write_bytes(502, body, "application/json; charset=utf-8", "no-store", head_only)
+                self._finish_log(502, target, started, "free-games error")
+            return
+
         if target.rstrip("/") == "/descargar":
             self._write_bytes(
                 302,
@@ -160,7 +192,7 @@ class Handler(BaseHTTPRequestHandler):
 
 def _fetch(url: str) -> tuple[str, int, float]:
     started = time.perf_counter()
-    req = urllib.request.Request(url, method="GET", headers={"Connection": "keep-alive", "User-Agent": "NeithV34R122SelfTest/1.0"})
+    req = urllib.request.Request(url, method="GET", headers={"Connection": "keep-alive", "User-Agent": f"Neith{REVISION}SelfTest/1.0"})
     with contextlib.closing(urllib.request.urlopen(req, timeout=5)) as response:
         response.read()
         return url, response.status, (time.perf_counter() - started) * 1000.0
@@ -170,12 +202,31 @@ def self_test(port: int) -> None:
     paths = [
         "/",
         "/css/style.css",
+        "/css/landing-r44.css",
+        "/css/web-commercial-r94.css",
+        "/css/admin-commercial-r120.css",
+        "/css/admin-premium-r127.css",
+        "/css/admin-insights-r129.css",
+        "/css/admin-operations-r130.css",
+        "/css/dashboard-premium-r129.css",
+        "/css/dashboard-premium-r130.css",
         "/js/main.js",
         "/js/auth.js",
+        "/js/admin.js",
+        "/js/admin-commercial-r120.js",
+        "/js/admin-insights-r129.js",
+        "/js/admin-operations-r130.js",
         "/logros/",
         "/cuentas/",
+        "/free-premium/",
+        "/dashboard/",
+        "/hourboost/",
+        "/css/hourboost-r136.css",
+        "/img/neith-approved-hourboost-r135.png",
+        "/boostpc/",
+        "/css/boostpc-r139.css",
+        "/img/neith-approved-boostpc-r138.webp",
         "/admin/",
-        "/js/admin.js",
         "/site.webmanifest",
         "/__neith_health",
     ]
@@ -194,20 +245,19 @@ def self_test(port: int) -> None:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Servidor local concurrente Neith V34 R122")
+    parser = argparse.ArgumentParser(description=f"Servidor local concurrente Neith {REVISION}")
     parser.add_argument("--port", type=int, default=8080)
     parser.add_argument("--no-browser", action="store_true")
     args = parser.parse_args()
 
-    marker = ROOT / "NEITH_BUILD.txt"
-    if not marker.is_file():
+    if not BUILD_MARKER.is_file():
         print("ERROR: falta NEITH_BUILD.txt", file=sys.stderr)
         return 2
-    marker_text = marker.read_text(encoding="utf-8-sig", errors="replace").strip()
-    if marker_text.strip().upper() != BUILD:
-        print(f"ERROR: esta carpeta no esta marcada como {BUILD}.", file=sys.stderr)
-        print(f"Contenido de NEITH_BUILD.txt: {marker_text}", file=sys.stderr)
+    if not BUILD or not BUILD.upper().startswith("NEITH_WEB_"):
+        print("ERROR: NEITH_BUILD.txt no contiene una marca de web Neith valida.", file=sys.stderr)
+        print(f"Contenido de NEITH_BUILD.txt: {BUILD}", file=sys.stderr)
         return 2
+    print(f"Build detectada: {BUILD} ({REVISION})", flush=True)
 
     try:
         server = NeithHTTPServer(("127.0.0.1", args.port), Handler)

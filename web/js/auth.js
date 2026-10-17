@@ -1,7 +1,7 @@
 (() => {
   'use strict';
-  window.__NEITH_WEB_BUILD__ = 'V32';
-  console.info('[NEITH WEB] Build V32 activo · admin roles seguros + auth fast path');
+  window.__NEITH_WEB_BUILD__ = 'V34';
+  console.info('[NEITH WEB] Build V34 activo · identidad instantánea + autoridad Supabase');
   const scriptUrl = document.currentScript?.src || '';
   const siteBase = (() => {
     try { return new URL('../', scriptUrl || window.location.href); }
@@ -33,14 +33,13 @@
 
   const REMEMBER_EMAIL_KEY = 'neith_auth_remembered_email';
   const REMEMBER_PREF_KEY = 'neith_auth_remember_identity';
-  const PROFILE_CACHE_KEY = 'neith_auth_profile_v30';
+  const PROFILE_CACHE_KEY = 'neith_auth_profile_v34_authoritative';
+  const PROFILE_PERSISTENT_PREFIX = 'neith_identity_v34:';
   const PROFILE_CACHE_TTL_MS = 5 * 60 * 1000;
 
-  function readProfileCache(userId, allowStale = false) {
-    if (!userId) return null;
+  function parseProfileCache(raw, userId, allowStale = false) {
+    if (!raw || !userId) return null;
     try {
-      const raw = sessionStorage.getItem(PROFILE_CACHE_KEY) || sessionStorage.getItem('neith_auth_profile_v28');
-      if (!raw) return null;
       const parsed = JSON.parse(raw);
       if (!parsed || parsed.userId !== userId || !parsed.profile) return null;
       const age = Date.now() - Number(parsed.savedAt || 0);
@@ -49,13 +48,59 @@
     } catch { return null; }
   }
 
-  function writeProfileCache(userId, profile) {
-    if (!userId || !profile) return;
-    try { sessionStorage.setItem(PROFILE_CACHE_KEY, JSON.stringify({ userId, profile, savedAt: Date.now() })); } catch {}
+  function readProfileCache(userId, allowStale = false) {
+    if (!userId) return null;
+    try {
+      const sessionHit = parseProfileCache(sessionStorage.getItem(PROFILE_CACHE_KEY), userId, allowStale);
+      if (sessionHit) return sessionHit;
+      // Migración transparente desde R179/R180 para que la primera apertura de R181
+      // también tenga identidad instantánea, sin esperar a red.
+      for (const legacyKey of ['neith_auth_profile_v33_authoritative', 'neith_auth_profile_v30', 'neith_auth_profile_v28']) {
+        const legacyHit = parseProfileCache(sessionStorage.getItem(legacyKey), userId, true);
+        if (legacyHit) { writeProfileCache(userId, legacyHit.profile); return legacyHit; }
+      }
+    } catch {}
+    try {
+      return parseProfileCache(localStorage.getItem(PROFILE_PERSISTENT_PREFIX + userId), userId, true);
+    } catch { return null; }
   }
 
-  function clearProfileCache() {
-    try { sessionStorage.removeItem(PROFILE_CACHE_KEY); sessionStorage.removeItem('neith_auth_profile_v28'); } catch {}
+  function writeProfileCache(userId, profile) {
+    if (!userId || !profile) return;
+    const payload = JSON.stringify({ userId, profile, savedAt: Date.now() });
+    try { sessionStorage.setItem(PROFILE_CACHE_KEY, payload); } catch {}
+    // Nombre/avatar no son credenciales. Mantenerlos por user_id permite el primer
+    // frame correcto incluso tras logout -> login, mientras Supabase revalida.
+    try { localStorage.setItem(PROFILE_PERSISTENT_PREFIX + userId, payload); } catch {}
+  }
+
+  function clearProfileCache({ purgePersistent = false, userId = null } = {}) {
+    try {
+      sessionStorage.removeItem(PROFILE_CACHE_KEY);
+      sessionStorage.removeItem('neith_auth_profile_v33_authoritative');
+      sessionStorage.removeItem('neith_auth_profile_v30');
+      sessionStorage.removeItem('neith_auth_profile_v28');
+    } catch {}
+    if (purgePersistent && userId) { try { localStorage.removeItem(PROFILE_PERSISTENT_PREFIX + userId); } catch {} }
+  }
+
+  function immediateProfileFor(user) {
+    if (!user?.id) return null;
+    const cached = readProfileCache(user.id, true);
+    if (cached?.profile) return cached.profile;
+    const meta = user.user_metadata || {};
+    return {
+      display_name: meta.display_name || meta.full_name || meta.name || meta.preferred_username || meta.user_name || user.email?.split('@')[0] || 'Usuario',
+      avatar_url: meta.avatar_url || meta.picture || null,
+      status: 'active',
+      updated_at: null
+    };
+  }
+
+  function hydrateImmediateIdentity(user) {
+    if (!user?.id) { state.profile = null; return null; }
+    state.profile = immediateProfileFor(user);
+    return state.profile;
   }
 
   const ADMIN_ROLE_CACHE_KEY = 'neith_admin_role_v32';
@@ -133,23 +178,29 @@
   }
 
   const persistedSession = readPersistedSupabaseSession();
+  const persistedProfile = readProfileCache(persistedSession?.user?.id, true);
   const state = {
     client: configured ? window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey, {
       auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
     }) : null,
     session: persistedSession,
-    profile: null
+    profile: persistedProfile?.profile || null,
+    membership: null,
+    membershipPeriods: [],
+    membershipServerTime: null,
+    membershipLastSync: 0
   };
   let authSubscriptionBound = false;
   let bootstrapValidated = false;
+  let accountStatePromise = null;
 
   const escapeHtml = (value = '') => String(value).replace(/[&<>'"]/g, ch => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
   })[ch]);
 
   function initials(user) {
-    const name = user?.user_metadata?.display_name || user?.user_metadata?.full_name || user?.user_metadata?.name || user?.user_metadata?.preferred_username || user?.user_metadata?.user_name || user?.email || 'N';
-    return name.trim().split(/\s+/).slice(0,2).map(x => x[0]?.toUpperCase() || '').join('') || 'N';
+    const name = state.profile?.display_name || user?.user_metadata?.display_name || user?.user_metadata?.full_name || user?.user_metadata?.name || user?.user_metadata?.preferred_username || user?.user_metadata?.user_name || user?.email || 'N';
+    return String(name).trim().split(/\s+/).slice(0,2).map(x => x[0]?.toUpperCase() || '').join('') || 'N';
   }
 
   function displayName(user) {
@@ -260,6 +311,7 @@
           <button class="account-menu-logout" type="button" data-logout role="menuitem"><span>⏻</span><b>CERRAR SESIÓN</b></button>
         </section>
       `);
+      if (state.session?.user) syncUI();
     }
 
     document.querySelectorAll('.nav').forEach(navShell => {
@@ -314,6 +366,7 @@
 
   function openAccountMenu(anchor) {
     if (state.session?.user && !document.getElementById('neith-account-menu')) injectAuthUI('menu');
+    syncUI();
     const menu = document.getElementById('neith-account-menu');
     if (!menu || !state.session?.user) return;
     accountMenuAnchor = anchor;
@@ -444,10 +497,45 @@
     el.dataset.type = type;
   }
 
+  function applyAuthoritativeAccountState(data, userId) {
+    const profile = data?.profile && typeof data.profile === 'object' ? data.profile : null;
+    if (profile) {
+      state.profile = {
+        display_name: profile.display_name || profile.nickname || null,
+        avatar_url: profile.avatar_url || null,
+        status: profile.status || 'active',
+        updated_at: profile.updated_at || null
+      };
+      writeProfileCache(userId, state.profile);
+    }
+    state.membership = data?.membership && typeof data.membership === 'object' ? data.membership : null;
+    state.membershipPeriods = Array.isArray(data?.periods) ? data.periods : [];
+    state.membershipServerTime = data?.server_time || null;
+    state.membershipLastSync = Date.now();
+    return data;
+  }
+
+  async function loadAccountState({ force = false } = {}) {
+    const userId = state.session?.user?.id;
+    if (!state.client || !userId) {
+      state.membership = null; state.membershipPeriods = []; state.membershipServerTime = null;
+      return null;
+    }
+    if (!force && state.membership && state.profile && Date.now() - Number(state.membershipLastSync || 0) < 15000) {
+      return { profile: state.profile, membership: state.membership, periods: state.membershipPeriods, server_time: state.membershipServerTime };
+    }
+    if (accountStatePromise) return accountStatePromise;
+    accountStatePromise = (async () => {
+      const { data, error } = await state.client.rpc('neith_web_account_state');
+      if (error) throw error;
+      return applyAuthoritativeAccountState(data || {}, userId);
+    })().finally(() => { accountStatePromise = null; });
+    return accountStatePromise;
+  }
+
   async function loadProfile({ force = false } = {}) {
     const userId = state.session?.user?.id;
     if (!state.client || !userId) return null;
-
     if (!force) {
       const cached = readProfileCache(userId);
       if (cached) {
@@ -455,18 +543,49 @@
         return state.profile;
       }
     }
-
-    const { data, error } = await state.client
-      .from('profiles')
-      .select('display_name,avatar_url,plan,subscription_status')
-      .eq('id', userId)
-      .maybeSingle();
-
-    if (!error) {
-      state.profile = data || null;
-      if (data) writeProfileCache(userId, data);
-    }
+    await loadAccountState({ force });
     return state.profile;
+  }
+
+  async function loadMembership({ force = false } = {}) {
+    const userId = state.session?.user?.id;
+    if (!state.client || !userId) {
+      state.membership = null; state.membershipPeriods = []; state.membershipServerTime = null;
+      return null;
+    }
+    if (!force && state.membership && Date.now() - Number(state.membershipLastSync || 0) < 15000) return state.membership;
+    await loadAccountState({ force });
+    return state.membership;
+  }
+
+  async function refreshMembershipLive({ silent = true } = {}) {
+    if (!state.session?.user || !state.client) return null;
+    try {
+      const before = JSON.stringify(state.membership || null);
+      await loadMembership({ force: true });
+      if (JSON.stringify(state.membership || null) !== before || document.querySelector('[data-dashboard-sync-time]')) syncUI();
+      return state.membership;
+    } catch (error) {
+      if (!silent) console.warn('[NEITH MEMBERSHIP] No se pudo sincronizar:', error?.message || error);
+      const badge = document.querySelector('[data-dashboard-sync-badge]');
+      if (badge) badge.innerHTML = '<i></i> SIN CONEXIÓN';
+      return state.membership;
+    }
+  }
+
+  function formatMembershipDate(value, { dateOnly = true } = {}) {
+    if (!value) return '—';
+    try {
+      return new Intl.DateTimeFormat(document.documentElement.lang === 'en' ? 'en-GB' : 'es-ES', dateOnly
+        ? { day:'2-digit', month:'2-digit', year:'numeric' }
+        : { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' }).format(new Date(value));
+    } catch { return '—'; }
+  }
+
+  function formatMoney(cents, currency = 'EUR') {
+    if (cents === null || cents === undefined || Number.isNaN(Number(cents))) return '—';
+    try { return new Intl.NumberFormat(document.documentElement.lang === 'en' ? 'en-GB' : 'es-ES', { style:'currency', currency:String(currency || 'EUR').toUpperCase() }).format(Number(cents)/100); }
+    catch { return `${(Number(cents)/100).toFixed(2)} ${String(currency || 'EUR').toUpperCase()}`; }
   }
 
   function scheduleProfileRevalidation() {
@@ -505,6 +624,15 @@
     });
   }
 
+  function currentBillingProviderLabel(membership, isPermanent=false) {
+    if (isPermanent) return 'NEITH';
+    const raw=String(membership?.billing_provider || membership?.active_period_provider || membership?.source || 'none').trim().toLowerCase();
+    if (!raw || raw==='none' || raw==='admin' || raw==='key') return 'NEITH';
+    if (raw==='paypal') return 'PAYPAL';
+    if (raw.includes('lemon') || raw==='stripe') return 'NEITH';
+    return raw.toUpperCase();
+  }
+
   function syncUI() {
     const user = state.session?.user;
     document.querySelectorAll('[data-auth-nav]').forEach(btn => {
@@ -521,7 +649,7 @@
         }
         return;
       }
-      const avatar = avatarUrl(user) || state.profile?.avatar_url || '';
+      const avatar = state.profile?.avatar_url || avatarUrl(user) || '';
       const name = state.profile?.display_name || displayName(user);
       const init = initials(user);
       const signature = `user:${user.id}:${name}:${avatar}:${init}`;
@@ -546,7 +674,7 @@
     const accountMenu = document.getElementById('neith-account-menu');
     if (!user) closeAccountMenu();
     if (accountMenu) {
-      const avatar = avatarUrl(user) || state.profile?.avatar_url || '';
+      const avatar = state.profile?.avatar_url || avatarUrl(user) || '';
       const menuAvatar = accountMenu.querySelector('[data-account-menu-avatar]');
       if (menuAvatar) {
         if (avatar) menuAvatar.innerHTML = `<img src="${escapeHtml(avatar)}" alt="Avatar de ${escapeHtml(displayName(user))}">`;
@@ -558,12 +686,19 @@
       if (menuEmail) menuEmail.textContent = user?.email || '—';
     }
 
-    const plan = (state.profile?.plan || 'free').toUpperCase();
-    const subscription = state.profile?.subscription_status || (plan === 'PREMIUM' ? 'active' : 'free');
+    const membership = state.membership && typeof state.membership === 'object' ? state.membership : null;
+    const authoritativePlan = membership?.plan ? String(membership.plan).toLowerCase() : '';
+    const fallbackPlan = state.profile?.plan ? String(state.profile.plan).toLowerCase() : '';
+    const planKey = authoritativePlan || (user ? 'checking' : (fallbackPlan || 'free'));
+    const isPremium = planKey === 'premium';
+    const isPermanent = isPremium && Boolean(membership?.premium_permanent);
+    const plan = planKey.toUpperCase();
+    const planLabel = isPermanent ? 'PREMIUM PERMANENTE' : (isPremium ? 'PREMIUM' : (planKey === 'checking' ? 'COMPROBANDO…' : 'FREE'));
+    const subscription = membership?.subscription_status || (planKey === 'checking' ? 'checking' : (state.profile?.subscription_status || (isPremium ? 'active' : 'free')));
     const menuPlan = document.querySelector('[data-account-menu-plan]');
     const menuStatus = document.querySelector('[data-account-menu-status]');
-    if (menuPlan) { menuPlan.textContent = plan; menuPlan.dataset.plan = plan.toLowerCase(); }
-    if (menuStatus) menuStatus.textContent = subscription === 'active' ? 'ACTIVO' : (plan === 'PREMIUM' ? 'ACTIVO' : 'FREE');
+    if (menuPlan) { menuPlan.textContent = planLabel; menuPlan.dataset.plan = isPremium ? 'premium' : (planKey === 'checking' ? 'checking' : 'free'); }
+    if (menuStatus) menuStatus.textContent = isPermanent ? 'SIN CADUCIDAD' : (subscription === 'active' ? 'ACTIVO' : (planKey === 'checking' ? 'SINCRONIZANDO' : String(subscription || 'FREE').toUpperCase()));
 
     // Public product pages have no dashboard fields. Avoid 20+ document-wide
     // selector scans on every authenticated page load.
@@ -572,12 +707,12 @@
     document.querySelectorAll('[data-dashboard-name]').forEach(el => el.textContent = user ? (state.profile?.display_name || displayName(user)) : 'Usuario');
     document.querySelectorAll('[data-dashboard-email]').forEach(el => el.textContent = user?.email || '—');
     document.querySelectorAll('[data-dashboard-plan]').forEach(el => {
-      el.textContent = plan === 'PREMIUM' ? 'USUARIO PREMIUM ACTIVADO' : 'USUARIO GRATIS';
-      el.dataset.plan = plan.toLowerCase();
+      el.textContent = isPermanent ? 'PREMIUM PERMANENTE' : (isPremium ? 'USUARIO PREMIUM ACTIVADO' : (planKey === 'checking' ? 'SINCRONIZANDO PLAN…' : 'USUARIO GRATIS'));
+      el.dataset.plan = isPremium ? 'premium' : (planKey === 'checking' ? 'checking' : 'free');
     });
-    document.querySelectorAll('[data-dashboard-status]').forEach(el => el.textContent = subscription.toUpperCase());
+    document.querySelectorAll('[data-dashboard-status]').forEach(el => el.textContent = planKey === 'checking' ? 'SINCRONIZANDO' : (isPermanent ? 'PREMIUM PERMANENTE' : String(subscription || (isPremium ? 'active' : 'free')).toUpperCase()));
     document.querySelectorAll('[data-dashboard-avatar]').forEach(el => {
-      const avatar = avatarUrl(user) || state.profile?.avatar_url || '';
+      const avatar = state.profile?.avatar_url || avatarUrl(user) || '';
       if (avatar) el.innerHTML = `<img src="${escapeHtml(avatar)}" alt="Avatar de ${escapeHtml(displayName(user))}">`;
       else el.textContent = user ? initials(user) : 'N';
     });
@@ -591,7 +726,7 @@
     });
 
     document.querySelectorAll('[data-dashboard-license]').forEach(el => {
-      el.textContent = plan === 'PREMIUM' ? 'VINCULADA' : 'NO ACTIVA';
+      el.textContent = planKey === 'checking' ? 'SINCRONIZANDO' : (isPremium ? 'VINCULADA' : 'NO ACTIVA');
     });
 
 
@@ -603,11 +738,32 @@
     document.querySelectorAll('[data-dashboard-providers-large]').forEach(el => {
       el.innerHTML = providersSafe.map(provider => `<div class="dashboard-v10-provider ${escapeHtml(provider)}"><i></i><div><b>${escapeHtml(providerLabel[provider] || provider)}</b><span>Vinculado a tu Neith ID</span></div><em>ACTIVO</em></div>`).join('');
     });
-    document.querySelectorAll('[data-dashboard-plan-orb]').forEach(el => el.textContent = plan === 'PREMIUM' ? 'PRO' : 'FREE');
-    document.querySelectorAll('[data-dashboard-license-type]').forEach(el => el.textContent = plan === 'PREMIUM' ? 'PREMIUM' : 'FREE');
-    document.querySelectorAll('[data-dashboard-license-state]').forEach(el => el.textContent = plan === 'PREMIUM' ? 'Licencia vinculada' : 'Sin licencia Premium');
-    document.querySelectorAll('[data-dashboard-license-expiry]').forEach(el => el.textContent = plan === 'PREMIUM' ? 'Gestionada por Neith' : '—');
-    document.querySelectorAll('[data-dashboard-license-key]').forEach(el => el.textContent = plan === 'PREMIUM' ? '•••• •••• ••••' : '— — — —');
+    document.querySelectorAll('[data-dashboard-plan-orb]').forEach(el => el.textContent = isPermanent ? '∞' : (isPremium ? 'PRO' : (planKey === 'checking' ? '…' : 'FREE')));
+    document.querySelectorAll('[data-dashboard-license-type]').forEach(el => el.textContent = planLabel);
+    document.querySelectorAll('[data-dashboard-license-state]').forEach(el => el.textContent = planKey === 'checking' ? 'Consultando membresía autoritativa' : (isPermanent ? 'Acceso permanente activo' : (isPremium ? 'Membresía Premium activa' : 'Plan FREE activo')));
+    document.querySelectorAll('[data-dashboard-license-expiry]').forEach(el => el.textContent = isPermanent ? 'SIN CADUCIDAD' : (isPremium ? formatMembershipDate(membership?.premium_until || membership?.current_period_end) : '—'));
+    document.querySelectorAll('[data-dashboard-license-key]').forEach(el => el.textContent = isPremium ? 'PROTEGIDA' : '—');
+    const purchaseAt = membership?.latest_purchase_at || null;
+    const periodStart = membership?.current_period_start || state.membershipPeriods?.[0]?.starts_at || null;
+    const expiry = membership?.premium_until || membership?.current_period_end || null;
+    const intervalMap = { monthly:'MENSUAL', annual:'ANUAL', gift:'REGALO', admin:'ADMIN', permanent:'PERMANENTE', other:'OTRO' };
+    const provider = currentBillingProviderLabel(membership, isPermanent);
+    const interval = isPermanent ? 'PERMANENTE' : (intervalMap[String(membership?.billing_interval || membership?.active_period_kind || 'other').toLowerCase()] || String(membership?.billing_interval || '—').toUpperCase());
+    const cancelAt = membership?.cancel_effective_at || (membership?.cancel_at_period_end ? expiry : null);
+    document.querySelectorAll('[data-dashboard-purchase-date]').forEach(el => el.textContent = purchaseAt ? formatMembershipDate(purchaseAt, {dateOnly:false}) : (isPermanent ? 'ASIGNACIÓN PERMANENTE' : '—'));
+    document.querySelectorAll('[data-dashboard-period-start]').forEach(el => el.textContent = isPermanent ? (membership?.first_premium_at ? formatMembershipDate(membership.first_premium_at) : 'PERMANENTE') : formatMembershipDate(periodStart));
+    document.querySelectorAll('[data-dashboard-renewal]').forEach(el => el.textContent = isPermanent ? 'NO APLICA' : (membership?.auto_renew ? 'AUTOMÁTICA · ACTIVA' : (isPremium ? 'DESACTIVADA' : 'NO APLICA')));
+    document.querySelectorAll('[data-dashboard-subscription-state]').forEach(el => el.textContent = planKey === 'checking' ? 'SINCRONIZANDO' : (isPermanent ? 'PERMANENTE' : String(subscription || 'inactive').toUpperCase()));
+    document.querySelectorAll('[data-dashboard-provider]').forEach(el => el.textContent = provider);
+    document.querySelectorAll('[data-dashboard-billing-interval]').forEach(el => el.textContent = interval);
+    document.querySelectorAll('[data-dashboard-cancel-state]').forEach(el => el.textContent = isPermanent ? 'NO APLICA' : (membership?.cancel_at_period_end ? `PROGRAMADA · ${formatMembershipDate(cancelAt)}` : (isPremium ? 'NO SOLICITADA' : '—')));
+    document.querySelectorAll('[data-dashboard-next-renewal]').forEach(el => el.textContent = isPermanent ? 'NO APLICA' : (membership?.auto_renew ? formatMembershipDate(membership?.next_renewal_at, {dateOnly:false}) : '—'));
+    document.querySelectorAll('[data-dashboard-next-amount]').forEach(el => el.textContent = isPermanent ? 'NO APLICA' : formatMoney(membership?.next_renewal_amount_cents, membership?.billing_currency));
+    document.querySelectorAll('[data-dashboard-plan-copy]').forEach(el => el.textContent = planKey === 'checking' ? 'Comprobando el estado real de tu membresía Neith…' : (isPermanent ? 'Tu cuenta tiene PREMIUM permanente. El acceso no caduca y no requiere renovación automática.' : (isPremium ? 'Tu PREMIUM está activo y sincronizado con la membresía autoritativa de Neith Cloud.' : 'Tu cuenta está en FREE. Si compras PREMIUM, este panel reflejará el cambio automáticamente.')));
+    document.querySelectorAll('[data-dashboard-premium-access]').forEach(el => { el.classList.toggle('locked', !isPremium); el.classList.toggle('active', isPremium); });
+    document.querySelectorAll('[data-dashboard-premium-access-label]').forEach(el => el.textContent = planKey === 'checking' ? 'COMPROBANDO' : (isPremium ? 'HABILITADO' : 'NO ACTIVO'));
+    document.querySelectorAll('[data-dashboard-sync-badge]').forEach(el => { el.className='dash11-badge live'; el.innerHTML='<i></i> ' + (membership ? 'SINCRONIZADO' : 'SINCRONIZANDO'); });
+    document.querySelectorAll('[data-dashboard-sync-time]').forEach(el => el.textContent = state.membershipLastSync ? new Intl.DateTimeFormat(document.documentElement.lang==='en'?'en-GB':'es-ES',{hour:'2-digit',minute:'2-digit',second:'2-digit'}).format(new Date(state.membershipLastSync)) : 'EN VIVO');
     const shortId = user?.id ? `${String(user.id).slice(0,4).toUpperCase()}-${String(user.id).slice(-4).toUpperCase()}` : '••••••••';
     document.querySelectorAll('[data-dashboard-user-short]').forEach(el => el.textContent = shortId);
     const fmtDate = value => {
@@ -717,10 +873,11 @@
         if (error) throw error;
         if (signInData?.session) {
           state.session = signInData.session;
-          const cached = readProfileCache(state.session.user?.id, true);
-          if (cached) state.profile = cached.profile;
+          hydrateImmediateIdentity(state.session.user);
           syncUI();
           window.dispatchEvent(new CustomEvent('neith:authchange', { detail: { session: state.session, event: 'SIGNED_IN' } }));
+          // Autoridad online en segundo plano; no bloquea el cierre del modal ni el primer frame.
+          loadAccountState({ force: true }).then(syncUI).catch(() => {});
         }
         persistRememberedIdentity(email, remember);
         closeAuth();
@@ -773,6 +930,7 @@
     await state.client.auth.signOut({ scope: 'local' });
     state.session = null;
     state.profile = null;
+    state.membership = null; state.membershipPeriods = []; state.membershipServerTime = null; state.membershipLastSync = 0;
     clearProfileCache();
     clearAdminRoleCache();
     syncUI();
@@ -782,6 +940,16 @@
 
   async function initAuth() {
     normalizeAuthTriggers();
+
+    // Nunca dejar el icono de imagen rota: si un avatar remoto falla, usar iniciales.
+    document.addEventListener('error', e => {
+      const img = e.target;
+      if (!(img instanceof HTMLImageElement) || !img.closest('[data-auth-nav], #neith-account-menu, [data-dashboard-avatar]')) return;
+      const user = state.session?.user;
+      const fallback = user ? initials(user) : 'N';
+      const host = img.parentElement;
+      if (host) host.textContent = fallback;
+    }, true);
 
     document.addEventListener('click', e => {
       const accountMenu = document.getElementById('neith-account-menu');
@@ -855,6 +1023,7 @@
 
           if (!nextUserId) {
             state.profile = null;
+            state.membership = null; state.membershipPeriods = []; state.membershipServerTime = null; state.membershipLastSync = 0;
             clearAdminRoleCache();
             clearProfileCache();
             syncUI();
@@ -863,17 +1032,15 @@
             return;
           }
 
-          if (nextUserId !== previousUserId) clearAdminRoleCache();
-          const cached = readProfileCache(nextUserId, true);
-          if (cached) state.profile = cached.profile;
-          else if (nextUserId !== previousUserId) state.profile = null;
+          if (nextUserId !== previousUserId) { clearAdminRoleCache(); state.membership = null; state.membershipPeriods = []; state.membershipLastSync = 0; }
+          hydrateImmediateIdentity(session.user);
 
           syncUI();
           requireDashboardSession();
           window.dispatchEvent(new CustomEvent('neith:authchange', { detail: { session: state.session, event: authEvent } }));
 
           if (authEvent === 'SIGNED_IN' || authEvent === 'USER_UPDATED' || nextUserId !== previousUserId) {
-            loadProfile({ force: true }).then(() => syncUI()).catch(() => {});
+            Promise.allSettled([loadProfile({ force: true }), loadMembership({ force: true })]).then(() => syncUI());
           } else {
             scheduleProfileRevalidation();
           }
@@ -892,9 +1059,7 @@
           if (state.session?.user && shouldBridgeRecovery() && goToRecoveryPage()) return;
 
           if (nextUserId) {
-            const cached = readProfileCache(nextUserId, true);
-            if (cached) state.profile = cached.profile;
-            else if (nextUserId !== previousUserId) state.profile = null;
+            hydrateImmediateIdentity(state.session.user);
           } else {
             state.profile = null;
             if (previousUserId) clearProfileCache();
@@ -902,6 +1067,8 @@
 
           if (nextUserId !== previousUserId || protectedPage) syncUI();
           await requireDashboardSession();
+          if (nextUserId) await Promise.allSettled([loadProfile({ force: true }), loadMembership({ force: true })]);
+          syncUI();
           window.dispatchEvent(new CustomEvent('neith:authchange', { detail: { session: state.session, event: 'BOOTSTRAP' } }));
           scheduleProfileRevalidation();
         } catch (error) {
@@ -925,11 +1092,24 @@
       await requireDashboardSession();
     }  }
 
+  let membershipLiveTimer = 0;
+  function ensureMembershipLiveRefresh() {
+    if (membershipLiveTimer) return;
+    membershipLiveTimer = window.setInterval(() => {
+      if (!document.hidden && state.session?.user) refreshMembershipLive();
+    }, 20000);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden && state.session?.user) refreshMembershipLive(); }, { passive:true });
+    window.addEventListener('focus', () => { if (state.session?.user) refreshMembershipLive(); }, { passive:true });
+  }
+  ensureMembershipLiveRefresh();
+
   window.NeithAuth = {
     get configured() { return configured; },
     get client() { return state.client; },
     get session() { return state.session; },
     get profile() { return state.profile; },
+    get membership() { return state.membership; },
+    get membershipPeriods() { return state.membershipPeriods; },
     open: openAuth,
     close: closeAuth,
     openAccountMenu,
@@ -938,7 +1118,8 @@
     handleHeaderTrigger,
     syncUI,
     getAdminRole: loadAdminRole,
-    refreshProfile: async () => { await loadProfile({ force: true }); syncUI(); return state.profile; }
+    refreshProfile: async () => { await Promise.allSettled([loadProfile({ force: true }), loadMembership({ force: true })]); syncUI(); return state.profile; },
+    refreshMembership: async () => { await refreshMembershipLive({ silent:false }); return state.membership; }
   };
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initAuth, { once: true });

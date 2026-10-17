@@ -1,16 +1,23 @@
 @echo off
-setlocal
+setlocal EnableExtensions
 cd /d "%~dp0"
-title NEITH WEB V34 R122 - SERVIDOR LOCAL
+title NEITH OFFICIAL WEB - SERVIDOR LOCAL
 
 echo ==============================================================
-echo   NEITH OFFICIAL WEB V34 R122 - PRUEBA LOCAL
+echo   NEITH OFFICIAL WEB - PRUEBA LOCAL
 echo ==============================================================
 echo.
 
-rem La validacion de version se hace en Python, que lee NEITH_BUILD.txt
-rem con UTF-8/UTF-8-BOM de forma fiable. Evitamos FINDSTR, que puede
-rem dar falsos negativos segun codificacion/salto de linea en Windows.
+if not exist "%~dp0NEITH_BUILD.txt" (
+  echo ERROR: falta NEITH_BUILD.txt en esta carpeta.
+  pause
+  exit /b 2
+)
+
+set "NEITH_BUILD="
+set /p NEITH_BUILD=<"%~dp0NEITH_BUILD.txt"
+echo Build detectada: %NEITH_BUILD%
+echo.
 
 set "PYTHON_CMD="
 where py >nul 2>nul

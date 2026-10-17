@@ -1,0 +1,144 @@
+/* Neith Web R127 — Admin Center commercial balance
+   Fluid/responsive: no rigid main-panel heights. */
+.admin32-console{max-width:min(94vw,92rem);margin-inline:auto}
+.admin32-toolbar{padding:clamp(.85rem,1.5vw,1.15rem) clamp(1rem,1.8vw,1.35rem);border-radius:1rem}
+.admin32-stats{grid-template-columns:repeat(5,minmax(0,1fr));gap:.65rem;margin-block:.8rem 1rem}
+.admin32-stats article{min-width:0;padding:.85rem .9rem;border-radius:.85rem}
+.admin32-layout{display:grid;grid-template-columns:minmax(11rem,14rem) minmax(0,1fr);gap:1rem;align-items:start}
+.admin32-sidebar{position:sticky;top:clamp(4.2rem,7vw,5.4rem);display:grid;gap:.4rem;padding:.65rem;border-radius:1rem}
+.admin32-sidebar button{min-height:0;padding:.72rem .75rem;border-radius:.75rem;grid-template-columns:2rem minmax(0,1fr);column-gap:.55rem}
+.admin32-sidebar button>span{width:2rem;aspect-ratio:1;border-radius:.62rem}
+.admin32-sidebar button b{font-size:.64rem}.admin32-sidebar button small{font-size:.58rem;margin-top:.12rem}
+.admin32-panels{min-width:0}.admin32-panel{padding:clamp(1rem,1.7vw,1.35rem)!important;border-radius:1rem!important;min-height:0!important}
+.admin32-section-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1rem!important;padding-bottom:.85rem!important}
+.admin32-section-head h2{font-size:clamp(1.1rem,1.7vw,1.45rem)!important;margin:.2rem 0 .25rem!important}.admin32-section-head p{max-width:62ch;line-height:1.45!important;margin:0!important;font-size:.78rem!important}
+
+/* One visual scale for all module cards. */
+.neith-dashboard-card,.neith-launcher-card,.neith-settings-card,.neith-commercial-card,.neith-notice-editor,.neith-flag-create,.neith-audit-manage{border-radius:.9rem!important;padding:clamp(.85rem,1.4vw,1.1rem)!important}
+.neith-dashboard-metrics,.neith-launcher-metrics,.neith-flags-metrics,.neith-notice-metrics,.neith-audit-summary,.neith-settings-runtime{gap:.6rem!important;margin-bottom:.9rem!important}
+.neith-dashboard-metrics article,.neith-launcher-metrics article,.neith-flags-metrics article,.neith-notice-metrics article,.neith-audit-summary article,.neith-settings-runtime article{padding:.8rem .85rem!important;border-radius:.8rem!important;min-height:0!important}
+
+/* Dashboard balanced columns, no giant/mini mismatch. */
+.neith-dashboard-hero{grid-template-columns:minmax(0,1.3fr) minmax(9rem,.7fr) auto!important;gap:.75rem!important;padding:1rem!important;border-radius:.9rem!important}
+.neith-dashboard-columns{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:.75rem!important;align-items:start!important}
+.neith-dashboard-column{display:grid;gap:.75rem!important}.neith-dashboard-card{min-height:0!important}
+.neith-dashboard-actions{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:.55rem!important}.neith-dashboard-actions button{min-height:0!important;padding:.75rem!important}
+
+/* Users: compact horizontal command bar + proportional cards. */
+.neith-users-command{grid-template-columns:minmax(0,1fr) auto!important;margin-bottom:.75rem!important;padding:.7rem!important}
+.neith-users-search{grid-template-columns:auto minmax(0,1fr) auto auto!important}.neith-users-summary{min-width:8.5rem!important;padding:.55rem .8rem!important}
+.neith-users-list{gap:.65rem!important}
+.neith-users-list .admin32-user{grid-template-columns:minmax(15rem,1.15fr) minmax(14rem,.9fr) minmax(18rem,1.05fr)!important;gap:.8rem!important;padding:.85rem .9rem!important;border-radius:.9rem!important;min-height:0!important}
+.neith-users-list .admin32-user-meta{gap:.45rem!important}.neith-users-list .admin32-user-meta span{padding:.65rem .6rem!important}
+.neith-access-controls{grid-template-columns:minmax(7rem,.8fr) minmax(11rem,1.35fr) auto!important;gap:.45rem!important;align-items:end!important}
+.neith-access-controls label{min-width:0}.neith-access-controls select{min-width:0!important;width:100%!important}
+.neith-access-apply{min-width:6.8rem!important;align-self:end!important}
+.neith-user-security{grid-column:1/-1!important;margin-top:0!important;padding-top:.65rem!important;min-height:0!important}
+.admin32-user.has-pending-access{border-color:rgba(70,236,204,.44)!important;box-shadow:0 0 0 1px rgba(70,236,204,.08),0 .7rem 2rem rgba(0,0,0,.18)!important}
+.neith-access-apply:not(:disabled){background:linear-gradient(110deg,#47e8ff,#2dffc0)!important;color:#00151c!important;border-color:rgba(72,247,209,.4)!important;box-shadow:0 .5rem 1.4rem rgba(38,230,201,.13)!important}
+.neith-access-apply.is-saving{opacity:.65;pointer-events:none}
+
+/* Commercial tab: equal columns and denser action surface. */
+.neith-commercial-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:.75rem!important;margin-top:.75rem!important}.neith-commercial-stack{gap:.75rem!important}.neith-commercial-card{min-height:0!important}.neith-commercial-search-results,.neith-commercial-devices,.neith-commercial-keys{max-height:30rem!important}
+
+/* Launcher / flags / notices / audit / settings use consistent fluid grids. */
+.neith-launcher-console,.neith-settings-grid{gap:.75rem!important}.neith-launcher-release-grid,.neith-settings-fields{gap:.65rem!important}
+.neith-flags-list,.neith-notices-list,.neith-audit-list{gap:.65rem!important}.neith-flag-card,.neith-notice-card,.neith-audit-event{border-radius:.85rem!important;padding:.8rem .9rem!important;min-height:0!important}
+.neith-settings-hero{grid-template-columns:minmax(0,1.25fr) minmax(13rem,.75fr)!important;gap:.75rem!important;padding:.9rem!important}.neith-settings-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;align-items:start!important}.neith-settings-card.wide{grid-column:1/-1!important}
+
+@media(max-width:72rem){
+  .admin32-stats{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .admin32-layout{grid-template-columns:1fr}
+  .admin32-sidebar{position:static;grid-template-columns:repeat(4,minmax(0,1fr))}
+  .admin32-sidebar button{grid-template-columns:1fr;text-align:center}.admin32-sidebar button>span{justify-self:center}.admin32-sidebar button small{display:none}
+  .neith-users-list .admin32-user{grid-template-columns:1fr 1fr!important}.admin32-user-access{grid-column:1/-1!important}.neith-user-security{grid-column:1/-1!important}
+}
+@media(max-width:56rem){
+  .admin32-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .admin32-sidebar{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .neith-dashboard-columns,.neith-commercial-grid,.neith-settings-grid{grid-template-columns:1fr!important}
+  .neith-settings-card.wide{grid-column:auto!important}
+  .neith-dashboard-hero{grid-template-columns:1fr!important}
+  .neith-users-list .admin32-user{grid-template-columns:1fr!important}.admin32-user-access,.neith-user-security{grid-column:auto!important}
+  .neith-access-controls{grid-template-columns:1fr 1fr!important}.neith-access-apply{grid-column:1/-1;width:100%}
+}
+@media(max-width:36rem){
+  .admin32-stats{grid-template-columns:1fr}.admin32-sidebar{grid-template-columns:1fr 1fr}.neith-users-command{grid-template-columns:1fr!important}.neith-users-summary{border-left:0!important;border-top:1px solid rgba(63,204,244,.12);min-width:0!important}.neith-users-search{grid-template-columns:auto minmax(0,1fr)!important}.neith-users-search button{grid-column:auto}.neith-access-controls{grid-template-columns:1fr!important}.neith-access-apply{grid-column:auto}
+}
+
+
+/* R128 — users panel proportion fix and zero-overlap actions */
+.neith-users-list .admin32-user{
+  grid-template-columns:minmax(0,1.08fr) minmax(22rem,.92fr)!important;
+  grid-template-areas:
+    "identity access"
+    "meta access"
+    "security security"!important;
+  align-items:start!important;
+}
+.neith-users-list .admin32-user>.admin32-user-access{align-self:stretch!important}
+.neith-users-list .admin32-user-access.neith-access-r13{
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:space-between!important;
+  padding:.9rem!important;
+}
+.neith-access-controls{
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+  gap:.55rem .6rem!important;
+  align-items:end!important;
+}
+.neith-access-controls label{width:100%!important}
+.neith-access-controls select{height:2.7rem!important}
+.neith-access-apply{
+  grid-column:1/-1!important;
+  grid-row:auto!important;
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+  justify-self:stretch!important;
+  height:2.75rem!important;
+}
+.neith-access-foot{margin-top:.75rem!important}
+.neith-user-security{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:.75rem!important;
+}
+.neith-security-actions{
+  display:flex!important;
+  flex-wrap:wrap!important;
+  gap:.55rem!important;
+  justify-content:flex-end!important;
+}
+.neith-security-actions button{
+  flex:1 1 9rem!important;
+  min-width:9rem!important;
+  min-height:2.35rem!important;
+}
+@media(max-width:72rem){
+  .neith-users-list .admin32-user{grid-template-columns:1fr!important;grid-template-areas:"identity" "meta" "access" "security"!important}
+}
+@media(max-width:56rem){
+  .neith-access-controls{grid-template-columns:1fr!important}
+  .neith-user-security{align-items:flex-start!important;flex-direction:column!important}
+  .neith-security-actions{width:100%!important;justify-content:stretch!important}
+  .neith-security-actions button{flex:1 1 100%!important;min-width:0!important}
+}
+
+/* R128 — featured games artwork must fill the premium frame cleanly */
+.home45-game{background:#061521!important}
+.home45-game img{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  margin:0!important;
+  object-fit:cover!important;
+  object-position:center center!important;
+  border-radius:inherit!important;
+  transform:scale(1.03)!important;
+  transform-origin:center center!important;
+}
+.home45-game:hover img{transform:scale(1.075)!important}

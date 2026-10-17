@@ -13,7 +13,9 @@
   const imageEl = $('[data-freegames-image]');
   const bgEl = $('[data-freegames-bg]');
   const countEl = $('[data-freegames-count]');
+  const sourcesEl = $('[data-freegames-sources]');
   const endDateEl = $('[data-freegames-enddate]');
+  const claimEl = $('[data-freegames-claim]');
   const timeEls = {
     days: $('[data-time-days]'), hours: $('[data-time-hours]'), minutes: $('[data-time-minutes]'), seconds: $('[data-time-seconds]')
   };
@@ -24,16 +26,8 @@
   let countdownTimer = null;
   let refreshTimer = null;
 
-  // Instant real-data fallback for static/local previews.
-  // Snapshot: GamerPower public API, verified 2026-09-22.
-  // Production still prefers /api/free-games and refreshes automatically.
-  const bundledSnapshot = [
-    { id: 3784, title: 'Deadshot', platform: 'STEAM', worth: '$4.99', image: 'https://www.gamerpower.com/offers/1b/bbb.jpg', thumbnail: 'https://www.gamerpower.com/offers/1/1234.jpg', endDate: '2026-09-23 23:59:00', endAt: Date.parse('2026-09-23T23:59:00Z') },
-    { id: 3782, title: 'Shogun Showdown', platform: 'EPIC GAMES', worth: '$14.99', image: 'https://www.gamerpower.com/offers/1b/6aac02328ba2e.jpg', thumbnail: 'https://www.gamerpower.com/offers/1/6aac02328ba2e.jpg', endDate: '2026-09-24 23:59:00', endAt: Date.parse('2026-09-24T23:59:00Z') },
-    { id: 3781, title: 'Mindcop', platform: 'EPIC GAMES', worth: '$14.99', image: 'https://www.gamerpower.com/offers/1b/6aac007c3171a.jpg', thumbnail: 'https://www.gamerpower.com/offers/1/6aac007c3171a.jpg', endDate: '2026-09-24 23:59:00', endAt: Date.parse('2026-09-24T23:59:00Z') },
-    { id: 3779, title: 'Space Menace', platform: 'STEAM', worth: '$6.99', image: 'https://www.gamerpower.com/offers/1b/6aaad50c2b7d4.jpg', thumbnail: 'https://www.gamerpower.com/offers/1/6aaad50c2b7d4.jpg', endDate: '2026-09-23 23:59:00', endAt: Date.parse('2026-09-23T23:59:00Z') },
-    { id: 3778, title: 'FOR HONOR', platform: 'UBISOFT CONNECT', worth: '$29.99', image: 'https://www.gamerpower.com/offers/1b/6aa94d05ac575.jpg', thumbnail: 'https://www.gamerpower.com/offers/1/6aa94d05ac575.jpg', endDate: '2026-09-28 23:59:00', endAt: Date.parse('2026-09-28T23:59:00Z') }
-  ];
+  // No stale bundled offers: live sources are authoritative.
+  const bundledSnapshot = [];
 
   const lang = () => document.documentElement.lang === 'en' ? 'en' : 'es';
   const t = (es, en) => lang() === 'en' ? en : es;
@@ -87,6 +81,11 @@
     platformEl.textContent = `${game.platform || 'PC'} // ${t('OFERTA REAL', 'REAL OFFER')}`;
     worthEl.textContent = game.worth || '—';
     endDateEl.textContent = formatEndDate(game.endDate);
+    if (claimEl) {
+      const claimUrl = safeImage(game.url || '');
+      if (claimUrl) { claimEl.href = claimUrl; claimEl.hidden = false; }
+      else { claimEl.href = '#'; claimEl.hidden = true; }
+    }
     imageEl.classList.remove('is-ready');
     imageEl.alt = `${game.title || t('Juego gratis', 'Free game')} — ${game.platform || 'PC'}`;
     if (image) {
@@ -175,6 +174,7 @@
     imageEl.classList.remove('is-ready');
     bgEl.style.backgroundImage = 'none';
     endDateEl.textContent = t('COMPROBACIÓN AUTOMÁTICA', 'AUTOMATIC CHECK');
+    if (claimEl) { claimEl.href = '#'; claimEl.hidden = true; }
     ['days','hours','minutes','seconds'].forEach(key => timeEls[key].textContent = '--');
     countEl.textContent = kind === 'empty' ? t('0 JUEGOS GRATIS DETECTADOS', '0 FREE GAMES DETECTED') : t('CONEXIÓN DE DATOS NO DISPONIBLE', 'DATA CONNECTION UNAVAILABLE');
     cardsHost.innerHTML = `<div class="freegames-live-empty"><b>${kind === 'empty' ? t('NO HAY OFERTAS VERIFICADAS AHORA MISMO','NO VERIFIED OFFERS RIGHT NOW') : t('NO SE PUDIERON COMPROBAR LAS OFERTAS','OFFERS COULD NOT BE CHECKED')}</b><p>${kind === 'empty' ? t('Neith seguirá comprobando las promociones disponibles automáticamente.','Neith will keep checking available promotions automatically.') : t('La conexión de datos en tiempo real no está disponible. Vuelve a intentarlo más tarde.','The real-time data connection is unavailable. Please try again later.')}</p></div>`;
@@ -194,8 +194,7 @@
       const text = `${item.title || ''} ${item.description || ''} ${item.instructions || ''}`.toLowerCase();
       if (/\bkey giveaway\b|\brequires?\b[^.]{0,50}\b(?:arp|points?|credits?)\b|\b(?:arp|points?) required\b/.test(text)) return false;
       if (/\b(?:dlc|demo|prologue|playtest|trial|beta|free weekend|season pass|battle pass|starter pack|skin pack|currency pack)\b|in[- ]game loot/.test(text)) return false;
-      const worth = parseFloat(String(item.worth || '').replace(/[^0-9.]/g, '')) || 0;
-      return worth > 0;
+      return true;
     }).map(item => {
       const platforms = String(item.platforms || '');
       const found = supported.find(([needle]) => platforms.toLowerCase().includes(needle.toLowerCase()));
@@ -207,7 +206,8 @@
         image: item.image || item.thumbnail || '',
         thumbnail: item.thumbnail || item.image || '',
         endDate: item.end_date,
-        endAt: Date.parse(item.end_date.replace(' ', 'T') + 'Z')
+        endAt: Date.parse(item.end_date.replace(' ', 'T') + 'Z'),
+        url: item.open_giveaway_url || item.gamerpower_url || ''
       };
     }).sort((a, b) => a.endAt - b.endAt);
   }
@@ -227,10 +227,19 @@
 
     // 1) Preferred production path: same-origin serverless proxy.
     try {
-      const response = await fetch('/api/free-games', { headers: { accept: 'application/json' }, cache: 'no-store' });
+      const response = await fetch('/api/free-games', { headers: { accept: 'application/json' }, cache: 'default' });
       if (response.ok) {
         const payload = await response.json();
-        if (payload?.ok && Array.isArray(payload.games) && showGames(payload.games)) return;
+        if (payload?.ok && Array.isArray(payload.games)) {
+          if (sourcesEl && payload.sources) {
+            const active = [];
+            if (payload.sources.gamerPower) active.push('GAMERPOWER');
+            if (payload.sources.epicGames) active.push('EPIC');
+            if (payload.sources.primeGaming) active.push('PRIME');
+            sourcesEl.textContent = active.length ? active.join(' · ') : 'NEITH MULTI-SOURCE';
+          }
+          if (showGames(payload.games)) return;
+        }
       }
     } catch (_) {}
 
@@ -248,6 +257,7 @@
     if (showGames(bundledSnapshot)) return;
 
     renderState('error');
+    setTimeout(() => { if (!document.hidden && navigator.onLine) load(); }, 60 * 1000);
   }
 
   document.addEventListener('click', event => {
@@ -264,8 +274,12 @@
   /* R58 visibility-aware free-games timers */
   refreshTimer = setInterval(() => { if (!document.hidden) load(); }, 15 * 60 * 1000);
   document.addEventListener('visibilitychange', () => {
-    if (!document.hidden && currentGame) paintCountdown(currentGame);
+    if (!document.hidden) {
+      if (currentGame) paintCountdown(currentGame);
+      if (!games.length) load();
+    }
   }, {passive:true});
+  window.addEventListener('online', () => load(), {passive:true});
   // No beforeunload handler: keeping the document BFCache-eligible makes
   // back/forward and repeated navigation substantially smoother. Browsers
   // suspend timers automatically while a document is in BFCache.
