@@ -103,7 +103,7 @@
     return state.profile;
   }
 
-  const ADMIN_ROLE_CACHE_KEY = 'neith_admin_role_v32';
+  const ADMIN_ROLE_CACHE_KEY = 'neith_admin_role_v33_owner_only';
   const ADMIN_ROLE_CACHE_TTL_MS = 10 * 60 * 1000;
   function readAdminRoleCache(userId) {
     if (!userId) return null;
@@ -111,36 +111,58 @@
       const raw = sessionStorage.getItem(ADMIN_ROLE_CACHE_KEY);
       if (!raw) return null;
       const data = JSON.parse(raw);
-      if (data?.userId !== userId || !data?.role) return null;
+      if (data?.userId !== userId || typeof data?.isOwner !== 'boolean') return null;
       if (Date.now() - Number(data.savedAt || 0) > ADMIN_ROLE_CACHE_TTL_MS) return null;
-      return data.role;
+      return data.isOwner;
     } catch { return null; }
   }
-  function writeAdminRoleCache(userId, role) {
-    if (!userId || !role) return;
-    try { sessionStorage.setItem(ADMIN_ROLE_CACHE_KEY, JSON.stringify({ userId, role, savedAt: Date.now() })); } catch {}
+  function writeAdminRoleCache(userId, isOwner) {
+    if (!userId || typeof isOwner !== 'boolean') return;
+    try { sessionStorage.setItem(ADMIN_ROLE_CACHE_KEY, JSON.stringify({ userId, isOwner, savedAt: Date.now() })); } catch {}
   }
-  function clearAdminRoleCache() { try { sessionStorage.removeItem(ADMIN_ROLE_CACHE_KEY); } catch {} }
+  function clearAdminRoleCache() {
+    try {
+      sessionStorage.removeItem(ADMIN_ROLE_CACHE_KEY);
+      sessionStorage.removeItem('neith_admin_role_v32');
+    } catch {}
+  }
   async function loadAdminRole({ force = false } = {}) {
     const userId = state.session?.user?.id;
     if (!state.client || !userId) return 'user';
-    if (!force) { const cached = readAdminRoleCache(userId); if (cached) return cached; }
     try {
       const { data, error } = await state.client.rpc('neith_my_role');
       if (error) throw error;
-      const role = String(data || 'user');
-      writeAdminRoleCache(userId, role);
-      return role;
+      return String(data || 'user');
     } catch {
       return 'user';
     }
   }
+  async function loadOwnerAccess({ force = false } = {}) {
+    const userId = state.session?.user?.id;
+    if (!state.client || !userId) return false;
+    if (!force) {
+      const cached = readAdminRoleCache(userId);
+      if (cached !== null) return cached;
+    }
+    try {
+      const { data, error } = await state.client.rpc('neith_is_owner');
+      if (error) throw error;
+      const isOwner = data === true;
+      writeAdminRoleCache(userId, isOwner);
+      return isOwner;
+    } catch {
+      return false;
+    }
+  }
   async function syncAdminMenuLink() {
-    const link = document.querySelector('[data-admin-menu-link]');
-    if (!link || !state.session?.user) return;
-    const role = await loadAdminRole();
-    link.hidden = !['admin','superadmin'].includes(role);
-    link.dataset.adminRole = role;
+    const nav = document.querySelector('#neith-account-menu .account-menu-links');
+    if (!nav) return;
+    const existing = nav.querySelector('[data-admin-menu-link]');
+    if (!state.session?.user) { existing?.remove(); return; }
+    const isOwner = await loadOwnerAccess();
+    if (!isOwner) { existing?.remove(); return; }
+    if (existing) return;
+    nav.insertAdjacentHTML('beforeend', `<a href="${siteUrl('admin/')}" role="menuitem" data-admin-menu-link data-owner-only="true"><span class="account-menu-icon">◆</span><span><b>ADMIN CENTER</b><small>Control de Neith</small></span><em>›</em></a>`);
   }
 
 
@@ -306,7 +328,6 @@
             <a href="${siteUrl('mi-cuenta/')}" role="menuitem"><span class="account-menu-icon">◎</span><span><b>MI CUENTA</b><small>Gestionar cuenta</small></span><em>›</em></a>
             <a href="${siteUrl('licencia/')}" role="menuitem"><span class="account-menu-icon">◇</span><span><b>LICENCIA Y PLAN</b><small>Licencia y plan</small></span><em>›</em></a>
             <a href="${siteUrl('seguridad/')}" role="menuitem"><span class="account-menu-icon">⌾</span><span><b>SEGURIDAD</b><small>Seguridad</small></span><em>›</em></a>
-            <a href="${siteUrl('admin/')}" role="menuitem" data-admin-menu-link hidden><span class="account-menu-icon">◆</span><span><b>ADMIN CENTER</b><small>Control de Neith</small></span><em>›</em></a>
           </nav>
           <button class="account-menu-logout" type="button" data-logout role="menuitem"><span>⏻</span><b>CERRAR SESIÓN</b></button>
         </section>
