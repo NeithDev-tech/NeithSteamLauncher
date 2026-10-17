@@ -2,7 +2,11 @@ const SUPPORTED = [
   ['Epic Games Store', 'EPIC GAMES'],
   ['Steam', 'STEAM'],
   ['GOG', 'GOG'],
-  ['Ubisoft Connect', 'UBISOFT CONNECT']
+  ['Ubisoft Connect', 'UBISOFT CONNECT'],
+  ['Itch.io', 'ITCH.IO'],
+  ['DRM-Free', 'DRM-FREE'],
+  ['Battle.net', 'BATTLE.NET'],
+  ['EA Origin', 'EA APP']
 ];
 const PRIME_FEED = 'https://feed.eikowagenknecht.com/lootscraper_amazon_game.xml';
 const PRIME_HTML = 'https://feed.eikowagenknecht.com/lootscraper_amazon_game.html';
@@ -16,8 +20,12 @@ function cleanTitle(title = '') {
     .trim();
 }
 
-function detectPlatform(platforms = '') {
-  const found = SUPPORTED.find(([needle]) => String(platforms).toLowerCase().includes(needle.toLowerCase()));
+function detectPlatform(platforms = '', context = '') {
+  const platformText = String(platforms || '');
+  const blob = `${platformText} ${context || ''}`.toLowerCase();
+  if (blob.includes('indiegala')) return 'INDIEGALA';
+  if (/\bstove\b/.test(blob)) return 'STOVE';
+  const found = SUPPORTED.find(([needle]) => blob.includes(needle.toLowerCase()));
   return found ? found[1] : 'PC';
 }
 
@@ -34,9 +42,10 @@ function isDirectStoreFreebie(item, now) {
   if (String(item.type).toLowerCase() !== 'game') return false;
   const platforms = String(item.platforms || '');
   if (!/\bPC\b/i.test(platforms)) return false;
-  if (!SUPPORTED.some(([needle]) => platforms.toLowerCase().includes(needle.toLowerCase()))) return false;
   const end = parseEnd(item.end_date);
-  if (!end || end <= now) return false;
+  // GamerPower marks some legitimate claim-and-keep offers as N/A when a store
+  // does not publish an end date. Keep those while the upstream status is Active.
+  if (end && end <= now) return false;
   const text = `${item.title || ''} ${item.description || ''} ${item.instructions || ''}`.toLowerCase();
   if (/\bkey giveaway\b|\brequires?\b[^.]{0,50}\b(?:arp|points?|credits?)\b|\b(?:arp|points?) required\b/.test(text)) return false;
   if (/\b(?:dlc|demo|prologue|playtest|trial|beta|free weekend|season pass|battle pass|starter pack|skin pack|currency pack)\b|in[- ]game loot/.test(text)) return false;
@@ -227,7 +236,7 @@ function mergePrime(atomRows = [], htmlRows = [], now = Date.now()) {
   }));
 }
 
-async function fetchText(url, accept, timeoutMs = 9000) {
+async function fetchText(url, accept, timeoutMs = 6500) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
@@ -243,16 +252,24 @@ async function fetchText(url, accept, timeoutMs = 9000) {
 }
 
 async function fetchGamerPower(now) {
-  const response = await fetch('https://www.gamerpower.com/api/giveaways?type=game', {
-    headers: { accept: 'application/json', 'user-agent': 'NeithLauncherWeb/1.0 (+https://www.neithlauncher.com)' },
-  });
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 6500);
+  let response;
+  try {
+    response = await fetch('https://www.gamerpower.com/api/giveaways?type=game', {
+      headers: { accept: 'application/json', 'user-agent': 'NeithLauncherWeb/1.0 (+https://www.neithlauncher.com)' },
+      signal: controller.signal,
+    });
+  } finally {
+    clearTimeout(timer);
+  }
   if (!response.ok) throw new Error('gamerpower_unavailable');
   const payload = await response.json();
   if (!Array.isArray(payload)) throw new Error('invalid_gamerpower_payload');
   return payload.filter(item => isDirectStoreFreebie(item, now)).map(item => ({
     id: Number(item.id),
     title: cleanTitle(item.title),
-    platform: detectPlatform(item.platforms),
+    platform: detectPlatform(item.platforms, `${item.title || ''} ${item.description || ''} ${item.instructions || ''}`),
     worth: item.worth || null,
     image: item.image || item.thumbnail || '',
     thumbnail: item.thumbnail || item.image || '',
@@ -321,14 +338,20 @@ function dedupeAndSort(rows, now) {
   const seen = new Map();
   const priority = game => /Epic Games Store official/i.test(String(game?.source || '')) ? 3 : /Prime Gaming Luna Feed/i.test(String(game?.source || '')) ? 2 : 1;
   for (const game of rows || []) {
-    if (!game || Number(game.endAt) <= now) continue;
+    if (!game) continue;
+    const endAt = Number(game.endAt);
+    if (Number.isFinite(endAt) && endAt > 0 && endAt <= now) continue;
     const key = cleanTitle(game.title).toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
     if (!key) continue;
     const current = seen.get(key);
     if (!current || priority(game) > priority(current)) seen.set(key, game);
   }
   return [...seen.values()]
-    .sort((a, b) => (Number(a.endAt) - Number(b.endAt)) || ((parseFloat(String(b.worth || '').replace(/[^0-9.]/g, '')) || 0) - (parseFloat(String(a.worth || '').replace(/[^0-9.]/g, '')) || 0)));
+    .sort((a, b) => {
+      const ae = Number(a.endAt) > 0 ? Number(a.endAt) : Number.POSITIVE_INFINITY;
+      const be = Number(b.endAt) > 0 ? Number(b.endAt) : Number.POSITIVE_INFINITY;
+      return (ae - be) || ((parseFloat(String(b.worth || '').replace(/[^0-9.]/g, '')) || 0) - (parseFloat(String(a.worth || '').replace(/[^0-9.]/g, '')) || 0));
+    });
 }
 
 exports.handler = async () => {
@@ -343,7 +366,7 @@ exports.handler = async () => {
     if (!games.length && gamerPowerResult.status === 'rejected' && epicResult.status === 'rejected' && primeResult.status === 'rejected') {
       return { statusCode: 502, headers: { 'content-type':'application/json; charset=utf-8', 'cache-control':'no-store' }, body: JSON.stringify({ ok:false, error:'upstreams_unavailable', games:[] }) };
     }
-    return { statusCode: 200, headers: { 'content-type':'application/json; charset=utf-8', 'cache-control':'public, max-age=300, s-maxage=900, stale-while-revalidate=1800' }, body: JSON.stringify({
+    return { statusCode: 200, headers: { 'content-type':'application/json; charset=utf-8', 'cache-control':'public, max-age=300, s-maxage=300, stale-while-revalidate=900' }, body: JSON.stringify({
       ok:true, updatedAt:new Date().toISOString(), source:'Neith verified multi-store feed',
       sources:{ gamerPower:gamerPowerResult.status === 'fulfilled', epicGames:epicResult.status === 'fulfilled', primeGaming:primeResult.status === 'fulfilled' }, games
     }) };

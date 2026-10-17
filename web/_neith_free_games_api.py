@@ -191,20 +191,30 @@ def _merge_prime(*groups):
     return [x for x in d.values() if int(x.get('endAt') or 0)>now]
 
 
+def _platform_label(platforms='', blob=''):
+    text=f"{platforms} {blob}".lower()
+    if 'indiegala' in text:return 'INDIEGALA'
+    if re.search(r'\bstove\b',text):return 'STOVE'
+    for needle,label in [
+        ('Epic Games Store','EPIC GAMES'),('Steam','STEAM'),('GOG','GOG'),
+        ('Ubisoft Connect','UBISOFT CONNECT'),('Prime Gaming','PRIME GAMING'),
+        ('Itch.io','ITCH.IO'),('DRM-Free','DRM-FREE'),('Battle.net','BATTLE.NET'),
+        ('EA Origin','EA APP')]:
+        if needle.lower() in text:return label
+    return 'PC'
+
+
 def _gamerpower():
     now=int(time.time()*1000);data=json.loads(_get(GAMERPOWER).decode('utf-8-sig','replace'));out=[]
-    supported=[('Epic Games Store','EPIC GAMES'),('Steam','STEAM'),('GOG','GOG'),('Ubisoft Connect','UBISOFT CONNECT'),('Prime Gaming','PRIME GAMING')]
     for item in data if isinstance(data,list) else []:
         if str(item.get('status','')).lower()!='active' or str(item.get('type','')).lower()!='game':continue
         platforms=str(item.get('platforms') or '')
         if not re.search(r'\bPC\b',platforms,re.I):continue
-        found=next((label for needle,label in supported if needle.lower() in platforms.lower()),None)
-        if not found:continue
         end=_ms(item.get('end_date'))
-        if not end or end<=now:continue
+        if end and end<=now:continue
         blob=f"{item.get('title','')} {item.get('description','')} {item.get('instructions','')}".lower()
         if re.search(r'\b(?:dlc|demo|prologue|playtest|trial|beta|free weekend|season pass|battle pass|starter pack|skin pack|currency pack)\b|in[- ]game loot|key giveaway',blob):continue
-        out.append({'id':item.get('id'),'title':_clean_title(item.get('title')),'platform':found,'worth':item.get('worth') or None,'image':item.get('image') or item.get('thumbnail') or '','thumbnail':item.get('thumbnail') or item.get('image') or '','endDate':item.get('end_date'),'endAt':end,'publishedDate':item.get('published_date'),'url':item.get('open_giveaway_url') or item.get('gamerpower_url') or '','source':'GamerPower'})
+        out.append({'id':item.get('id'),'title':_clean_title(item.get('title')),'platform':_platform_label(platforms,blob),'worth':item.get('worth') or None,'image':item.get('image') or item.get('thumbnail') or '','thumbnail':item.get('thumbnail') or item.get('image') or '','endDate':item.get('end_date'),'endAt':end or None,'publishedDate':item.get('published_date'),'url':item.get('open_giveaway_url') or item.get('gamerpower_url') or '','source':'GamerPower'})
     return out
 
 
@@ -232,7 +242,8 @@ def _dedupe(rows):
     now=int(time.time()*1000);seen={}
     pri=lambda x:3 if 'official' in str(x.get('source','')).lower() else 2 if 'Prime Gaming' in str(x.get('source','')) else 1
     for g in rows:
-        if int(g.get('endAt') or 0)<=now:continue
+        end=int(g.get('endAt') or 0)
+        if end and end<=now:continue
         key=re.sub(r'[^a-z0-9]+',' ',_clean_title(g.get('title')).lower()).strip()
         if not key:continue
         if key not in seen or pri(g)>pri(seen[key]):seen[key]=g
