@@ -1,2 +1,2 @@
 NEITH_WEB_V34_R184_CLEAN_RUNTIME_SAFE
-R185: registration welcome-email delivery + PayPal LIVE browser CORS root fix
+R186: server-side registration email trigger + PayPal LIVE web checkout CORS root fix

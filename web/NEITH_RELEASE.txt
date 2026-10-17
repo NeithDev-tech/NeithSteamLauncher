@@ -1,1 +1,1 @@
-Neith Official Web V34 R185 — Registration welcome email + PayPal LIVE web checkout CORS root fix
+Neith Official Web V34 R186 — Server-side welcome email trigger + PayPal LIVE web checkout CORS root fix

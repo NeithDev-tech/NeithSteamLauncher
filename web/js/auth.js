@@ -822,38 +822,6 @@
     button.classList.toggle('is-visible', revealing);
   }
 
-  async function requestWelcomeEmail(user, email) {
-    const userId = String(user?.id || '').trim();
-    const targetEmail = normalizeEmail(email || user?.email || '');
-    if (!userId || !targetEmail) return { ok:false, skipped:true };
-    const cfg = window.NEITH_CONFIG || {};
-    const base = String(cfg.supabaseUrl || '').replace(/\/+$/,'');
-    const anon = String(cfg.supabaseAnonKey || '');
-    if (!base.startsWith('https://') || !anon) return { ok:false, skipped:true };
-    try {
-      const response = await fetch(`${base}/functions/v1/neith-welcome-email`, {
-        method:'POST',
-        cache:'no-store',
-        credentials:'omit',
-        headers:{
-          'Accept':'application/json',
-          'Content-Type':'application/json',
-          'apikey':anon
-        },
-        body:JSON.stringify({ user_id:userId, email:targetEmail })
-      });
-      const payload = await response.json().catch(() => ({}));
-      if (!response.ok || payload?.ok === false) {
-        console.warn('[NEITH AUTH] Welcome email pendiente:', payload?.error || response.status);
-        return { ok:false, error:payload?.error || `HTTP ${response.status}` };
-      }
-      return { ok:true, messageId:String(payload?.message_id || '') };
-    } catch (error) {
-      console.warn('[NEITH AUTH] Welcome email no disponible:', error?.message || error);
-      return { ok:false, error:error?.message || String(error) };
-    }
-  }
-
   async function handleAuthForm(form) {
     if (!configured) {
       setMessage('Configura Supabase para activar el registro y el inicio de sesión reales.', 'warning');
@@ -892,14 +860,9 @@
           console.error('[NEITH AUTH] Inconsistencia de correo en respuesta Supabase', { requested: email, returned: returnedEmail });
           throw new Error(window.NeithI18n?.t?.('Supabase devolvió un correo distinto al indicado. Registro detenido por seguridad.') || 'Supabase devolvió un correo distinto al indicado. Registro detenido por seguridad.');
         }
-        const welcomeResult = await requestWelcomeEmail(signupData?.user, email);
         form.reset();
         prepareRegisterForm({ clear: true });
-        if (welcomeResult.ok) {
-          setMessage(`Cuenta creada correctamente. Hemos enviado el correo de bienvenida a: ${email}`, 'success');
-        } else {
-          setMessage(`Cuenta creada correctamente. El correo de bienvenida está pendiente de entrega para: ${email}`, 'warning');
-        }
+        setMessage(`Cuenta creada correctamente. El correo de bienvenida se enviará automáticamente a: ${email}`, 'success');
       } else if (form.dataset.authForm === 'recover') {
         const redirectTo = siteUrl('recuperar-password/');
         const { error } = await state.client.auth.resetPasswordForEmail(data.email, { redirectTo });
