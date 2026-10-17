@@ -4,7 +4,7 @@
   const DEFAULT_STATE = 'PayPal LIVE activo · pago seguro · renovación automática gestionable desde Neith.';
   const ERROR_PREFIX = 'No se pudo abrir PayPal';
 
-  const stateNode = button => button.closest('.neith-plan-card')?.querySelector('.neith-store-state span') || null;
+  const stateNode = button => button.closest('.premium147-plan, .neith-plan-card')?.querySelector('.neith-store-state span') || document.querySelector('.premium147-store-state span') || null;
   const setState = (button, text, error=false) => {
     const node = stateNode(button);
     if (!node) return;

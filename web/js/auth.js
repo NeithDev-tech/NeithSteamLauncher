@@ -822,6 +822,38 @@
     button.classList.toggle('is-visible', revealing);
   }
 
+  async function requestWelcomeEmail(user, email) {
+    const userId = String(user?.id || '').trim();
+    const targetEmail = normalizeEmail(email || user?.email || '');
+    if (!userId || !targetEmail) return { ok:false, skipped:true };
+    const cfg = window.NEITH_CONFIG || {};
+    const base = String(cfg.supabaseUrl || '').replace(/\/+$/,'');
+    const anon = String(cfg.supabaseAnonKey || '');
+    if (!base.startsWith('https://') || !anon) return { ok:false, skipped:true };
+    try {
+      const response = await fetch(`${base}/functions/v1/neith-welcome-email`, {
+        method:'POST',
+        cache:'no-store',
+        credentials:'omit',
+        headers:{
+          'Accept':'application/json',
+          'Content-Type':'application/json',
+          'apikey':anon
+        },
+        body:JSON.stringify({ user_id:userId, email:targetEmail })
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok || payload?.ok === false) {
+        console.warn('[NEITH AUTH] Welcome email pendiente:', payload?.error || response.status);
+        return { ok:false, error:payload?.error || `HTTP ${response.status}` };
+      }
+      return { ok:true, messageId:String(payload?.message_id || '') };
+    } catch (error) {
+      console.warn('[NEITH AUTH] Welcome email no disponible:', error?.message || error);
+      return { ok:false, error:error?.message || String(error) };
+    }
+  }
+
   async function handleAuthForm(form) {
     if (!configured) {
       setMessage('Configura Supabase para activar el registro y el inicio de sesión reales.', 'warning');
@@ -849,7 +881,10 @@
         const { data: signupData, error } = await state.client.auth.signUp({
           email,
           password,
-          options: { data: { display_name: displayNameValue } }
+          options: {
+            data: { display_name: displayNameValue },
+            emailRedirectTo: siteUrl('mi-cuenta/')
+          }
         });
         if (error) throw error;
         const returnedEmail = normalizeEmail(signupData?.user?.email || email);
@@ -857,9 +892,14 @@
           console.error('[NEITH AUTH] Inconsistencia de correo en respuesta Supabase', { requested: email, returned: returnedEmail });
           throw new Error(window.NeithI18n?.t?.('Supabase devolvió un correo distinto al indicado. Registro detenido por seguridad.') || 'Supabase devolvió un correo distinto al indicado. Registro detenido por seguridad.');
         }
+        const welcomeResult = await requestWelcomeEmail(signupData?.user, email);
         form.reset();
         prepareRegisterForm({ clear: true });
-        setMessage(`${window.NeithI18n?.t?.('Cuenta creada. Correo de confirmación solicitado para:') || 'Cuenta creada. Correo de confirmación solicitado para:'} ${email}`, 'success');
+        if (welcomeResult.ok) {
+          setMessage(`Cuenta creada correctamente. Hemos enviado el correo de bienvenida a: ${email}`, 'success');
+        } else {
+          setMessage(`Cuenta creada correctamente. El correo de bienvenida está pendiente de entrega para: ${email}`, 'warning');
+        }
       } else if (form.dataset.authForm === 'recover') {
         const redirectTo = siteUrl('recuperar-password/');
         const { error } = await state.client.auth.resetPasswordForEmail(data.email, { redirectTo });
