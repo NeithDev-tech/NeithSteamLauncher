@@ -1,6 +1,9 @@
-Neith Official Web V34 R193 — Footer right alignment
+Neith Official Web V34 R194 — Google SEO & indexing safe
 
-- Keeps the discreet unique visitor counter as V: number.
-- Restores "Diseñado para Windows" to the right side of the footer on desktop.
-- Keeps copyright left and SYSTEM ONLINE + V counter centered.
-- No changes to visitor counting, authentication, payments, downloads, or other sections.
+- SEO metadata refined for Neith Launcher PRO, VAC LIVE, Hour Boost and Boost PC.
+- Canonical stays on https://www.neithlauncher.com/.
+- Open Graph and Twitter metadata completed.
+- Added SoftwareApplication structured data without ratings or invented claims.
+- robots.txt protects private/account areas from crawling.
+- sitemap.xml cleaned: removes the obsolete pages.dev dashboard URL and adds the main public sections.
+- No visual, visitor-counter, authentication, payment or download behavior changes.

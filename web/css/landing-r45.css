@@ -238,3 +238,6 @@ body.home45-lightbox-open{overflow:hidden}
   .home44-footer-center{justify-self:center}
   .home44-footer-bottom>span:last-child{justify-self:end;text-align:right}
 }
+
+/* R195 footer counter separator */
+.home44-footer-center{gap:0}.home44-footer-separator{display:inline-block;margin:0 .32rem;color:#4f7180;opacity:.65;font:700 .39rem/1 Orbitron,sans-serif;white-space:pre}.home44-footer-visitors{gap:.12rem}

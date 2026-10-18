@@ -1,4 +1,9 @@
 User-agent: *
 Allow: /
 Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /mi-cuenta/
+Disallow: /recuperar-password/
+Disallow: /reset-password/
+
 Sitemap: https://www.neithlauncher.com/sitemap.xml

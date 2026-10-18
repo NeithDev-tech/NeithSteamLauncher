@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<url><loc>https://www.neithlauncher.com/</loc></url>
-<url><loc>https://www.neithlauncher.com/boostpc/</loc></url>
-<url><loc>https://www.neithlauncher.com/hourboost/</loc></url>
-<url><loc>https://www.neithlauncher.com/logros/</loc></url>
-<url><loc>https://www.neithlauncher.com/juegos-gratis/</loc></url>
-<url><loc>https://www.neithlauncher.com/docs/</loc></url>
-<url><loc>https://www.neithlauncher.com/free-premium/</loc></url>
-<url><loc>https://neith-launcher.pages.dev/dashboard/</loc></url>  <url><loc>https://www.neithlauncher.com/faq/</loc></url>
-
-  <url><loc>https://www.neithlauncher.com/cuentas/</loc></url>
+  <url><loc>https://www.neithlauncher.com/</loc><lastmod>2026-10-18</lastmod></url>
+  <url><loc>https://www.neithlauncher.com/cuentas/</loc><lastmod>2026-10-18</lastmod></url>
+  <url><loc>https://www.neithlauncher.com/hourboost/</loc><lastmod>2026-10-18</lastmod></url>
+  <url><loc>https://www.neithlauncher.com/vac-live/</loc><lastmod>2026-10-18</lastmod></url>
+  <url><loc>https://www.neithlauncher.com/boostpc/</loc><lastmod>2026-10-18</lastmod></url>
+  <url><loc>https://www.neithlauncher.com/logros/</loc><lastmod>2026-10-18</lastmod></url>
+  <url><loc>https://www.neithlauncher.com/juegos-gratis/</loc><lastmod>2026-10-18</lastmod></url>
+  <url><loc>https://www.neithlauncher.com/biblioteca/</loc><lastmod>2026-10-18</lastmod></url>
+  <url><loc>https://www.neithlauncher.com/free-premium/</loc><lastmod>2026-10-18</lastmod></url>
+  <url><loc>https://www.neithlauncher.com/faq/</loc><lastmod>2026-10-18</lastmod></url>
+  <url><loc>https://www.neithlauncher.com/docs/</loc><lastmod>2026-10-18</lastmod></url>
+  <url><loc>https://www.neithlauncher.com/seguridad/</loc><lastmod>2026-10-18</lastmod></url>
+  <url><loc>https://www.neithlauncher.com/licencia/</loc><lastmod>2026-10-18</lastmod></url>
 </urlset>
