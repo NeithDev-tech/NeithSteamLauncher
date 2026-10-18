@@ -1,2 +1,1 @@
-NEITH_WEB_V34_R191_UNIQUE_VISITOR_COUNTER_SAFE
-R191: unique visitor counter using an anonymous persistent browser/device identifier; repeat visits from the same browser do not increment the total.
+NEITH_WEB_V34_R193_FOOTER_RIGHT_ALIGNMENT

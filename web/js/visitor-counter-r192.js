@@ -1,4 +1,4 @@
-/* Neith R191 — anonymous unique visitor counter.
+/* Neith R192 — anonymous unique visitor counter.
    One persistent browser UUID = one unique visitor. No IP address is stored. */
 (() => {
   'use strict';
@@ -37,9 +37,7 @@
     if (!Number.isFinite(total) || total < 0) return;
     const value = Math.trunc(total).toLocaleString(document.documentElement.lang === 'en' ? 'en-US' : 'es-ES');
     const valueNode = TARGET.querySelector('[data-unique-visitors-value]');
-    const labelNode = TARGET.querySelector('[data-unique-visitors-label]');
     if (valueNode) valueNode.textContent = value;
-    if (labelNode) labelNode.textContent = document.documentElement.lang === 'en' ? 'VISITORS' : 'VISITANTES';
     TARGET.hidden = false;
   };
 
