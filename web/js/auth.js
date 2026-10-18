@@ -1,5 +1,15 @@
 (() => {
   'use strict';
+
+  // R190: one canonical Auth origin. Never create a Supabase client on the bare
+  // domain because www/non-www have separate localStorage sessions and can
+  // otherwise rotate the same account's refresh lifecycle independently.
+  if (window.location.hostname.toLowerCase() === 'neithlauncher.com') {
+    const canonical = new URL(window.location.href);
+    canonical.hostname = 'www.neithlauncher.com';
+    window.location.replace(canonical.href);
+    return;
+  }
   window.__NEITH_WEB_BUILD__ = 'V34';
   console.info('[NEITH WEB] Build V34 activo · identidad instantánea + autoridad Supabase');
   const scriptUrl = document.currentScript?.src || '';
@@ -32,6 +42,7 @@
   }
 
   const REMEMBER_EMAIL_KEY = 'neith_auth_remembered_email';
+  const REMEMBER_IDENTITY_KEY = 'neith_auth_remembered_identity';
   const REMEMBER_PREF_KEY = 'neith_auth_remember_identity';
   const PROFILE_CACHE_KEY = 'neith_auth_profile_v34_authoritative';
   const PROFILE_PERSISTENT_PREFIX = 'neith_identity_v34:';
@@ -262,8 +273,8 @@
 
             <form class="auth-form auth-form-v19 auth-form-v20" data-auth-form="login" novalidate>
               <label class="auth-field">
-                <span class="auth-field-title">CORREO ELECTRÓNICO</span>
-                <div class="auth-input-shell"><span class="auth-field-icon" aria-hidden="true">@</span><input name="email" type="email" autocomplete="email" autocapitalize="none" spellcheck="false" required placeholder="tu@correo.com"></div>
+                <span class="auth-field-title">CORREO O NOMBRE DE USUARIO</span>
+                <div class="auth-input-shell"><span class="auth-field-icon" aria-hidden="true">@</span><input name="email" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" required placeholder="tu@correo.com o usuario"></div>
               </label>
               <label class="auth-field">
                 <span class="auth-field-title">CONTRASEÑA</span>
@@ -274,14 +285,14 @@
                 <label class="auth-remember"><input type="checkbox" name="remember" value="1" data-auth-remember><span class="auth-check" aria-hidden="true"><i>✓</i></span><span>Recordar identificación</span></label>
                 <button class="auth-forgot" type="button" data-auth-switch="recover">¿Olvidaste tu contraseña?</button>
               </div>
-              <p class="auth-remember-note">Guardamos únicamente tu correo en este navegador. Nunca tu contraseña.</p>
+              <p class="auth-remember-note">Guardamos únicamente tu correo o nombre de usuario en este navegador. Nunca tu contraseña.</p>
 
               <button class="auth-submit auth-submit-v19" type="submit"><span>ENTRAR EN NEITH</span><em aria-hidden="true">→</em></button>
               <button class="auth-switch-link" type="button" data-auth-switch="register">¿No tienes cuenta? <strong>Crear Neith ID</strong></button>
             </form>
 
             <form class="auth-form auth-form-v19 auth-form-v20" data-auth-form="register" autocomplete="off" hidden novalidate>
-              <label class="auth-field"><span class="auth-field-title">NOMBRE DE USUARIO</span><div class="auth-input-shell"><span class="auth-field-icon" aria-hidden="true">N</span><input name="display_name" type="text" autocomplete="nickname" required maxlength="40" placeholder="Tu nombre en Neith"></div></label>
+              <label class="auth-field"><span class="auth-field-title">NOMBRE DE USUARIO</span><div class="auth-input-shell"><span class="auth-field-icon" aria-hidden="true">N</span><input name="display_name" type="text" autocomplete="nickname" required maxlength="20" placeholder="Tu nombre en Neith"></div></label>
               <label class="auth-field"><span class="auth-field-title">CORREO ELECTRÓNICO</span><div class="auth-input-shell"><span class="auth-field-icon" aria-hidden="true">@</span><input name="register_email" type="email" autocomplete="off" autocapitalize="none" spellcheck="false" data-lpignore="true" data-1p-ignore="true" required placeholder="tu@correo.com"></div></label>
               <label class="auth-field"><span class="auth-field-title">CONFIRMAR CORREO</span><div class="auth-input-shell"><span class="auth-field-icon" aria-hidden="true">✓</span><input name="register_email_confirm" type="email" autocomplete="off" autocapitalize="none" spellcheck="false" data-lpignore="true" data-1p-ignore="true" required placeholder="Repite tu correo"></div></label>
               <label class="auth-field"><span class="auth-field-title">CONTRASEÑA</span><div class="auth-input-shell password-field"><span class="auth-field-icon auth-lock-icon" aria-hidden="true">◇</span><input name="register_password" type="password" autocomplete="new-password" data-lpignore="true" required minlength="8" placeholder="Mínimo 8 caracteres"><button class="password-toggle" type="button" data-password-toggle aria-label="Mostrar contraseña" aria-pressed="false"><svg class="password-eye" viewBox="0 0 24 24" aria-hidden="true"><path class="eye-open" d="M2.4 12s3.4-6 9.6-6 9.6 6 9.6 6-3.4 6-9.6 6-9.6-6-9.6-6Z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle class="eye-open" cx="12" cy="12" r="2.7" fill="none" stroke="currentColor" stroke-width="1.8"/><path class="eye-slash" d="M4 4l16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></button></div></label>
@@ -417,30 +428,45 @@
   function hydrateRememberedIdentity() {
     const form = document.querySelector('[data-auth-form="login"]');
     if (!form) return;
-    const email = form.querySelector('input[name="email"]');
+    const identity = form.querySelector('input[name="email"]');
     const remember = form.querySelector('[data-auth-remember]');
     let saved = '';
     let pref = true;
     try {
-      saved = localStorage.getItem(REMEMBER_EMAIL_KEY) || '';
+      saved = localStorage.getItem(REMEMBER_IDENTITY_KEY) || localStorage.getItem(REMEMBER_EMAIL_KEY) || '';
       const rawPref = localStorage.getItem(REMEMBER_PREF_KEY);
       pref = rawPref === null ? true : rawPref === '1';
     } catch (_) {}
     if (remember) remember.checked = pref;
-    if (email && saved && !email.value) email.value = saved;
+    if (identity && saved && !identity.value) identity.value = saved;
   }
 
-  function persistRememberedIdentity(email, enabled) {
+  function persistRememberedIdentity(identity, enabled) {
     try {
       localStorage.setItem(REMEMBER_PREF_KEY, enabled ? '1' : '0');
-      if (enabled && email) localStorage.setItem(REMEMBER_EMAIL_KEY, String(email).trim());
-      else localStorage.removeItem(REMEMBER_EMAIL_KEY);
+      if (enabled && identity) {
+        localStorage.setItem(REMEMBER_IDENTITY_KEY, String(identity).trim());
+        localStorage.removeItem(REMEMBER_EMAIL_KEY);
+      } else {
+        localStorage.removeItem(REMEMBER_IDENTITY_KEY);
+        localStorage.removeItem(REMEMBER_EMAIL_KEY);
+      }
     } catch (_) {}
   }
 
-
   function normalizeEmail(value = '') {
     return String(value || '').trim().toLowerCase();
+  }
+
+  function normalizeUsername(value = '') {
+    return String(value || '').trim().toLowerCase();
+  }
+
+  async function invokeIdentityAuth(body) {
+    const { data, error } = await state.client.functions.invoke('neith-auth-identity', { body });
+    if (error) throw error;
+    if (!data?.ok) throw new Error(data?.error || 'identity_auth_failed');
+    return data;
   }
 
   function prepareRegisterForm({ clear = false } = {}) {
@@ -862,6 +888,9 @@
         const emailConfirm = normalizeEmail(form.querySelector('input[name="register_email_confirm"]')?.value);
         const password = String(form.querySelector('input[name="register_password"]')?.value || '');
         if (!displayNameValue) throw new Error(window.NeithI18n?.t?.('Introduce tu nombre de usuario.') || 'Introduce tu nombre de usuario.');
+        if (displayNameValue.length > 20) throw new Error(window.NeithI18n?.t?.('El nombre de usuario puede tener como máximo 20 caracteres.') || 'El nombre de usuario puede tener como máximo 20 caracteres.');
+        const usernameCheck = await invokeIdentityAuth({ action: 'check_username', username: displayNameValue });
+        if (!usernameCheck.available) throw new Error(window.NeithI18n?.t?.('Este nombre de usuario ya está en uso.') || 'Este nombre de usuario ya está en uso.');
         if (!email || !email.includes('@')) throw new Error(window.NeithI18n?.t?.('Introduce un correo electrónico válido.') || 'Introduce un correo electrónico válido.');
         if (email !== emailConfirm) throw new Error(window.NeithI18n?.t?.('Los correos no coinciden. Revisa la dirección antes de crear la cuenta.') || 'Los correos no coinciden. Revisa la dirección antes de crear la cuenta.');
         if (password.length < 8) throw new Error(window.NeithI18n?.t?.('La contraseña debe tener al menos 8 caracteres.') || 'La contraseña debe tener al menos 8 caracteres.');
@@ -871,7 +900,7 @@
           email,
           password,
           options: {
-            data: { display_name: displayNameValue },
+            data: { display_name: displayNameValue, nickname: displayNameValue, login_username: displayNameValue },
             emailRedirectTo: siteUrl('mi-cuenta/')
           }
         });
@@ -881,9 +910,35 @@
           console.error('[NEITH AUTH] Inconsistencia de correo en respuesta Supabase', { requested: email, returned: returnedEmail });
           throw new Error(window.NeithI18n?.t?.('Supabase devolvió un correo distinto al indicado. Registro detenido por seguridad.') || 'Supabase devolvió un correo distinto al indicado. Registro detenido por seguridad.');
         }
+        let createdSession = signupData?.session || null;
+        if (!createdSession) {
+          const { data: signedData, error: signInError } = await state.client.auth.signInWithPassword({ email, password });
+          if (signInError) throw signInError;
+          createdSession = signedData?.session || null;
+        }
+        if (!createdSession?.user) {
+          throw new Error(window.NeithI18n?.t?.('La cuenta se creó, pero no se pudo iniciar la sesión automáticamente.') || 'La cuenta se creó, pero no se pudo iniciar la sesión automáticamente.');
+        }
+
+        state.session = createdSession;
+        clearAdminRoleCache();
+        state.membership = null; state.membershipPeriods = []; state.membershipServerTime = null; state.membershipLastSync = 0;
+        hydrateImmediateIdentity(createdSession.user);
+        syncUI();
+        window.dispatchEvent(new CustomEvent('neith:authchange', { detail: { session: state.session, event: 'SIGNED_IN' } }));
+
         form.reset();
         prepareRegisterForm({ clear: true });
-        setMessage(`Cuenta creada correctamente. El correo de bienvenida se enviará automáticamente a: ${email}`, 'success');
+        closeAuth();
+        try {
+          const nextUrl = new URL(window.location.href);
+          nextUrl.searchParams.delete('register');
+          nextUrl.searchParams.delete('login');
+          window.history.replaceState({}, '', `${nextUrl.pathname}${nextUrl.search}${nextUrl.hash}`);
+        } catch {}
+
+        // Completa perfil/plan FREE desde la autoridad remota sin retrasar el cierre del modal.
+        loadAccountState({ force: true }).then(syncUI).catch(() => {});
       } else if (form.dataset.authForm === 'recover') {
         const redirectTo = siteUrl('recuperar-password/');
         const { error } = await state.client.auth.resetPasswordForEmail(data.email, { redirectTo });
@@ -892,9 +947,24 @@
         setMessage('Si existe una cuenta con ese correo, recibirás un enlace para crear una nueva contraseña.', 'success');
       } else {
         const remember = Boolean(form.querySelector('[data-auth-remember]')?.checked);
-        const email = normalizeEmail(data.email);
-        const { data: signInData, error } = await state.client.auth.signInWithPassword({ email, password: data.password });
-        if (error) throw error;
+        const identifier = String(data.email || '').trim();
+        if (!identifier) throw new Error(window.NeithI18n?.t?.('Introduce tu correo electrónico o nombre de usuario.') || 'Introduce tu correo electrónico o nombre de usuario.');
+        let signInData = null;
+        if (identifier.includes('@')) {
+          const email = normalizeEmail(identifier);
+          const result = await state.client.auth.signInWithPassword({ email, password: data.password });
+          if (result.error) throw result.error;
+          signInData = result.data;
+        } else {
+          try {
+            const resolved = await invokeIdentityAuth({ action: 'login_username', username: identifier, password: data.password });
+            const result = await state.client.auth.setSession({ access_token: resolved.access_token, refresh_token: resolved.refresh_token });
+            if (result.error) throw result.error;
+            signInData = result.data;
+          } catch (_) {
+            throw new Error(window.NeithI18n?.t?.('Correo, nombre de usuario o contraseña incorrectos.') || 'Correo, nombre de usuario o contraseña incorrectos.');
+          }
+        }
         if (signInData?.session) {
           state.session = signInData.session;
           hydrateImmediateIdentity(state.session.user);
@@ -903,7 +973,7 @@
           // Autoridad online en segundo plano; no bloquea el cierre del modal ni el primer frame.
           loadAccountState({ force: true }).then(syncUI).catch(() => {});
         }
-        persistRememberedIdentity(email, remember);
+        persistRememberedIdentity(identifier, remember);
         closeAuth();
       }
     } catch (error) {

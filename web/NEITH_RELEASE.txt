@@ -1,1 +1,9 @@
-Neith Official Web V34 R186 — Server-side welcome email trigger + PayPal LIVE web checkout CORS root fix
+Neith Official Web V34 R191 — Unique visitor counter
+
+- Adds a discreet unique visitor counter to the footer.
+- Uses an anonymous persistent browser/device identifier instead of raw page views.
+- Repeated visits from the same browser do not increase the count.
+- Counter data is persisted in Supabase.
+- No raw IP address is stored by this feature.
+- Responsive footer layout preserved.
+- R190 authentication and all existing website functionality remain intact.
