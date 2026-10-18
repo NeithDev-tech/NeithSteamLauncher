@@ -1,0 +1,19 @@
+
+/* R198 — SEO landing FAQ shared: additive, responsive, no layout replacement */
+.neith-seo-faq{padding:clamp(3rem,7vw,6rem) 0;background:linear-gradient(180deg,rgba(0,15,29,0),rgba(0,22,38,.56));}
+.neith-seo-faq .shell{width:min(92%,76rem);margin-inline:auto;}
+.neith-seo-faq-head{max-width:52rem;margin-bottom:clamp(1.5rem,3vw,2.4rem);}
+.neith-seo-faq-head .kicker{font-size:.78rem;letter-spacing:.18em;color:#68e8df;margin-bottom:.7rem;}
+.neith-seo-faq-head h2{margin:0;font-family:Orbitron,Inter,sans-serif;font-size:clamp(1.7rem,4vw,3.1rem);line-height:1.02;letter-spacing:-.035em;}
+.neith-seo-faq-head h2 span{color:#68e8df;}
+.neith-seo-faq-head p{max-width:44rem;color:#91a9b8;line-height:1.7;margin-top:1rem;}
+.neith-seo-faq-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(.75rem,1.4vw,1.1rem);}
+.neith-seo-faq-grid article{min-width:0;padding:clamp(1rem,2vw,1.4rem);border:1px solid rgba(104,232,223,.13);background:linear-gradient(145deg,rgba(5,25,40,.82),rgba(2,14,25,.9));box-shadow:0 1rem 2.4rem rgba(0,0,0,.14);}
+.neith-seo-faq-grid article b{display:block;color:#eefcff;font-size:clamp(.92rem,1.5vw,1.05rem);letter-spacing:.015em;margin-bottom:.55rem;}
+.neith-seo-faq-grid article p{margin:0;color:#89a2b2;line-height:1.65;font-size:.94rem;}
+.neith-seo-faq-cta{margin-top:clamp(1rem,2vw,1.4rem);display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:clamp(1rem,2.2vw,1.45rem);border:1px solid rgba(104,232,223,.18);background:rgba(4,24,38,.78);}
+.neith-seo-faq-cta small{display:block;color:#5e8798;font-size:.68rem;letter-spacing:.15em;margin-bottom:.25rem;}
+.neith-seo-faq-cta b{color:#effdff;font-family:Oxanium,Inter,sans-serif;letter-spacing:.035em;}
+.neith-seo-faq-cta a{flex:0 0 auto;text-decoration:none;color:#001018;background:#68e8df;font-family:Oxanium,Inter,sans-serif;font-weight:800;font-size:.78rem;letter-spacing:.06em;padding:.78rem 1rem;transition:transform .2s ease,filter .2s ease;}
+.neith-seo-faq-cta a:hover{transform:translateY(-2px);filter:brightness(1.08);}
+@media(max-width:720px){.neith-seo-faq-grid{grid-template-columns:1fr}.neith-seo-faq-cta{align-items:flex-start;flex-direction:column}.neith-seo-faq-cta a{width:100%;box-sizing:border-box;text-align:center}}

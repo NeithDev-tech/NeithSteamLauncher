@@ -1,0 +1,20 @@
+
+.hb196-faq{position:relative;padding-block:clamp(4rem,8vw,7rem);overflow:hidden}
+.hb196-faq::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(0,210,255,.07),transparent 42%);pointer-events:none}
+.hb196-faq>.shell{position:relative;z-index:1}
+.hb196-faq-head{max-width:52rem;margin-inline:auto;text-align:center}
+.hb196-faq-head h2{margin:.65rem 0 1rem;font-family:Orbitron,sans-serif;font-size:clamp(2rem,4.8vw,4rem);line-height:1.03;letter-spacing:-.04em;color:#f2fbff}
+.hb196-faq-head h2 span{color:#53d8ff}
+.hb196-faq-head p{margin:0 auto;color:#8aa7b9;max-width:44rem;font-size:clamp(.98rem,1.5vw,1.08rem);line-height:1.75}
+.hb196-faq-grid{display:grid;gap:.78rem;max-width:62rem;margin:clamp(2rem,4vw,3.2rem) auto 0}
+.hb196-faq-grid details{border:1px solid rgba(83,216,255,.14);background:linear-gradient(180deg,rgba(7,24,39,.86),rgba(4,15,27,.9));border-radius:1rem;overflow:hidden;box-shadow:0 1rem 3rem rgba(0,0,0,.16)}
+.hb196-faq-grid summary{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1.05rem 1.2rem;cursor:pointer;list-style:none;font-family:Oxanium,sans-serif;font-weight:700;letter-spacing:.02em;color:#dff8ff}
+.hb196-faq-grid summary::-webkit-details-marker{display:none}
+.hb196-faq-grid summary span{display:grid;place-items:center;flex:0 0 auto;width:1.75rem;height:1.75rem;border:1px solid rgba(83,216,255,.24);border-radius:50%;color:#53d8ff;transition:transform .2s ease}
+.hb196-faq-grid details[open] summary span{transform:rotate(45deg)}
+.hb196-faq-grid details p{margin:0;padding:0 1.2rem 1.2rem;color:#89a8bb;line-height:1.75}
+.hb196-faq-cta{display:flex;align-items:center;justify-content:space-between;gap:1.25rem;max-width:62rem;margin:1rem auto 0;padding:1.15rem 1.25rem;border:1px solid rgba(83,216,255,.12);border-radius:1rem;background:rgba(5,19,31,.72)}
+.hb196-faq-cta small{display:block;color:#6f91a6;font-family:Rajdhani,sans-serif;font-weight:700;letter-spacing:.16em}
+.hb196-faq-cta b{display:block;margin-top:.2rem;color:#f0fbff;font-family:Oxanium,sans-serif}
+.hb196-faq-cta a{display:inline-flex;align-items:center;gap:.6rem;text-decoration:none;color:#00101f;background:#55ddff;border-radius:.8rem;padding:.85rem 1rem;font-family:Oxanium,sans-serif;font-weight:800;white-space:nowrap}
+@media (max-width:48rem){.hb196-faq-cta{align-items:stretch;flex-direction:column}.hb196-faq-cta a{justify-content:center;width:100%;box-sizing:border-box}.hb196-faq-grid summary{align-items:flex-start}}

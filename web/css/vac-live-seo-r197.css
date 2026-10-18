@@ -1,0 +1,20 @@
+
+.vacseo-faq{position:relative;padding:clamp(4.25rem,8vw,7.5rem) 0 clamp(4.5rem,8vw,7rem);overflow:hidden}
+.vacseo-faq:before{content:"";position:absolute;inset:8% 8% auto;height:46%;background:radial-gradient(circle at 50% 50%,rgba(42,190,160,.095),transparent 65%);pointer-events:none}
+.vacseo-faq-shell{position:relative;z-index:1}
+.vacseo-faq-head{max-width:56rem;margin:0 auto clamp(2rem,4vw,3.25rem);text-align:center}
+.vacseo-faq-head h2{margin:.7rem 0 1rem;font-family:Orbitron,sans-serif;font-size:clamp(1.75rem,4.2vw,3.2rem);line-height:1.08;letter-spacing:-.03em}
+.vacseo-faq-head h2 span{color:#54e7c2}
+.vacseo-faq-head p{max-width:45rem;margin:0 auto;color:rgba(220,241,247,.7);font-size:clamp(.96rem,1.5vw,1.08rem);line-height:1.75}
+.vacseo-faq-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(.7rem,1.4vw,1rem);max-width:66rem;margin:0 auto}
+.vacseo-faq-grid details{border:1px solid rgba(92,224,197,.12);border-radius:clamp(.85rem,1.7vw,1.1rem);background:linear-gradient(145deg,rgba(5,26,40,.88),rgba(2,14,25,.8));box-shadow:inset 0 1px rgba(255,255,255,.025);overflow:hidden}
+.vacseo-faq-grid details:first-child{grid-column:1/-1}
+.vacseo-faq-grid summary{cursor:pointer;list-style:none;padding:clamp(1rem,2vw,1.25rem) clamp(1rem,2vw,1.35rem);font-family:Oxanium,sans-serif;font-weight:700;letter-spacing:.025em;color:#ecfbff;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.vacseo-faq-grid summary::-webkit-details-marker{display:none}
+.vacseo-faq-grid summary:after{content:"+";color:#54e7c2;font-size:1.15rem;transition:transform .2s ease}
+.vacseo-faq-grid details[open] summary:after{transform:rotate(45deg)}
+.vacseo-faq-grid p{margin:0;padding:0 clamp(1rem,2vw,1.35rem) clamp(1rem,2vw,1.35rem);color:rgba(210,235,241,.7);line-height:1.7;font-size:.96rem}
+.vacseo-cta{max-width:66rem;margin:clamp(1.25rem,3vw,2rem) auto 0;padding:clamp(1.15rem,2.4vw,1.6rem);display:flex;align-items:center;justify-content:space-between;gap:1.25rem;border:1px solid rgba(91,229,198,.18);border-radius:clamp(1rem,2vw,1.35rem);background:linear-gradient(135deg,rgba(7,31,45,.94),rgba(3,20,31,.9));box-shadow:0 1.2rem 3rem rgba(0,0,0,.18)}
+.vacseo-cta div{display:grid;gap:.35rem}.vacseo-cta span{font-family:Oxanium,sans-serif;font-size:.72rem;letter-spacing:.16em;color:#54e7c2}.vacseo-cta strong{font-family:Orbitron,sans-serif;font-size:clamp(.92rem,1.65vw,1.1rem);line-height:1.45;color:#effcff}
+.vacseo-cta .btn{flex:0 0 auto;white-space:nowrap}
+@media (max-width:760px){.vacseo-faq-grid{grid-template-columns:1fr}.vacseo-faq-grid details:first-child{grid-column:auto}.vacseo-cta{align-items:stretch;flex-direction:column}.vacseo-cta .btn{width:100%;justify-content:center;text-align:center}}
