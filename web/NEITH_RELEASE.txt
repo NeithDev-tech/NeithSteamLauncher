@@ -1,9 +1,7 @@
-Neith Official Web V34 R194 — Google SEO & indexing safe
+Neith Official Web V34 R203 — Full English Translation SAFE
 
-- SEO metadata refined for Neith Launcher PRO, VAC LIVE, Hour Boost and Boost PC.
-- Canonical stays on https://www.neithlauncher.com/.
-- Open Graph and Twitter metadata completed.
-- Added SoftwareApplication structured data without ratings or invented claims.
-- robots.txt protects private/account areas from crawling.
-- sitemap.xml cleaned: removes the obsolete pages.dev dashboard URL and adds the main public sections.
-- No visual, visitor-counter, authentication, payment or download behavior changes.
+- Complete English translation pass for every public section reachable from the language selector.
+- Expanded translation coverage for Home, Hour Boost, VAC LIVE, Boost PC, Accounts, Achievements, Free Games, Library, FREE/PREMIUM, Account, License, Security, Recovery and Admin Center.
+- Added translations for dynamic authentication, billing, recovery, Free Games and administrative messages.
+- English dictionary cache version bumped so browsers fetch the new translation immediately.
+- No visual layout, Supabase schema, visitor counter, payment flow, download flow or launcher behavior changed.

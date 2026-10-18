@@ -10,7 +10,7 @@
   let dictionaryPromise = null;
 
   const scriptUrl = document.currentScript?.src || location.href;
-  const DICTIONARY_URL = new URL('./i18n-en.json?v=20260924-r59', scriptUrl).href;
+  const DICTIONARY_URL = new URL('./i18n-en.json?v=20261018-r203-full-en', scriptUrl).href;
 
   const queryLang = (() => {
     try {
