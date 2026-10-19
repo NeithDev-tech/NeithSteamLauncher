@@ -1,6 +1,7 @@
 (() => {
   'use strict';
   const STORAGE_KEY = 'neith_language';
+  const USER_CHOICE_KEY = 'neith_language_user_choice_r204';
   const ATTRS = ['title','aria-label','placeholder','alt','content','value','data-caption','data-text','data-account-level','data-account-role','data-account-status','data-search','data-label','data-title','data-description'];
   const textSource = new WeakMap();
   const attrSource = new WeakMap();
@@ -10,7 +11,7 @@
   let dictionaryPromise = null;
 
   const scriptUrl = document.currentScript?.src || location.href;
-  const DICTIONARY_URL = new URL('./i18n-en.json?v=20261018-r203-full-en', scriptUrl).href;
+  const DICTIONARY_URL = new URL('./i18n-en.json?v=20261019-r204-default-english-root', scriptUrl).href;
 
   const queryLang = (() => {
     try {
@@ -18,8 +19,10 @@
       return v === 'en' || v === 'es' ? v : null;
     } catch { return null; }
   })();
-  let lang = queryLang || localStorage.getItem(STORAGE_KEY) || document.documentElement.lang || 'es';
-  if (lang !== 'en') lang = 'es';
+  let savedChoice = null;
+  try { savedChoice = localStorage.getItem(USER_CHOICE_KEY); } catch {}
+  let lang = queryLang || (savedChoice === 'en' || savedChoice === 'es' ? savedChoice : null) || 'en';
+  if (lang !== 'es') lang = 'en';
 
   function ensureDictionary() {
     if (ES_TO_EN && EN_TO_ES) return Promise.resolve(ES_TO_EN);
@@ -131,7 +134,7 @@
       try { await ensureDictionary(); } catch { return; }
     }
     lang=next;
-    if(persist)localStorage.setItem(STORAGE_KEY,lang);
+    if(persist){ try { localStorage.setItem(USER_CHOICE_KEY,lang); localStorage.setItem(STORAGE_KEY,lang); } catch {} }
     apply();
     window.dispatchEvent(new CustomEvent('neith:languagechange',{detail:{language:lang}}));
     requestAnimationFrame(() => apply());
@@ -157,7 +160,7 @@
     images();buttons();
     if(lang==='en'){
       try { await ensureDictionary(); apply(); }
-      catch { lang='es'; document.documentElement.lang='es'; buttons(); }
+      catch { lang='en'; document.documentElement.lang='en'; buttons(); }
     }
 
     let queued=[]; let frame=0;
