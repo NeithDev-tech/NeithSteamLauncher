@@ -29,6 +29,19 @@
     return u.href;
   }
 
+  async function safeRpc(name, args) {
+    try {
+      const client = window.NeithAuth?.client;
+      if (!client?.rpc) return null;
+      const {data, error} = await client.rpc(name, args || {});
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      console.warn('[Neith Billing telemetry]', name, error);
+      return null;
+    }
+  }
+
   async function openCheckout(button) {
     const kind = String(button.dataset.plan || '').toLowerCase();
     if (!['monthly','annual'].includes(kind)) throw new Error('Plan PREMIUM no válido.');
@@ -43,6 +56,12 @@
     const base = String(cfg.supabaseUrl || '').replace(/\/+$/,'');
     const anon = String(cfg.supabaseAnonKey || '');
     if (!base.startsWith('https://') || !anon) throw new Error('Neith Billing no está disponible.');
+
+    let attemptId = null;
+    attemptId = await safeRpc('neith_purchase_attempt_start', {
+      p_plan: kind,
+      p_source_page: `${location.pathname}${location.search || ''}`
+    });
 
     const response = await fetch(`${base}/functions/v1/paypal-checkout`, {
       method: 'POST',
@@ -65,9 +84,15 @@
       if (/Permanent PREMIUM/i.test(raw)) {
         throw new Error('Tu cuenta ya tiene PREMIUM permanente y no necesita otra suscripción.');
       }
+      if (attemptId) await safeRpc('neith_purchase_attempt_mark_failed', {p_attempt_id: attemptId, p_error: raw});
       throw new Error(raw);
     }
-    return safePayPalUrl(data?.approval_url || data?.url);
+    const approval = safePayPalUrl(data?.approval_url || data?.url);
+    if (attemptId) {
+      await safeRpc('neith_purchase_attempt_mark_opened', {p_attempt_id: attemptId});
+      try { sessionStorage.setItem('neith_purchase_attempt_id', String(attemptId)); } catch (_) {}
+    }
+    return approval;
   }
 
   document.addEventListener('click', async e => {

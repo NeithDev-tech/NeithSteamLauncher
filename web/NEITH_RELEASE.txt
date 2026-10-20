@@ -1,7 +1,19 @@
-Neith Official Web V34 R203 — Full English Translation SAFE
+Neith Official Web V34 R221
 
-- Complete English translation pass for every public section reachable from the language selector.
-- Expanded translation coverage for Home, Hour Boost, VAC LIVE, Boost PC, Accounts, Achievements, Free Games, Library, FREE/PREMIUM, Account, License, Security, Recovery and Admin Center.
-- Added translations for dynamic authentication, billing, recovery, Free Games and administrative messages.
-- English dictionary cache version bumped so browsers fetch the new translation immediately.
-- No visual layout, Supabase schema, visitor counter, payment flow, download flow or launcher behavior changed.
+Purchase Attempts / checkout intent tracking (WEB + Supabase only):
+- records authenticated PREMIUM checkout starts from the website
+- records successful PayPal approval URL creation / redirect intent
+- records checkout creation failures without blocking checkout
+- automatically marks matching PayPal monthly/annual purchases as PAID when the authoritative premium period is created
+- computes abandoned attempts after 30 minutes without payment
+- owner-only PURCHASE ATTEMPTS module in Admin Center
+- realtime updates through Supabase Realtime + 5s safety refresh while the module is open
+- metrics: attempts today, PayPal opened, paid today, active now, abandoned 24h, conversion today
+- filters and user/plan/time/source details
+- no launcher files or launcher behavior changed
+
+Security:
+- direct table writes are not exposed to users
+- tracking RPCs only act on auth.uid()
+- admin snapshot and table reads are owner-only
+- no card, PayPal credential or sensitive payment data is stored
