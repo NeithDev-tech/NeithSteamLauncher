@@ -6,6 +6,12 @@
   const jsBase = new URL('./', scriptUrl);
   const src = name => new URL(name, jsBase).href;
 
+  // R231: Hour Boost uses a different FREE/PREMIUM section class.
+  // Mark it before header-controller runs so it uses the same donation replacement
+  // already working in Boost PC, Achievements, Free Games and Accounts.
+  const hourBoostPlans = document.querySelector('.hb136-plans');
+  if (hourBoostPlans) hourBoostPlans.classList.add('bp172-plans');
+
   const SUPABASE_CDN = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
   let loadPromise = null;
 
