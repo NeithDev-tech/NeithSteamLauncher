@@ -20,12 +20,27 @@
     document.head.appendChild(style);
   }
 
+  function restoreVacLiveNav() {
+    document.querySelectorAll('.navlinks a[href*="vac-live"]').forEach(link => {
+      link.textContent = 'VAC LIVE';
+    });
+  }
+
   function ensurePublicPurchaseHidden() {
     if (location.pathname.includes('/admin/') || location.pathname.includes('/premium/')) return;
+
     if (!document.getElementById('neith-public-purchase-hidden-r223')) {
       const style = document.createElement('style');
       style.id = 'neith-public-purchase-hidden-r223';
-      style.textContent = `[data-premium-checkout],.premium147-price-grid,.premium147-plan-actions--premium,.premium147-store-state,.premium147-note,.premium147-cta-panel{display:none!important}`;
+      style.textContent = [
+        '[data-premium-checkout]',
+        '.neith-plan-dualprice',
+        '.premium147-price-grid',
+        '.premium147-plan-actions--premium',
+        '.premium147-store-state',
+        '.premium147-note',
+        '.premium147-cta-panel'
+      ].join(',') + '{display:none!important}';
       document.head.appendChild(style);
     }
 
@@ -33,13 +48,14 @@
       if (/paypal/i.test(el.textContent || '')) el.remove();
     });
 
-    document.querySelectorAll('[data-premium-checkout]').forEach(el => el.remove());
+    document.querySelectorAll('[data-premium-checkout],.neith-plan-dualprice,.premium147-price-grid,.premium147-plan-actions--premium,.premium147-store-state,.premium147-note,.premium147-cta-panel').forEach(el => el.remove());
+
     document.querySelectorAll('a,button').forEach(el => {
       if (el.matches('[data-owner-premium-shortcut]')) return;
       const plan = String(el.getAttribute('data-plan') || '').toLowerCase();
       const text = String(el.textContent || '').replace(/\s+/g, ' ').trim();
       if (plan === 'monthly' || plan === 'annual') { el.remove(); return; }
-      if (/€\s*(?:1\.99|7\.99|69\.99)/i.test(text) && /(month|year|mes|año|ano)/i.test(text)) el.remove();
+      if (/€\s*(?:1[.,]99|7[.,]99|69[.,]99)/i.test(text) && /(month|year|mes|año|ano)/i.test(text)) el.remove();
     });
   }
 
@@ -100,6 +116,7 @@
   function boot() {
     sanitize(document);
     ensurePremiumStyle();
+    restoreVacLiveNav();
     ensurePublicPurchaseHidden();
     syncPremiumShortcut();
 
@@ -114,6 +131,7 @@
           else if (node.querySelector?.('[data-auth-nav]')) { sanitize(node); authChanged = true; }
         }
       }
+      restoreVacLiveNav();
       if (authChanged) syncPremiumShortcut();
     });
     observer.observe(header, { subtree: true, childList: true });
@@ -122,10 +140,14 @@
   window.addEventListener('neith:authchange', event => {
     const userId = event?.detail?.session?.user?.id;
     if (!userId) ownerCache.clear();
+    restoreVacLiveNav();
     ensurePublicPurchaseHidden();
     syncPremiumShortcut();
   });
-  window.addEventListener('neith:languagechange', ensurePublicPurchaseHidden);
+  window.addEventListener('neith:languagechange', () => {
+    restoreVacLiveNav();
+    ensurePublicPurchaseHidden();
+  });
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
   else boot();
