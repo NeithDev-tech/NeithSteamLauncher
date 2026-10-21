@@ -105,24 +105,23 @@
   }
 
   function ensureDonationStyle() {
-    if (document.getElementById('neith-home-donation-r228-style')) return;
+    if (document.getElementById('neith-home-donation-r229-style')) return;
     const style = document.createElement('style');
-    style.id = 'neith-home-donation-r228-style';
+    style.id = 'neith-home-donation-r229-style';
     style.textContent = `
       .home44-membership.home228-donation-mode{position:relative;overflow:hidden;padding:78px 0 82px!important;background:radial-gradient(circle at 13% 25%,rgba(0,222,255,.14),transparent 32%),radial-gradient(circle at 88% 12%,rgba(100,82,255,.18),transparent 34%),linear-gradient(180deg,#00101f 0%,#04192f 52%,#00101f 100%)!important;border-top:1px solid rgba(65,220,255,.18);border-bottom:1px solid rgba(65,220,255,.14)}
       .home44-membership.home228-donation-mode:before{content:"";position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(58,207,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(58,207,255,.04) 1px,transparent 1px);background-size:48px 48px;mask-image:linear-gradient(to bottom,transparent,black 15%,black 85%,transparent)}
       .home228-donation-mode .home44-membership-ambient{display:block!important;opacity:.45}
-      .home228-donation-mode .home44-membership-shell{position:relative;z-index:2;max-width:1180px}
+      .home228-donation-mode .home44-membership-shell{position:relative;z-index:2;max-width:1180px;margin:0 auto}
       .home228-donation-mode .home44-membership-head{display:block!important;opacity:1!important;transform:none!important;text-align:left;max-width:none;margin:0 0 26px}
       .home228-donation-mode .home44-membership-kicker{display:inline-flex;align-items:center;gap:9px;color:#54e8ff}
       .home228-donation-mode .home44-membership-kicker b{margin-left:8px;padding:6px 9px;border:1px solid rgba(58,244,169,.25);border-radius:999px;background:rgba(34,110,81,.12);color:#5bf2ae;font-size:9px}
-      .home228-donation-mode .home44-membership-head h2{max-width:950px;margin:12px 0 10px;font-size:clamp(32px,4.6vw,62px);line-height:.98;letter-spacing:-.035em;text-align:left}
+      .home228-donation-mode .home44-membership-head h2{max-width:950px;margin:12px 0 10px;font:900 clamp(32px,4.6vw,62px)/.98 Orbitron,Inter,sans-serif;letter-spacing:-.035em;text-align:left;color:#f4fdff}
       .home228-donation-mode .home44-membership-head h2 span{display:block;background:linear-gradient(90deg,#50eaff,#27b1ff 55%,#8970ff);-webkit-background-clip:text;background-clip:text;color:transparent}
-      .home228-donation-mode .home44-membership-head p{max-width:790px;margin:0;color:#93bac9;font-size:14px;line-height:1.65;text-align:left}
+      .home228-donation-mode .home44-membership-head p{max-width:790px;margin:0;color:#93bac9;font:500 14px/1.65 Inter,sans-serif;text-align:left}
       .home228-donation-mode .home44-plan-grid{display:grid!important;grid-template-columns:1fr!important;gap:0!important;opacity:1!important;transform:none!important}
       .home228-donation-mode .home44-plan-free{display:none!important}
       .home228-donation-mode .home44-plan-premium{display:block!important;min-height:0!important;padding:0!important;overflow:visible!important;border:0!important;background:transparent!important;box-shadow:none!important}
-      .home228-donation-mode .home44-plan-premium>.home44-plan-beam,.home228-donation-mode .home44-plan-premium>.home44-plan-orbit{display:none!important}
       .home228-panel{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(330px,.65fr);gap:18px}
       .home228-main,.home228-pass{position:relative;overflow:hidden;border:1px solid rgba(64,219,255,.23);border-radius:22px;background:linear-gradient(145deg,rgba(6,34,55,.96),rgba(2,18,31,.98));box-shadow:0 25px 70px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.035)}
       .home228-main{padding:23px}.home228-pass{padding:24px;background:radial-gradient(circle at 88% 0%,rgba(93,91,255,.22),transparent 38%),linear-gradient(155deg,#08243c,#041625 72%)}
@@ -142,38 +141,8 @@
     document.head.appendChild(style);
   }
 
-  function applyDonationLanguage() {
-    const root = document.querySelector('.home228-donation-mode');
-    if (!root) return;
-    const copy = donationCopy[donationLanguage()];
-    root.querySelectorAll('[data-donation-key]').forEach(el => {
-      const value = copy[el.dataset.donationKey];
-      if (value != null) el.textContent = value;
-    });
-  }
-
-  function installHomeDonation() {
-    const section = document.querySelector('.home44-membership');
-    if (!section || section.dataset.home228Ready === '1') return;
-    const head = section.querySelector('.home44-membership-head');
-    const kicker = section.querySelector('.home44-membership-kicker');
-    const title = head?.querySelector('h2');
-    const intro = head?.querySelector('p');
-    const freeCard = section.querySelector('.home44-plan-free');
-    const premiumCard = section.querySelector('.home44-plan-premium');
-    const notes = section.querySelector('.home44-membership-notes');
-    if (!head || !kicker || !title || !intro || !premiumCard || !notes) return;
-
-    ensureDonationStyle();
-    section.dataset.home228Ready = '1';
-    section.classList.add('home228-donation-mode');
-    freeCard?.remove();
-
-    kicker.innerHTML = '<i></i><span data-donation-key="kicker"></span><b data-donation-key="badge"></b>';
-    title.innerHTML = '<span data-donation-key="titleA"></span><span data-donation-key="titleB"></span>';
-    intro.setAttribute('data-donation-key','intro');
-
-    premiumCard.innerHTML = `
+  function donationPanelMarkup() {
+    return `
       <div class="home228-panel">
         <div class="home228-main">
           <div class="home228-main-top">
@@ -198,12 +167,77 @@
           <div class="home228-price-sub" data-donation-key="priceSub"></div>
           <div class="home228-pass-list"><span><i></i><b data-donation-key="feature1"></b></span><span><i></i><b data-donation-key="feature2"></b></span><span><i></i><b data-donation-key="feature3"></b></span><span><i></i><b data-donation-key="feature4"></b></span></div>
         </aside>
-      </div>
-    `;
+      </div>`;
+  }
 
+  function donationShellMarkup() {
+    return `
+      <div aria-hidden="true" class="home44-membership-ambient"><i></i><i></i><i></i></div>
+      <div class="shell home44-membership-shell">
+        <div class="home44-membership-head">
+          <div class="home44-membership-kicker"><i></i><span data-donation-key="kicker"></span><b data-donation-key="badge"></b></div>
+          <h2><span data-donation-key="titleA"></span><span data-donation-key="titleB"></span></h2>
+          <p data-donation-key="intro"></p>
+        </div>
+        <div class="home44-plan-grid">
+          <article class="home44-plan home44-plan-premium">${donationPanelMarkup()}</article>
+        </div>
+        <div class="home44-membership-notes home228-notes">
+          <span><b data-donation-key="footA"></b></span>
+          <span><b data-donation-key="footB"></b></span>
+          <span><b data-donation-key="footC"></b></span>
+          <span><b data-donation-key="footD"></b></span>
+        </div>
+      </div>`;
+  }
+
+  function applyDonationLanguage() {
+    const copy = donationCopy[donationLanguage()];
+    document.querySelectorAll('.home228-donation-mode').forEach(root => {
+      root.querySelectorAll('[data-donation-key]').forEach(el => {
+        const value = copy[el.dataset.donationKey];
+        if (value != null) el.textContent = value;
+      });
+    });
+  }
+
+  function installHomeDonation() {
+    const section = document.querySelector('.home44-membership');
+    if (!section || section.dataset.home228Ready === '1') return;
+    const head = section.querySelector('.home44-membership-head');
+    const kicker = section.querySelector('.home44-membership-kicker');
+    const title = head?.querySelector('h2');
+    const intro = head?.querySelector('p');
+    const freeCard = section.querySelector('.home44-plan-free');
+    const premiumCard = section.querySelector('.home44-plan-premium');
+    const notes = section.querySelector('.home44-membership-notes');
+    if (!head || !kicker || !title || !intro || !premiumCard || !notes) return;
+
+    ensureDonationStyle();
+    section.dataset.home228Ready = '1';
+    section.classList.add('home228-donation-mode');
+    freeCard?.remove();
+    kicker.innerHTML = '<i></i><span data-donation-key="kicker"></span><b data-donation-key="badge"></b>';
+    title.innerHTML = '<span data-donation-key="titleA"></span><span data-donation-key="titleB"></span>';
+    intro.setAttribute('data-donation-key','intro');
+    premiumCard.innerHTML = donationPanelMarkup();
     notes.classList.add('home228-notes');
     notes.innerHTML = '<span><b data-donation-key="footA"></b></span><span><b data-donation-key="footB"></b></span><span><b data-donation-key="footC"></b></span><span><b data-donation-key="footD"></b></span>';
-    applyDonationLanguage();
+  }
+
+  function installFeatureDonations() {
+    const selectors = ['.bp172-plans', '.logros178-plans', '.freegames144-plans', '.accounts145-plans'];
+    let changed = false;
+    selectors.forEach(selector => {
+      const section = document.querySelector(selector);
+      if (!section || section.dataset.home229Ready === '1') return;
+      section.dataset.home229Ready = '1';
+      section.classList.add('home44-membership', 'home228-donation-mode');
+      section.removeAttribute('id');
+      section.innerHTML = donationShellMarkup();
+      changed = true;
+    });
+    if (changed) ensureDonationStyle();
   }
 
   function premiumUrl() {
@@ -263,6 +297,8 @@
     ensurePremiumStyle();
     ensurePublicPurchaseHiddenStyle();
     installHomeDonation();
+    installFeatureDonations();
+    applyDonationLanguage();
     syncPremiumShortcut();
 
     const header = document.querySelector('.topbar');
@@ -288,6 +324,6 @@
   });
   window.addEventListener('neith:languagechange', () => requestAnimationFrame(applyDonationLanguage));
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once:true });
   else boot();
 })();
