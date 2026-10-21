@@ -32,11 +32,178 @@
       .premium147-store-state,
       .premium147-note,
       .premium147-cta-panel,
-      .premium147-pills > span:nth-child(2) {
-        display:none !important;
-      }
+      .premium147-pills > span:nth-child(2) { display:none !important; }
     `;
     document.head.appendChild(style);
+  }
+
+  const donationCopy = {
+    en: {
+      kicker: 'NEITH PREMIUM // SUPPORT THE PROJECT',
+      badge: '30 DAYS · FULL PREMIUM',
+      titleA: 'SUPPORT NEITH.',
+      titleB: 'UNLOCK 30 DAYS PREMIUM.',
+      intro: 'A direct contribution to keep Neith growing. Donate €4.90, identify your Neith username in the PayPal note and your account will be activated in less than 24 hours.',
+      pass: 'NEITH PREMIUM PASS',
+      passSub: 'SUPPORT EDITION',
+      priceSub: 'ONE-TIME DONATION',
+      activation: 'MANUAL VERIFIED ACTIVATION',
+      step1: 'DONATE €4.90',
+      step1p: 'Open the official Neith PayPal donation link.',
+      step2: 'ADD YOUR NEITH USERNAME',
+      step2p: 'Write your exact Neith username in the donation note.',
+      step3: 'PREMIUM ACTIVATED',
+      step3p: 'We verify the donation and activate 30 full days in under 24 hours.',
+      important: 'IMPORTANT',
+      importantText: 'Your Neith username in the PayPal note is required so we know which account to activate.',
+      donate: 'DONATE €4.90 · GET PREMIUM',
+      discord: 'JOIN DISCORD',
+      contact: 'CONTACT NEITH',
+      feature1: '30 FULL DAYS OF PREMIUM',
+      feature2: 'ALL PREMIUM FEATURES',
+      feature3: 'NO AUTOMATIC RENEWAL',
+      feature4: 'ACTIVATION < 24H',
+      footA: 'ONE NEITH ID',
+      footB: 'VERIFIED ACTIVATION',
+      footC: 'NO SUBSCRIPTION',
+      footD: 'DIRECT SUPPORT'
+    },
+    es: {
+      kicker: 'NEITH PREMIUM // APOYA EL PROYECTO',
+      badge: '30 DÍAS · PREMIUM COMPLETO',
+      titleA: 'APOYA NEITH.',
+      titleB: 'DESBLOQUEA 30 DÍAS PREMIUM.',
+      intro: 'Una aportación directa para ayudar a que Neith siga creciendo. Dona 4,90 €, identifica tu usuario de Neith en la nota de PayPal y tu cuenta será activada en menos de 24 horas.',
+      pass: 'NEITH PREMIUM PASS',
+      passSub: 'SUPPORT EDITION',
+      priceSub: 'DONACIÓN ÚNICA',
+      activation: 'ACTIVACIÓN MANUAL VERIFICADA',
+      step1: 'DONA 4,90 €',
+      step1p: 'Abre el enlace oficial de donación PayPal de Neith.',
+      step2: 'AÑADE TU USUARIO DE NEITH',
+      step2p: 'Escribe tu nombre exacto de usuario Neith en la nota de la donación.',
+      step3: 'PREMIUM ACTIVADO',
+      step3p: 'Verificamos la donación y activamos 30 días completos en menos de 24 horas.',
+      important: 'IMPORTANTE',
+      importantText: 'Es obligatorio poner tu usuario de Neith en la nota de PayPal para saber qué cuenta debemos activar.',
+      donate: 'DONAR 4,90 € · CONSEGUIR PREMIUM',
+      discord: 'UNIRME A DISCORD',
+      contact: 'CONTACTAR CON NEITH',
+      feature1: '30 DÍAS COMPLETOS DE PREMIUM',
+      feature2: 'TODAS LAS FUNCIONES PREMIUM',
+      feature3: 'SIN RENOVACIÓN AUTOMÁTICA',
+      feature4: 'ACTIVACIÓN < 24H',
+      footA: 'UN NEITH ID',
+      footB: 'ACTIVACIÓN VERIFICADA',
+      footC: 'SIN SUSCRIPCIÓN',
+      footD: 'APOYO DIRECTO'
+    }
+  };
+
+  function donationLanguage() {
+    return window.NeithI18n?.language === 'es' ? 'es' : 'en';
+  }
+
+  function ensureDonationStyle() {
+    if (document.getElementById('neith-home-donation-r228-style')) return;
+    const style = document.createElement('style');
+    style.id = 'neith-home-donation-r228-style';
+    style.textContent = `
+      .home44-membership.home228-donation-mode{position:relative;overflow:hidden;padding:78px 0 82px!important;background:radial-gradient(circle at 13% 25%,rgba(0,222,255,.14),transparent 32%),radial-gradient(circle at 88% 12%,rgba(100,82,255,.18),transparent 34%),linear-gradient(180deg,#00101f 0%,#04192f 52%,#00101f 100%)!important;border-top:1px solid rgba(65,220,255,.18);border-bottom:1px solid rgba(65,220,255,.14)}
+      .home44-membership.home228-donation-mode:before{content:"";position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(58,207,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(58,207,255,.04) 1px,transparent 1px);background-size:48px 48px;mask-image:linear-gradient(to bottom,transparent,black 15%,black 85%,transparent)}
+      .home228-donation-mode .home44-membership-ambient{display:block!important;opacity:.45}
+      .home228-donation-mode .home44-membership-shell{position:relative;z-index:2;max-width:1180px}
+      .home228-donation-mode .home44-membership-head{display:block!important;opacity:1!important;transform:none!important;text-align:left;max-width:none;margin:0 0 26px}
+      .home228-donation-mode .home44-membership-kicker{display:inline-flex;align-items:center;gap:9px;color:#54e8ff}
+      .home228-donation-mode .home44-membership-kicker b{margin-left:8px;padding:6px 9px;border:1px solid rgba(58,244,169,.25);border-radius:999px;background:rgba(34,110,81,.12);color:#5bf2ae;font-size:9px}
+      .home228-donation-mode .home44-membership-head h2{max-width:950px;margin:12px 0 10px;font-size:clamp(32px,4.6vw,62px);line-height:.98;letter-spacing:-.035em;text-align:left}
+      .home228-donation-mode .home44-membership-head h2 span{display:block;background:linear-gradient(90deg,#50eaff,#27b1ff 55%,#8970ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+      .home228-donation-mode .home44-membership-head p{max-width:790px;margin:0;color:#93bac9;font-size:14px;line-height:1.65;text-align:left}
+      .home228-donation-mode .home44-plan-grid{display:grid!important;grid-template-columns:1fr!important;gap:0!important;opacity:1!important;transform:none!important}
+      .home228-donation-mode .home44-plan-free{display:none!important}
+      .home228-donation-mode .home44-plan-premium{display:block!important;min-height:0!important;padding:0!important;overflow:visible!important;border:0!important;background:transparent!important;box-shadow:none!important}
+      .home228-donation-mode .home44-plan-premium>.home44-plan-beam,.home228-donation-mode .home44-plan-premium>.home44-plan-orbit{display:none!important}
+      .home228-panel{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(330px,.65fr);gap:18px}
+      .home228-main,.home228-pass{position:relative;overflow:hidden;border:1px solid rgba(64,219,255,.23);border-radius:22px;background:linear-gradient(145deg,rgba(6,34,55,.96),rgba(2,18,31,.98));box-shadow:0 25px 70px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.035)}
+      .home228-main{padding:23px}.home228-pass{padding:24px;background:radial-gradient(circle at 88% 0%,rgba(93,91,255,.22),transparent 38%),linear-gradient(155deg,#08243c,#041625 72%)}
+      .home228-main:before,.home228-pass:before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,rgba(70,227,255,.08),transparent 27%,transparent 72%,rgba(116,84,255,.08))}
+      .home228-main-top{position:relative;display:flex;align-items:center;justify-content:space-between;gap:15px;padding-bottom:17px;border-bottom:1px solid rgba(67,213,255,.13)}
+      .home228-brand{display:flex;align-items:center;gap:13px}.home228-orb{width:47px;height:47px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,#7af7ff,#1aa7ea 48%,#5346df);box-shadow:0 0 30px rgba(56,191,255,.3);font:900 18px/1 Orbitron;color:#fff}
+      .home228-brand small,.home228-brand strong{display:block}.home228-brand small{color:#76aabd;font:700 9px/1 Inter;letter-spacing:.15em}.home228-brand strong{margin-top:5px;font:900 17px/1 Orbitron;color:#effcff}
+      .home228-verify{padding:8px 10px;border:1px solid rgba(59,244,169,.22);border-radius:9px;background:rgba(36,111,80,.1);color:#57efaa;font:800 8px/1 Orbitron;white-space:nowrap}
+      .home228-steps{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:17px}.home228-step{min-height:140px;padding:15px;border:1px solid rgba(62,207,255,.14);border-radius:14px;background:linear-gradient(145deg,rgba(3,29,47,.9),rgba(1,18,31,.94))}.home228-step-num{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}.home228-step-num b{font:900 21px/1 Orbitron;color:#51dffc}.home228-step-num i{width:29px;height:1px;background:linear-gradient(90deg,#51dffc,transparent)}.home228-step strong{display:block;color:#ecfbff;font:800 10px/1.25 Orbitron}.home228-step p{margin:7px 0 0;color:#7fa8b9;font:500 11px/1.5 Inter}
+      .home228-alert{position:relative;margin-top:10px;padding:12px 14px;border:1px solid rgba(255,207,72,.24);border-radius:11px;background:linear-gradient(90deg,rgba(121,82,13,.17),rgba(47,32,7,.09));color:#d9c989;font:600 11px/1.5 Inter}.home228-alert b{color:#ffe278;margin-right:7px}
+      .home228-actions{position:relative;display:grid;grid-template-columns:1.5fr .8fr .8fr;gap:9px;margin-top:13px}.home228-actions a{min-height:48px;display:flex;align-items:center;justify-content:center;border-radius:11px;text-decoration:none!important;font:900 9px/1.15 Orbitron;letter-spacing:.04em;transition:transform .16s ease,box-shadow .16s ease}.home228-actions a:hover{transform:translateY(-2px)}.home228-donate{border:1px solid rgba(85,238,255,.58);background:linear-gradient(100deg,#42e7ff,#29b8ff 53%,#7161ff);color:#00131e!important;box-shadow:0 12px 30px rgba(40,180,255,.18)}.home228-discord{border:1px solid rgba(123,107,255,.36);background:linear-gradient(135deg,rgba(76,67,180,.58),rgba(48,44,118,.64));color:#eceaff!important}.home228-contact{border:1px solid rgba(67,216,255,.23);background:#06263b;color:#d5f3ff!important}
+      .home228-pass-head{position:relative;display:flex;align-items:center;justify-content:space-between}.home228-pass-head small,.home228-pass-head strong{display:block}.home228-pass-head small{color:#76adbf;font:700 8px/1 Inter;letter-spacing:.16em}.home228-pass-head strong{margin-top:5px;font:900 13px/1 Orbitron;color:#effcff}.home228-chip{padding:7px 9px;border:1px solid rgba(255,215,82,.3);border-radius:8px;background:rgba(113,82,13,.18);color:#ffe474;font:800 8px/1 Orbitron}.home228-price{position:relative;margin:31px 0 7px;font:900 clamp(48px,6vw,72px)/.9 Orbitron;color:#f6fdff;letter-spacing:-.045em}.home228-price sup{font-size:.34em;color:#6ee7ff;vertical-align:top;margin-right:3px}.home228-price-sub{position:relative;color:#59ebb0;font:800 9px/1 Orbitron;letter-spacing:.09em}.home228-pass-list{position:relative;display:grid;gap:9px;margin-top:23px}.home228-pass-list span{display:flex;align-items:center;gap:9px;padding:9px 10px;border:1px solid rgba(67,215,255,.11);border-radius:9px;background:rgba(2,24,40,.75);color:#a9cbd8;font:600 10px/1.25 Inter}.home228-pass-list i{width:7px;height:7px;border-radius:50%;background:#44efac;box-shadow:0 0 11px rgba(68,239,172,.7)}
+      .home228-notes{display:grid!important;grid-template-columns:repeat(4,1fr)!important;gap:9px!important;margin-top:13px!important;opacity:1!important;transform:none!important}.home228-notes span{display:block!important;padding:10px!important;border:1px solid rgba(61,207,244,.11)!important;border-radius:9px!important;background:rgba(3,24,39,.65)!important;color:#719fb0!important;text-align:center!important;font:700 8px/1.2 Orbitron!important}.home228-notes i{display:none!important}.home228-notes b{color:#58eab0}
+      @media(max-width:920px){.home228-panel{grid-template-columns:1fr}.home228-pass{min-height:360px}.home228-donation-mode .home44-membership-head h2{font-size:clamp(30px,7vw,48px)}}
+      @media(max-width:650px){.home44-membership.home228-donation-mode{padding:56px 0 60px!important}.home228-main,.home228-pass{padding:16px;border-radius:16px}.home228-main-top{align-items:flex-start}.home228-verify{display:none}.home228-steps{grid-template-columns:1fr}.home228-step{min-height:0}.home228-actions{grid-template-columns:1fr}.home228-actions a{min-height:50px}.home228-notes{grid-template-columns:1fr 1fr!important}.home228-donation-mode .home44-membership-head p{font-size:12px}.home228-donation-mode .home44-membership-kicker b{display:none}}
+    `;
+    document.head.appendChild(style);
+  }
+
+  function applyDonationLanguage() {
+    const root = document.querySelector('.home228-donation-mode');
+    if (!root) return;
+    const copy = donationCopy[donationLanguage()];
+    root.querySelectorAll('[data-donation-key]').forEach(el => {
+      const value = copy[el.dataset.donationKey];
+      if (value != null) el.textContent = value;
+    });
+  }
+
+  function installHomeDonation() {
+    const section = document.querySelector('.home44-membership');
+    if (!section || section.dataset.home228Ready === '1') return;
+    const head = section.querySelector('.home44-membership-head');
+    const kicker = section.querySelector('.home44-membership-kicker');
+    const title = head?.querySelector('h2');
+    const intro = head?.querySelector('p');
+    const freeCard = section.querySelector('.home44-plan-free');
+    const premiumCard = section.querySelector('.home44-plan-premium');
+    const notes = section.querySelector('.home44-membership-notes');
+    if (!head || !kicker || !title || !intro || !premiumCard || !notes) return;
+
+    ensureDonationStyle();
+    section.dataset.home228Ready = '1';
+    section.classList.add('home228-donation-mode');
+    freeCard?.remove();
+
+    kicker.innerHTML = '<i></i><span data-donation-key="kicker"></span><b data-donation-key="badge"></b>';
+    title.innerHTML = '<span data-donation-key="titleA"></span><span data-donation-key="titleB"></span>';
+    intro.setAttribute('data-donation-key','intro');
+
+    premiumCard.innerHTML = `
+      <div class="home228-panel">
+        <div class="home228-main">
+          <div class="home228-main-top">
+            <div class="home228-brand"><div class="home228-orb">N</div><div><small>NEITH PREMIUM</small><strong data-donation-key="activation"></strong></div></div>
+            <div class="home228-verify">✓ PREMIUM · 30 DAYS</div>
+          </div>
+          <div class="home228-steps">
+            <div class="home228-step"><div class="home228-step-num"><b>01</b><i></i></div><strong data-donation-key="step1"></strong><p data-donation-key="step1p"></p></div>
+            <div class="home228-step"><div class="home228-step-num"><b>02</b><i></i></div><strong data-donation-key="step2"></strong><p data-donation-key="step2p"></p></div>
+            <div class="home228-step"><div class="home228-step-num"><b>03</b><i></i></div><strong data-donation-key="step3"></strong><p data-donation-key="step3p"></p></div>
+          </div>
+          <div class="home228-alert"><b data-donation-key="important"></b><span data-donation-key="importantText"></span></div>
+          <div class="home228-actions">
+            <a class="home228-donate" href="https://www.paypal.com/paypalme/Lokodoco/4.90" target="_blank" rel="noopener"><span data-donation-key="donate"></span></a>
+            <a class="home228-discord" href="https://discord.gg/Dgkc6wv79F" target="_blank" rel="noopener"><span data-donation-key="discord"></span></a>
+            <a class="home228-contact" href="mailto:xjacobo1987@gmail.com?subject=Neith%20Premium%20Donation"><span data-donation-key="contact"></span></a>
+          </div>
+        </div>
+        <aside class="home228-pass">
+          <div class="home228-pass-head"><div><small data-donation-key="passSub"></small><strong data-donation-key="pass"></strong></div><span class="home228-chip">SUPPORT</span></div>
+          <div class="home228-price"><sup>€</sup>4.90</div>
+          <div class="home228-price-sub" data-donation-key="priceSub"></div>
+          <div class="home228-pass-list"><span><i></i><b data-donation-key="feature1"></b></span><span><i></i><b data-donation-key="feature2"></b></span><span><i></i><b data-donation-key="feature3"></b></span><span><i></i><b data-donation-key="feature4"></b></span></div>
+        </aside>
+      </div>
+    `;
+
+    notes.classList.add('home228-notes');
+    notes.innerHTML = '<span><b data-donation-key="footA"></b></span><span><b data-donation-key="footB"></b></span><span><b data-donation-key="footC"></b></span><span><b data-donation-key="footD"></b></span>';
+    applyDonationLanguage();
   }
 
   function premiumUrl() {
@@ -78,16 +245,13 @@
     requestAnimationFrame(() => link.classList.add('ready'));
   }
 
-  // One delegated owner for the account/login control. auth.js owns session state.
   window.addEventListener('click', event => {
     const trigger = event.target.closest?.('[data-auth-nav]');
     if (!trigger) return;
-
     event.preventDefault();
     event.stopPropagation();
     event.stopImmediatePropagation();
     sanitize(trigger.ownerDocument || document);
-
     const auth = window.NeithAuth;
     if (auth?.handleHeaderTrigger) auth.handleHeaderTrigger(trigger);
     else if (auth?.session?.user) auth.toggleAccountMenu?.(trigger);
@@ -98,11 +262,9 @@
     sanitize(document);
     ensurePremiumStyle();
     ensurePublicPurchaseHiddenStyle();
+    installHomeDonation();
     syncPremiumShortcut();
 
-    // Headers are static in Neith. Watching the whole document made every dynamic
-    // card/list mutation pass through this controller. Observe only the header so
-    // account-button replacements remain safe without taxing the rest of the page.
     const header = document.querySelector('.topbar');
     if (!header || !('MutationObserver' in window)) return;
     const observer = new MutationObserver(records => {
@@ -124,6 +286,7 @@
     if (!userId) ownerCache.clear();
     syncPremiumShortcut();
   });
+  window.addEventListener('neith:languagechange', () => requestAnimationFrame(applyDonationLanguage));
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
   else boot();
