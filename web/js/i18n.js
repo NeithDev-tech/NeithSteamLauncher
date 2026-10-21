@@ -53,6 +53,7 @@
   }
   function toSpanish(raw) {
     const str=String(raw??''); const t=str.trim(); if(!t) return str;
+    if (t === 'VAC LIVE') return keepWS(str, 'VAC LIVE');
     if (EN_TO_ES?.[t] != null) return keepWS(str, EN_TO_ES[t]);
     let m=t.match(/^(\d[\d,.]*)\s+hrs$/i); if(m) return keepWS(str, `${m[1]} h`);
     m=t.match(/^(\d+) FREE GAMES DETECTED$/i); if(m) return keepWS(str, `${m[1]} JUEGOS GRATIS DETECTADOS`);
@@ -62,6 +63,7 @@
   }
   function toEnglish(raw) {
     const str=String(raw??''); const t=str.trim(); if(!t) return str;
+    if (t === 'VAC LIVE') return keepWS(str, 'VAC LIVE');
     if (ES_TO_EN?.[t] != null) return keepWS(str, ES_TO_EN[t]);
     let m=t.match(/^(\d[\d,.]*)\s+h$/i); if(m) return keepWS(str, `${m[1]} hrs`);
     m=t.match(/^(\d+) JUEGOS GRATIS DETECTADOS$/i); if(m) return keepWS(str, `${m[1]} FREE GAMES DETECTED`);
