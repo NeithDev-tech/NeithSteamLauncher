@@ -12,6 +12,24 @@
   const hourBoostPlans = document.querySelector('.hb136-plans');
   if (hourBoostPlans) hourBoostPlans.classList.add('bp172-plans');
 
+  // R232: VAC LIVE showcase is isolated to the VAC page only.
+  if (/\/vac-live\/?$/i.test(location.pathname)) {
+    if (!document.querySelector('link[data-neith-vac232]')) {
+      const css = document.createElement('link');
+      css.rel = 'stylesheet';
+      css.href = new URL('../css/vac-live-showcase-r232.css?v=20261021-r232', jsBase).href;
+      css.dataset.neithVac232 = '1';
+      document.head.appendChild(css);
+    }
+    if (!document.querySelector('script[data-neith-vac232]')) {
+      const showcase = document.createElement('script');
+      showcase.src = src('vac-live-showcase-r232.js?v=20261021-r232');
+      showcase.async = false;
+      showcase.dataset.neithVac232 = '1';
+      document.head.appendChild(showcase);
+    }
+  }
+
   const SUPABASE_CDN = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
   let loadPromise = null;
 
