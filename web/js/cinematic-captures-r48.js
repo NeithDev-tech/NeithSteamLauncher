@@ -1,4 +1,9 @@
 (()=>{
+  const hourBoostPlans=document.querySelector('.hb136-plans');
+  if(hourBoostPlans&&!hourBoostPlans.classList.contains('bp172-plans')){
+    hourBoostPlans.classList.add('bp172-plans');
+  }
+
   const reduced=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
   const fine=window.matchMedia?.('(pointer:fine)').matches;
   if(reduced||!fine)return;
