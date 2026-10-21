@@ -20,6 +20,41 @@
     document.head.appendChild(style);
   }
 
+  function keepVacLiveLabel() {
+    document.querySelectorAll('.navlinks a[href*="vac-live"]').forEach(link => {
+      if (link.textContent !== 'VAC LIVE') link.textContent = 'VAC LIVE';
+    });
+  }
+
+  function removePublicPremiumPurchaseUi() {
+    if (location.pathname.includes('/admin/') || location.pathname.includes('/premium/')) return;
+
+    const selectors = [
+      '[data-premium-checkout]',
+      '.neith-plan-dualprice',
+      '.home44-plan-action-premium',
+      '.premium147-price-grid',
+      '.premium147-plan-actions--premium',
+      '.premium147-store-state',
+      '.premium147-note',
+      '.premium147-cta-panel'
+    ];
+    document.querySelectorAll(selectors.join(',')).forEach(el => el.remove());
+
+    document.querySelectorAll('.premium147-pills span').forEach(el => {
+      if (/paypal/i.test(el.textContent || '')) el.remove();
+    });
+
+    document.querySelectorAll('a,button').forEach(el => {
+      if (el.matches('[data-owner-premium-shortcut]')) return;
+      const plan = String(el.getAttribute('data-plan') || '').toLowerCase();
+      const text = String(el.textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
+      if (plan === 'monthly' || plan === 'annual') { el.remove(); return; }
+      if (text === 'view premium' || text === 'ver premium') { el.remove(); return; }
+      if ((/€\s*(?:7[.,]99|69[.,]99)/i.test(text)) && /(month|year|mes|año|ano)/i.test(text)) el.remove();
+    });
+  }
+
   function premiumUrl() {
     const current = new URL(window.location.href);
     const root = `${current.origin}/`;
@@ -59,7 +94,6 @@
     requestAnimationFrame(() => link.classList.add('ready'));
   }
 
-  // One delegated owner for the account/login control. auth.js owns session state.
   window.addEventListener('click', event => {
     const trigger = event.target.closest?.('[data-auth-nav]');
     if (!trigger) return;
@@ -78,31 +112,41 @@
   function boot() {
     sanitize(document);
     ensurePremiumStyle();
+    keepVacLiveLabel();
+    removePublicPremiumPurchaseUi();
     syncPremiumShortcut();
 
-    // Headers are static in Neith. Watching the whole document made every dynamic
-    // card/list mutation pass through this controller. Observe only the header so
-    // account-button replacements remain safe without taxing the rest of the page.
     const header = document.querySelector('.topbar');
     if (!header || !('MutationObserver' in window)) return;
     const observer = new MutationObserver(records => {
       let authChanged = false;
       for (const record of records) {
-        for (const node of record.addedNodes) {
+        if (record.type === 'characterData') continue;
+        for (const node of record.addedNodes || []) {
           if (node.nodeType !== Node.ELEMENT_NODE) continue;
           if (node.matches?.('[data-auth-nav]')) { sanitize(node.parentElement || header); authChanged = true; }
           else if (node.querySelector?.('[data-auth-nav]')) { sanitize(node); authChanged = true; }
         }
       }
+      keepVacLiveLabel();
       if (authChanged) syncPremiumShortcut();
     });
-    observer.observe(header, { subtree: true, childList: true });
+    observer.observe(header, { subtree: true, childList: true, characterData: true });
   }
 
   window.addEventListener('neith:authchange', event => {
     const userId = event?.detail?.session?.user?.id;
     if (!userId) ownerCache.clear();
+    keepVacLiveLabel();
+    removePublicPremiumPurchaseUi();
     syncPremiumShortcut();
+  });
+
+  window.addEventListener('neith:languagechange', () => {
+    requestAnimationFrame(() => {
+      keepVacLiveLabel();
+      removePublicPremiumPurchaseUi();
+    });
   });
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
