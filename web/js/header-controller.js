@@ -20,6 +20,29 @@
     document.head.appendChild(style);
   }
 
+  function ensurePublicPurchaseHidden() {
+    if (location.pathname.includes('/admin/') || location.pathname.includes('/premium/')) return;
+    if (!document.getElementById('neith-public-purchase-hidden-r223')) {
+      const style = document.createElement('style');
+      style.id = 'neith-public-purchase-hidden-r223';
+      style.textContent = `[data-premium-checkout],.premium147-price-grid,.premium147-plan-actions--premium,.premium147-store-state,.premium147-note,.premium147-cta-panel{display:none!important}`;
+      document.head.appendChild(style);
+    }
+
+    document.querySelectorAll('.premium147-pills span').forEach(el => {
+      if (/paypal/i.test(el.textContent || '')) el.remove();
+    });
+
+    document.querySelectorAll('[data-premium-checkout]').forEach(el => el.remove());
+    document.querySelectorAll('a,button').forEach(el => {
+      if (el.matches('[data-owner-premium-shortcut]')) return;
+      const plan = String(el.getAttribute('data-plan') || '').toLowerCase();
+      const text = String(el.textContent || '').replace(/\s+/g, ' ').trim();
+      if (plan === 'monthly' || plan === 'annual') { el.remove(); return; }
+      if (/€\s*(?:1\.99|7\.99|69\.99)/i.test(text) && /(month|year|mes|año|ano)/i.test(text)) el.remove();
+    });
+  }
+
   function premiumUrl() {
     const current = new URL(window.location.href);
     const root = `${current.origin}/`;
@@ -59,7 +82,6 @@
     requestAnimationFrame(() => link.classList.add('ready'));
   }
 
-  // One delegated owner for the account/login control. auth.js owns session state.
   window.addEventListener('click', event => {
     const trigger = event.target.closest?.('[data-auth-nav]');
     if (!trigger) return;
@@ -78,11 +100,9 @@
   function boot() {
     sanitize(document);
     ensurePremiumStyle();
+    ensurePublicPurchaseHidden();
     syncPremiumShortcut();
 
-    // Headers are static in Neith. Watching the whole document made every dynamic
-    // card/list mutation pass through this controller. Observe only the header so
-    // account-button replacements remain safe without taxing the rest of the page.
     const header = document.querySelector('.topbar');
     if (!header || !('MutationObserver' in window)) return;
     const observer = new MutationObserver(records => {
@@ -102,8 +122,10 @@
   window.addEventListener('neith:authchange', event => {
     const userId = event?.detail?.session?.user?.id;
     if (!userId) ownerCache.clear();
+    ensurePublicPurchaseHidden();
     syncPremiumShortcut();
   });
+  window.addEventListener('neith:languagechange', ensurePublicPurchaseHidden);
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
   else boot();
