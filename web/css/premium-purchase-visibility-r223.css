@@ -1,0 +1,9 @@
+/* R223 — Public monthly/annual PREMIUM purchase UI disabled. Backend remains intact. */
+body:not(.premium222-body) [data-premium-checkout],
+body:not(.premium222-body) .premium147-price-grid,
+body:not(.premium222-body) .premium147-plan-actions--premium,
+body:not(.premium222-body) .premium147-store-state,
+body:not(.premium222-body) .premium147-note,
+body:not(.premium222-body) .premium147-cta-panel{
+  display:none!important;
+}
