@@ -35,6 +35,7 @@
       style.textContent = [
         '[data-premium-checkout]',
         '.neith-plan-dualprice',
+        '.home44-plan-action-premium',
         '.premium147-price-grid',
         '.premium147-plan-actions--premium',
         '.premium147-store-state',
@@ -48,7 +49,7 @@
       if (/paypal/i.test(el.textContent || '')) el.remove();
     });
 
-    document.querySelectorAll('[data-premium-checkout],.neith-plan-dualprice,.premium147-price-grid,.premium147-plan-actions--premium,.premium147-store-state,.premium147-note,.premium147-cta-panel').forEach(el => el.remove());
+    document.querySelectorAll('[data-premium-checkout],.neith-plan-dualprice,.home44-plan-action-premium,.premium147-price-grid,.premium147-plan-actions--premium,.premium147-store-state,.premium147-note,.premium147-cta-panel').forEach(el => el.remove());
 
     document.querySelectorAll('a,button').forEach(el => {
       if (el.matches('[data-owner-premium-shortcut]')) return;
