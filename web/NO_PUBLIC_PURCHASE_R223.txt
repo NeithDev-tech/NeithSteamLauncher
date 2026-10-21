@@ -1,0 +1,1 @@
+R223: Public monthly/annual PREMIUM purchase UI removed from the visible website. Backend payment infrastructure intentionally preserved for future redesign.
