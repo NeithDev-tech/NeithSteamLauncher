@@ -20,6 +20,25 @@
     document.head.appendChild(style);
   }
 
+  function ensurePublicPurchaseHiddenStyle() {
+    if (document.getElementById('neith-hide-public-premium-purchase')) return;
+    const style = document.createElement('style');
+    style.id = 'neith-hide-public-premium-purchase';
+    style.textContent = `
+      .neith-plan-dualprice,
+      .home44-plan-action-premium,
+      .premium147-price-grid,
+      .premium147-plan-actions--premium,
+      .premium147-store-state,
+      .premium147-note,
+      .premium147-cta-panel,
+      .premium147-pills > span:nth-child(2) {
+        display:none !important;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
   function premiumUrl() {
     const current = new URL(window.location.href);
     const root = `${current.origin}/`;
@@ -78,6 +97,7 @@
   function boot() {
     sanitize(document);
     ensurePremiumStyle();
+    ensurePublicPurchaseHiddenStyle();
     syncPremiumShortcut();
 
     // Headers are static in Neith. Watching the whole document made every dynamic
