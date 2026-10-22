@@ -31,3 +31,7 @@
 @keyframes premium147Orbit{from{transform:rotate(0)}to{transform:rotate(360deg)}}
 @media(max-width:1100px){.premium147-hero-grid,.premium147-plan-grid,.premium147-head{grid-template-columns:1fr}.premium147-head-badge{min-width:0}.premium147-adv-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:760px){.premium147-stack,.premium147-price-grid,.premium147-spotlights,.premium147-adv-grid{grid-template-columns:1fr}.premium147-title span,.premium147-title strong{font-size:clamp(1.7rem,9vw,2.75rem)}.premium147-plan{padding:18px}.premium147-actions .btn,.premium147-plan-actions .btn{flex:1 1 100%}}
+
+
+/* R247 — functional Free / Premium support panel */
+.freepremium247-donation{margin:0}

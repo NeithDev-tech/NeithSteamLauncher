@@ -6,6 +6,31 @@
   const jsBase = new URL('./', scriptUrl);
   const src = name => new URL(name, jsBase).href;
 
+  // R231: Hour Boost uses a different FREE/PREMIUM section class.
+  // Mark it before header-controller runs so it uses the same donation replacement
+  // already working in Boost PC, Achievements, Free Games and Accounts.
+  const hourBoostPlans = document.querySelector('.hb136-plans');
+  if (hourBoostPlans) hourBoostPlans.classList.add('bp172-plans');
+
+  // R234: VAC LIVE showcase — contained backdrop + distortion-free HQ previews.
+  if (/\/vac-live\/?$/i.test(location.pathname)) {
+    if (!document.querySelector('link[data-neith-vac234]')) {
+      const css = document.createElement('link');
+      css.rel = 'stylesheet';
+      css.href = new URL('../css/vac-live-showcase-r234.css?v=20261022-r234', jsBase).href;
+      css.dataset.neithVac234 = '1';
+      document.head.appendChild(css);
+    }
+
+    if (!document.querySelector('script[data-neith-vac234]')) {
+      const showcase = document.createElement('script');
+      showcase.src = src('vac-live-showcase-r234.js?v=20261022-r234');
+      showcase.async = false;
+      showcase.dataset.neithVac234 = '1';
+      document.head.appendChild(showcase);
+    }
+  }
+
   const SUPABASE_CDN = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
   let loadPromise = null;
 
@@ -76,7 +101,7 @@
     loadPromise = (async () => {
       await addScript(SUPABASE_CDN);
       await addScript(src('supabase-config.js?v=20260922-oauth-v8'));
-      await addScript(src('auth.js?v=20261017-r187-owner-only-admin-menu'));
+      await addScript(src('auth.js?v=20261022-r245-account-menu-clean'));
 
       if (!window.NeithAuth || window.NeithAuth.__lazyStub) {
         throw new Error('Neith Auth no pudo inicializarse.');

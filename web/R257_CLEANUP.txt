@@ -1,0 +1,1 @@
+R257 safe cleanup removed runtime-irrelevant fix/setup notes only. Runtime CSS/JS/images preserved.

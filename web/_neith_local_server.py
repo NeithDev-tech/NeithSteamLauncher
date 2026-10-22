@@ -222,7 +222,7 @@ def self_test(port: int) -> None:
         "/dashboard/",
         "/hourboost/",
         "/css/hourboost-r136.css",
-        "/img/neith-approved-hourboost-r135.png",
+        "/img/neith-hourboost-current-r236.png",
         "/boostpc/",
         "/css/boostpc-r139.css",
         "/img/neith-approved-boostpc-r138.webp",

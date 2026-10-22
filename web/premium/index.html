@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <meta name="color-scheme" content="dark"/>
+  <meta name="theme-color" content="#000813"/>
+  <meta name="robots" content="noindex,nofollow,noarchive"/>
+  <title>Premium Control — Neith Steam Launcher</title>
+  <link rel="icon" href="../favicon.ico"/>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="preconnect" href="https://nsqhfbyxqcmdthvptuzp.supabase.co" crossorigin/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/style.css?v=20260924-r58-css-prune"/>
+  <link rel="stylesheet" href="../css/premium-manager-r222.css?v=20261021-r222"/>
+</head>
+<body class="premium222-body">
+<header class="topbar">
+  <nav class="nav shell">
+    <a aria-label="Neith Steam Launcher" class="brand nav-brand-r47" href="../"><span aria-hidden="true" class="nav-brand-r47__visual"><img alt="" class="nav-brand-r47__image" decoding="async" fetchpriority="high" height="109" loading="eager" src="../img/neith-navbar-logo-transparent.png" width="260"/></span><span class="nav-brand-r47__sr">Neith Steam Launcher</span></a>
+    <button aria-expanded="false" aria-label="Open menu" class="menu" type="button">☰</button>
+    <div class="navlinks"><a href="../hourboost/">Hour Boost</a><a href="../vac-live/">VAC LIVE</a><a href="../boostpc/">Boost PC</a><a href="../logros/">Achievements</a><a href="../juegos-gratis/">Free Games</a><a href="../cuentas/">Accounts</a><button aria-controls="neith-auth-modal" aria-haspopup="dialog" class="nav-auth-button nav-login-visible" data-auth-nav type="button"><span aria-hidden="true" class="nav-auth-led"></span><span data-auth-nav-label>SIGN IN</span></button></div>
+    <div class="nav-actions"><a class="btn primary nav-download" href="../descargar">DOWNLOAD LAUNCHER</a></div>
+  </nav>
+</header>
+
+<main class="premium222-page" data-premium-page>
+  <section class="premium222-hero shell">
+    <div class="premium222-hero-copy">
+      <span class="premium222-kicker"><i></i> OWNER · PREMIUM CONTROL</span>
+      <h1>PREMIUM <span>COMMAND CENTER</span></h1>
+      <p>Grant, extend or revoke Neith PREMIUM from desktop or mobile with authoritative Supabase control.</p>
+    </div>
+    <div class="premium222-owner-badge"><span>◆</span><div><small>ACCESS LEVEL</small><b>OWNER ONLY</b></div></div>
+  </section>
+
+  <section class="shell premium222-gate" data-premium-gate>
+    <div class="premium222-gate-card"><span class="premium222-spinner"></span><div><small>SECURE ACCESS</small><h2>VALIDATING OWNER SESSION</h2><p>Checking your Neith account directly with Supabase.</p></div></div>
+  </section>
+
+  <section class="shell premium222-denied" data-premium-denied hidden>
+    <div class="premium222-denied-card"><span>⛨</span><div><small>RESTRICTED ACCESS</small><h2>PREMIUM CONTROL LOCKED</h2><p data-premium-denied-copy>This area is available only to the Neith owner account.</p><button type="button" data-premium-login>OPEN LOGIN</button></div></div>
+  </section>
+
+  <section class="shell premium222-mfa" data-premium-mfa hidden>
+    <div class="premium222-mfa-card">
+      <div class="premium222-mfa-icon">◇</div>
+      <div class="premium222-mfa-copy"><small>OWNER SECURITY</small><h2>VERIFY 2FA ON THIS BROWSER</h2><p>Enter the 6-digit code from your authenticator. Supabase keeps the elevated session active while it remains valid.</p></div>
+      <form data-premium-mfa-form>
+        <input data-premium-mfa-code inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="one-time-code" placeholder="000000" aria-label="2FA code"/>
+        <button type="submit">VERIFY & ENTER</button>
+      </form>
+      <div class="premium222-status" data-premium-mfa-status></div>
+    </div>
+  </section>
+
+  <section class="shell premium222-console" data-premium-console hidden>
+    <div class="premium222-toolbar">
+      <div><small>PREMIUM MANAGEMENT</small><h2>OWNER CONSOLE</h2></div>
+      <div class="premium222-toolbar-actions"><span class="premium222-live"><i></i> LIVE</span><button type="button" data-premium-refresh>↻ REFRESH</button></div>
+    </div>
+
+    <div class="premium222-layout">
+      <section class="premium222-users-card">
+        <div class="premium222-card-head"><div><small>NEITH USERS</small><h3>SELECT ACCOUNT</h3></div><span data-premium-count>0 USERS</span></div>
+        <label class="premium222-search"><span>⌕</span><input data-premium-search type="search" autocomplete="off" spellcheck="false" placeholder="Search name or email…"/></label>
+        <div class="premium222-users" data-premium-users></div>
+        <div class="premium222-empty" data-premium-empty hidden>No users found.</div>
+      </section>
+
+      <section class="premium222-control-card">
+        <div class="premium222-selected" data-premium-selected-empty>
+          <div class="premium222-selected-placeholder"><span>◇</span><b>SELECT A NEITH USER</b><small>Choose an account on the left to manage PREMIUM.</small></div>
+        </div>
+        <div class="premium222-selected" data-premium-selected hidden>
+          <div class="premium222-selected-top">
+            <div class="premium222-avatar" data-premium-avatar>N</div>
+            <div class="premium222-identity"><small>SELECTED ACCOUNT</small><h3 data-premium-name>—</h3><p data-premium-email>—</p></div>
+            <span class="premium222-plan" data-premium-plan>FREE</span>
+          </div>
+          <div class="premium222-metrics"><div><small>EXPIRES</small><b data-premium-expiry>NO PREMIUM</b></div><div><small>TIME LEFT</small><b data-premium-left>INACTIVE</b></div><div><small>STATUS</small><b data-premium-status>ACTIVE</b></div></div>
+
+          <div class="premium222-section">
+            <div class="premium222-section-title"><div><small>QUICK PREMIUM</small><h4>PLANS</h4></div><span>Adds time to the current expiry</span></div>
+            <div class="premium222-plan-grid">
+              <button type="button" data-premium-action="month" data-premium-amount="1"><strong>1 MONTH</strong><small>+30 days approx.</small></button>
+              <button type="button" data-premium-action="month" data-premium-amount="3"><strong>3 MONTHS</strong><small>Quarter plan</small></button>
+              <button type="button" data-premium-action="month" data-premium-amount="6"><strong>6 MONTHS</strong><small>Half year</small></button>
+              <button type="button" data-premium-action="year" data-premium-amount="1"><strong>1 YEAR</strong><small>12 months</small></button>
+            </div>
+            <button class="premium222-lifetime" type="button" data-premium-lifetime><span>◆</span><div><strong>PREMIUM LIFETIME</strong><small>Permanent access · no expiry</small></div><em>ACTIVATE</em></button>
+          </div>
+
+          <div class="premium222-section premium222-custom">
+            <div class="premium222-section-title"><div><small>EXACT CONTROL</small><h4>CUSTOM DAYS</h4></div><span>Type the exact number</span></div>
+            <div class="premium222-days-row">
+              <label><span>DAYS</span><input data-premium-days type="text" inputmode="numeric" pattern="[0-9]*" maxlength="5" value="5" autocomplete="off"/></label>
+              <button type="button" class="add" data-premium-add-days>+ ADD DAYS</button>
+              <button type="button" class="remove" data-premium-remove-days>− REMOVE DAYS</button>
+            </div>
+          </div>
+
+          <div class="premium222-section premium222-danger">
+            <div class="premium222-section-title"><div><small>ACCESS CONTROL</small><h4>REMOVE PREMIUM</h4></div><span>Immediate action</span></div>
+            <button type="button" data-premium-remove-all>× REMOVE ALL PREMIUM NOW</button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+</main>
+
+<div class="premium222-confirm" data-premium-confirm hidden aria-hidden="true">
+  <div class="premium222-confirm-backdrop" data-premium-confirm-cancel></div>
+  <section role="dialog" aria-modal="true" aria-labelledby="premiumConfirmTitle">
+    <span class="premium222-confirm-icon">!</span>
+    <small>OWNER ACTION</small><h3 id="premiumConfirmTitle" data-premium-confirm-title>CONFIRM ACTION</h3><p data-premium-confirm-copy></p>
+    <div><button type="button" data-premium-confirm-cancel>CANCEL</button><button type="button" class="danger" data-premium-confirm-ok>CONFIRM</button></div>
+  </section>
+</div>
+<div class="premium222-toasts" data-premium-toasts></div>
+
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script defer src="../js/supabase-config.js?v=20260922-oauth-v8"></script>
+<script defer src="../js/i18n.js?v=20261019-r204-default-english-root"></script>
+<script defer src="../js/main.js?v=20260924-r58-visible-timers"></script>
+<script defer src="../js/auth.js?v=20261022-r244-account-menu"></script>
+<script defer src="../js/header-controller.js?v=20261022-r257-contact-direct"></script>
+<script defer src="../js/premium-manager-r222.js?v=20261021-r222"></script>
+</body>
+</html>

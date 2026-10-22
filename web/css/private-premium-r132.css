@@ -44,3 +44,7 @@
 .dashboard-v11 .dash11-card-foot{margin-top:1rem!important}
 @media(max-width:68rem){.dashboard-v11 .dash11-command{grid-template-columns:1fr!important}.dashboard-v11 .dash11-head-actions{grid-template-columns:1fr 1fr!important;grid-column:auto!important}.dashboard-v11 .dash11-plan-ribbon{grid-template-columns:1fr!important}}
 @media(max-width:44rem){.dashboard-v11 .dash11-head-actions{grid-template-columns:1fr!important}.dashboard-v11 .dash11-main-action,.dashboard-v11 .dash11-logout{grid-template-columns:1.8rem minmax(0,1fr)!important}}
+
+/* R244 - Security password submit hover must not move layout/scroll position */
+.security-password-submit{transform:none!important;transition:background .18s ease,border-color .18s ease,box-shadow .18s ease,color .18s ease!important;will-change:auto!important}
+.security-password-submit:hover,.security-password-submit:focus-visible{transform:none!important}

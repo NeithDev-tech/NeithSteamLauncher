@@ -1,0 +1,37 @@
+/* R235 — desktop balance for HOW TO READ IT / LIVE STATUS BOARD.
+   The right dashboard defines the section height. The redundant disclaimer was removed
+   from the left column; both cards now stretch to the same row height on desktop.
+   Mobile/tablet keep intrinsic stacked heights. */
+@media (min-width:68.8125rem){
+  .vac173-monitor-grid{
+    align-items:stretch;
+  }
+  .vac173-monitor-copy,
+  .vac173-dashboard{
+    min-height:100%;
+    height:100%;
+  }
+  .vac173-monitor-copy{
+    display:flex;
+    flex-direction:column;
+  }
+  .vac173-monitor-list{
+    flex:1 1 auto;
+    align-content:space-between;
+    gap:clamp(.45rem,.7vw,.7rem);
+  }
+  .vac173-monitor-list article{
+    padding:clamp(.68rem,.8vw,.82rem) clamp(.78rem,1vw,.95rem);
+  }
+  .vac173-monitor-list p{
+    margin-top:.28rem;
+    line-height:1.42;
+  }
+}
+@media (max-width:68.75rem){
+  .vac173-monitor-copy,
+  .vac173-dashboard{
+    min-height:0;
+    height:auto;
+  }
+}

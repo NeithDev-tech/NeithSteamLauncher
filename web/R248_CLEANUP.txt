@@ -1,0 +1,3 @@
+R248
+- Removes the commercial comparison Two Plans section from Free / Premium.
+- Removes Documentation from the footer across all HTML pages.
