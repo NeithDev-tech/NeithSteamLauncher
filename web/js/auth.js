@@ -1005,7 +1005,12 @@
       const redirectTo = siteUrl('dashboard/');
       const options = { redirectTo };
       if (provider === 'discord') options.scopes = 'identify email';
-      if (provider === 'google') options.scopes = 'openid email profile';
+      if (provider === 'google') {
+        options.scopes = 'openid email profile';
+        // Always show Google's account chooser, even when a Google session already exists.
+        // This prevents mobile browsers from silently reusing the last signed-in account.
+        options.queryParams = { prompt: 'select_account' };
+      }
       const { error } = await state.client.auth.signInWithOAuth({ provider, options });
       if (error) throw error;
     } catch (error) {

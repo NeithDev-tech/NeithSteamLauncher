@@ -1,0 +1,5 @@
+R263
+- Google OAuth now sends prompt=select_account.
+- Google account chooser is shown even when a Google session already exists.
+- Discord OAuth is unchanged.
+- auth.js and auth-public-loader.js cache versions bumped across the site.

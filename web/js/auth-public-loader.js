@@ -101,7 +101,7 @@
     loadPromise = (async () => {
       await addScript(SUPABASE_CDN);
       await addScript(src('supabase-config.js?v=20260922-oauth-v8'));
-      await addScript(src('auth.js?v=20261022-r245-account-menu-clean'));
+      await addScript(src('auth.js?v=20261022-r263-google-account-chooser'));
 
       if (!window.NeithAuth || window.NeithAuth.__lazyStub) {
         throw new Error('Neith Auth no pudo inicializarse.');
