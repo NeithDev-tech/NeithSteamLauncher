@@ -27,7 +27,7 @@
   let refreshTimer = null;
   let lastRefreshAt = 0;
   let loadPromise = null;
-  const CACHE_KEY = 'neith_free_games_live_v3';
+  const CACHE_KEY = 'neith_free_games_live_v4_paid_to_zero';
   const CACHE_MAX_AGE = 2 * 60 * 60 * 1000;
 
   // No stale bundled offers: live sources are authoritative.
@@ -35,6 +35,26 @@
 
   const lang = () => document.documentElement.lang === 'en' ? 'en' : 'es';
   const t = (es, en) => lang() === 'en' ? en : es;
+
+
+  function priceValue(raw) {
+    const text = String(raw || '').replace(/\u00a0/g, ' ').trim();
+    const match = text.match(/(\d+(?:[.,]\d{1,2})?)/);
+    if (!match) return 0;
+    const value = Number(match[1].replace(',', '.'));
+    return Number.isFinite(value) ? value : 0;
+  }
+
+  function strictPaidToZeroGame(game) {
+    if (!game) return false;
+    const endAt = Number(game.endAt);
+    if (!Number.isFinite(endAt) || endAt <= Date.now()) return false;
+    if (priceValue(game.worth) <= 0) return false;
+    const platform = String(game.platform || '').toUpperCase().trim();
+    const allowed = new Set(['STEAM', 'EPIC GAMES', 'GOG', 'PRIME GAMING', 'HUMBLE BUNDLE']);
+    if (!allowed.has(platform)) return false;
+    return true;
+  }
 
   function safeImage(url) {
     try {
@@ -208,8 +228,10 @@
       const platforms = String(item.platforms || '');
       if (!/\bPC\b/i.test(platforms)) return false;
       const endAt = item.end_date && item.end_date !== 'N/A' ? Date.parse(item.end_date.replace(' ', 'T') + 'Z') : null;
-      if (Number.isFinite(endAt) && endAt <= Date.now()) return false;
-      const text = `${item.title || ''} ${item.description || ''} ${item.instructions || ''}`.toLowerCase();
+      if (!Number.isFinite(endAt) || endAt <= Date.now()) return false;
+      if (priceValue(item.worth) <= 0) return false;
+      const text = `${item.title || ''} ${item.description || ''} ${item.instructions || ''} ${item.open_giveaway_url || ''} ${item.gamerpower_url || ''}`.toLowerCase();
+      if (!/(?:epic games|steam|\bgog\b|prime gaming|gaming\.amazon|amazon prime|humble)/i.test(text)) return false;
       if (/\bkey giveaway\b|\brequires?\b[^.]{0,50}\b(?:arp|points?|credits?)\b|\b(?:arp|points?) required\b/.test(text)) return false;
       if (/\b(?:dlc|demo|prologue|playtest|trial|beta|free weekend|season pass|battle pass|starter pack|skin pack|currency pack)\b|in[- ]game loot/.test(text)) return false;
       return true;
@@ -217,8 +239,7 @@
       const platforms = String(item.platforms || '');
       const context = `${platforms} ${item.title || ''} ${item.description || ''} ${item.instructions || ''}`.toLowerCase();
       let platformLabel = 'PC';
-      if (context.includes('indiegala')) platformLabel = 'INDIEGALA';
-      else if (/\bstove\b/.test(context)) platformLabel = 'STOVE';
+      if (context.includes('humble')) platformLabel = 'HUMBLE BUNDLE';
       else {
         const found = supported.find(([needle]) => context.includes(needle.toLowerCase()));
         if (found) platformLabel = found[1];
@@ -254,10 +275,7 @@
   }
 
   function showGames(list) {
-    games = list.filter(game => {
-      const endAt = Number(game?.endAt);
-      return !Number.isFinite(endAt) || endAt <= 0 || endAt > Date.now();
-    });
+    games = list.filter(strictPaidToZeroGame);
     if (!games.length) return false;
     selectedIndex = 0;
     countEl.textContent = `${games.length} ${t('JUEGOS GRATIS DETECTADOS', 'FREE GAMES DETECTED')}`;
@@ -271,7 +289,7 @@
 
     // 1) Preferred production path: same-origin serverless proxy.
     try {
-      const response = await fetch('/api/free-games', { headers: { accept: 'application/json' }, cache: 'default' });
+      const response = await fetch('/api/free-games?mode=paid-to-zero-v1', { headers: { accept: 'application/json' }, cache: 'default' });
       if (response.ok) {
         const payload = await response.json();
         if (payload?.ok && Array.isArray(payload.games)) {

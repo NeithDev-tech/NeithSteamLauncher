@@ -11,7 +11,7 @@
   let dictionaryPromise = null;
 
   const scriptUrl = document.currentScript?.src || location.href;
-  const DICTIONARY_URL = new URL('./i18n-en.json?v=20261022-r259-vac-live-stable', scriptUrl).href;
+  const DICTIONARY_URL = new URL('./i18n-en.json?v=20261022-r268-reviews', scriptUrl).href;
 
   const queryLang = (() => {
     try {

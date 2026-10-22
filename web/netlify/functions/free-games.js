@@ -2,6 +2,7 @@ const SUPPORTED = [
   ['Epic Games Store', 'EPIC GAMES'],
   ['Steam', 'STEAM'],
   ['GOG', 'GOG'],
+  ['Humble', 'HUMBLE BUNDLE'],
   ['Ubisoft Connect', 'UBISOFT CONNECT'],
   ['Itch.io', 'ITCH.IO'],
   ['DRM-Free', 'DRM-FREE'],
@@ -37,15 +38,35 @@ function parseEnd(value) {
   return Number.isFinite(ms) ? ms : null;
 }
 
+
+function valueNumber(raw = '') {
+  const match = String(raw || '').replace(/\u00a0/g, ' ').match(/(\d+(?:[.,]\d{1,2})?)/);
+  if (!match) return 0;
+  const value = Number(match[1].replace(',', '.'));
+  return Number.isFinite(value) ? value : 0;
+}
+
+function launcherStoreFromItem(item = {}) {
+  const blob = `${item.platforms || ''} ${item.title || ''} ${item.description || ''} ${item.instructions || ''} ${item.open_giveaway_url || ''} ${item.gamerpower_url || ''}`.toLowerCase();
+  if (blob.includes('epic games')) return 'EPIC GAMES';
+  if (blob.includes('steam')) return 'STEAM';
+  if (/\bgog\b/.test(blob)) return 'GOG';
+  if (blob.includes('prime gaming') || blob.includes('gaming.amazon') || blob.includes('amazon prime')) return 'PRIME GAMING';
+  if (blob.includes('humble')) return 'HUMBLE BUNDLE';
+  return '';
+}
+
 function isDirectStoreFreebie(item, now) {
   if (!item || String(item.status).toLowerCase() !== 'active') return false;
   if (String(item.type).toLowerCase() !== 'game') return false;
   const platforms = String(item.platforms || '');
   if (!/\bPC\b/i.test(platforms)) return false;
   const end = parseEnd(item.end_date);
-  // GamerPower marks some legitimate claim-and-keep offers as N/A when a store
-  // does not publish an end date. Keep those while the upstream status is Active.
-  if (end && end <= now) return false;
+  // Match launcher strict rule: temporary means a real, future expiry is required.
+  if (!end || end <= now) return false;
+  // Match launcher strict rule: the base game must have a numeric normal price > 0.
+  if (valueNumber(item.worth) <= 0) return false;
+  if (!launcherStoreFromItem(item)) return false;
   const text = `${item.title || ''} ${item.description || ''} ${item.instructions || ''}`.toLowerCase();
   if (/\bkey giveaway\b|\brequires?\b[^.]{0,50}\b(?:arp|points?|credits?)\b|\b(?:arp|points?) required\b/.test(text)) return false;
   if (/\b(?:dlc|demo|prologue|playtest|trial|beta|free weekend|season pass|battle pass|starter pack|skin pack|currency pack)\b|in[- ]game loot/.test(text)) return false;
@@ -269,7 +290,7 @@ async function fetchGamerPower(now) {
   return payload.filter(item => isDirectStoreFreebie(item, now)).map(item => ({
     id: Number(item.id),
     title: cleanTitle(item.title),
-    platform: detectPlatform(item.platforms, `${item.title || ''} ${item.description || ''} ${item.instructions || ''}`),
+    platform: launcherStoreFromItem(item),
     worth: item.worth || null,
     image: item.image || item.thumbnail || '',
     thumbnail: item.thumbnail || item.image || '',
@@ -340,7 +361,10 @@ function dedupeAndSort(rows, now) {
   for (const game of rows || []) {
     if (!game) continue;
     const endAt = Number(game.endAt);
-    if (Number.isFinite(endAt) && endAt > 0 && endAt <= now) continue;
+    if (!Number.isFinite(endAt) || endAt <= now) continue;
+    if (valueNumber(game.worth) <= 0) continue;
+    const platform = String(game.platform || '').toUpperCase().trim();
+    if (!['STEAM', 'EPIC GAMES', 'GOG', 'PRIME GAMING', 'HUMBLE BUNDLE'].includes(platform)) continue;
     const key = cleanTitle(game.title).toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
     if (!key) continue;
     const current = seen.get(key);

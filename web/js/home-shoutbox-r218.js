@@ -37,6 +37,9 @@
     syncing: false,
     pruneBusy: false,
     reconnectTimer: 0,
+    reconnectNoticeTimer: 0,
+    realtimeGeneration: 0,
+    realtimeOnline: false,
     pollTimer: 0,
     cooldownUntil: 0,
     cooldownTimer: 0,
@@ -416,14 +419,40 @@
     }
   }
 
-  function scheduleReconnect() {
-    if (state.reconnectTimer) return;
+  function clearReconnectNotice() {
+    if (state.reconnectNoticeTimer) {
+      clearTimeout(state.reconnectNoticeTimer);
+      state.reconnectNoticeTimer = 0;
+    }
+  }
+
+  function showReconnectNoticeLater(generation) {
+    clearReconnectNotice();
+    state.reconnectNoticeTimer = window.setTimeout(() => {
+      state.reconnectNoticeTimer = 0;
+      if (generation !== state.realtimeGeneration || state.realtimeOnline) return;
+      setStatus(tx('RECONNECTING'), 'home209-shoutbox-error');
+    }, 2200);
+  }
+
+  function scheduleReconnect(generation) {
+    if (generation !== state.realtimeGeneration || state.reconnectTimer) return;
     state.reconnectTimer = window.setTimeout(async () => {
       state.reconnectTimer = 0;
-      try {
-        if (state.channel && state.client) await state.client.removeChannel(state.channel);
-      } catch {}
+      if (generation !== state.realtimeGeneration) return;
+
+      const oldChannel = state.channel;
+      // Invalidate the old callback before removing its channel. Supabase may emit
+      // CLOSED asynchronously during removeChannel(); that stale event must never
+      // overwrite the status of the replacement connection.
+      state.realtimeGeneration += 1;
       state.channel = null;
+      state.realtimeOnline = false;
+
+      try {
+        if (oldChannel && state.client) await state.client.removeChannel(oldChannel);
+      } catch {}
+
       subscribeRealtime();
       syncFromServer({ forceRender: true });
     }, 1200);
@@ -431,11 +460,14 @@
 
   function subscribeRealtime() {
     if (!state.client || state.channel) return;
-    state.channel = state.client
-      .channel('neith-home-shoutbox-r211')
+
+    const generation = ++state.realtimeGeneration;
+    const channel = state.client
+      .channel(`neith-home-shoutbox-r218-${generation}`)
       .on('postgres_changes', {
         event: '*', schema: 'public', table: 'neith_shoutbox_messages'
       }, payload => {
+        if (generation !== state.realtimeGeneration || state.channel !== channel) return;
         const wasAtBottom = isNearBottom();
         if (payload.eventType === 'DELETE') removeLocal(payload.old.id);
         else {
@@ -450,6 +482,7 @@
       .on('postgres_changes', {
         event: '*', schema: 'public', table: 'neith_shoutbox_bans'
       }, async payload => {
+        if (generation !== state.realtimeGeneration || state.channel !== channel) return;
         const affected = payload.new?.user_id || payload.old?.user_id;
         if (state.session?.user?.id && String(affected || '') === String(state.session.user.id)) {
           await refreshIdentity();
@@ -459,16 +492,28 @@
         }
       })
       .subscribe(status => {
+        // Ignore status notifications from superseded channels. This is the core
+        // fix for the LIVE <-> RECONNECTING flicker seen during channel replacement.
+        if (generation !== state.realtimeGeneration || state.channel !== channel) return;
+
         if (status === 'SUBSCRIBED') {
+          state.realtimeOnline = true;
+          clearReconnectNotice();
           setStatus(tx('LIVE'), 'home209-shoutbox-ok');
           syncFromServer();
           return;
         }
+
         if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED') {
-          setStatus(tx('RECONNECTING'), 'home209-shoutbox-error');
-          scheduleReconnect();
+          state.realtimeOnline = false;
+          // Do not visually flap on sub-second transport hiccups. The polling path
+          // keeps messages synchronized while the realtime channel reconnects.
+          showReconnectNoticeLater(generation);
+          scheduleReconnect(generation);
         }
       });
+
+    state.channel = channel;
   }
 
   async function pruneRemote() {
@@ -820,6 +865,7 @@
     state.authSubscription?.unsubscribe?.();
     if (state.pollTimer) clearInterval(state.pollTimer);
     if (state.reconnectTimer) clearTimeout(state.reconnectTimer);
+    clearReconnectNotice();
     clearCooldownTimer();
     clearInlineNoticeTimer();
   }, { once: true });
@@ -848,7 +894,7 @@
       setTimeout(refreshIdentity, 1400);
       setTimeout(refreshIdentity, 3200);
 
-      setStatus(tx('LIVE'), 'home209-shoutbox-ok');
+      // Realtime callback sets LIVE only after a confirmed SUBSCRIBED state.
     } catch (error) {
       setStatus(tx('OFFLINE'), 'home209-shoutbox-error');
       ui.meta.textContent = tx('Shoutbox connection unavailable.');
