@@ -16,7 +16,7 @@
     if (document.getElementById('neith-premium-owner-shortcut-style')) return;
     const style = document.createElement('style');
     style.id = 'neith-premium-owner-shortcut-style';
-    style.textContent = `.neith-owner-premium-shortcut{display:none;align-items:center;justify-content:center;min-height:38px;padding:0 clamp(10px,1vw,15px);margin:0;border:1px solid rgba(255,214,84,.38);border-radius:12px;background:linear-gradient(135deg,rgba(93,68,12,.88),rgba(49,36,8,.92));color:#ffe675!important;text-decoration:none!important;font:800 clamp(9px,.72vw,11px)/1 Orbitron,Inter,sans-serif;letter-spacing:.055em;white-space:nowrap;flex:0 0 auto;box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 8px 24px rgba(0,0,0,.18);transition:transform .15s ease,border-color .15s ease,box-shadow .15s ease}.neith-owner-premium-shortcut.ready{display:inline-flex}.neith-owner-premium-shortcut:hover{transform:translateY(-1px);border-color:rgba(255,222,106,.72);box-shadow:0 9px 25px rgba(201,147,31,.15)}@media(max-width:1180px){.neith-owner-premium-shortcut{min-height:36px;padding-inline:9px}}@media(max-width:1040px){.neith-owner-premium-shortcut{width:100%;min-height:42px}}`;
+    style.textContent = `.neith-owner-premium-shortcut{display:none;align-items:center;justify-content:center;min-height:38px;min-width:4.35rem;padding:0 .78rem;margin:0;border:1px solid rgba(255,214,84,.38);border-radius:12px;background:linear-gradient(135deg,rgba(93,68,12,.88),rgba(49,36,8,.92));color:#ffe675!important;text-decoration:none!important;font:800 clamp(9px,.68vw,10.5px)/1 Orbitron,Inter,sans-serif;letter-spacing:.055em;white-space:nowrap;flex:0 0 auto;position:relative;z-index:1;box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 8px 24px rgba(0,0,0,.18);transition:border-color .15s ease,box-shadow .15s ease}.neith-owner-premium-shortcut.ready{display:inline-flex}.neith-owner-premium-shortcut:hover{border-color:rgba(255,222,106,.72);box-shadow:0 9px 25px rgba(201,147,31,.15)}@media(max-width:1180px){.neith-owner-premium-shortcut{min-height:36px;min-width:3.9rem;padding-inline:.62rem}}@media(max-width:1040px){.neith-owner-premium-shortcut{display:none!important}}`;
     document.head.appendChild(style);
   }
 
@@ -362,12 +362,16 @@
     const nav = authBtn.closest('.nav');
     const actions = nav?.querySelector('.nav-actions');
     const download = actions?.querySelector('.nav-download, a.btn.primary');
+    if (actions && authBtn.parentElement !== actions) {
+      if (download) actions.insertBefore(authBtn, download);
+      else actions.prepend(authBtn);
+    }
     let link = document.querySelector('[data-owner-premium-shortcut]');
     if (!link) {
       link = document.createElement('a');
       link.dataset.ownerPremiumShortcut = '';
       link.className = 'neith-owner-premium-shortcut';
-      link.textContent = 'PREMIUM';
+      link.textContent = 'PRO';
       link.href = premiumUrl();
     }
     if (actions && link.parentElement !== actions) {

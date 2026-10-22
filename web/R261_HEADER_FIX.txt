@@ -1,0 +1,4 @@
+R261
+- Owner PREMIUM shortcut renamed to PRO.
+- Account trigger moved into nav-actions for owner sessions.
+- Responsive spacing rebuilt to prevent account/PRO/download overlap.
