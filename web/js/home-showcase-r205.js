@@ -4,14 +4,12 @@
   if (!root) return;
 
   const slides = [
-    {category:'accounts', label:'Accounts', src:'./img/showcase-accounts.jpg', title:'Accounts · Steam account control'},
-    {category:'boostpc', label:'Boost PC', src:'./img/showcase-boostpc-01.jpg', title:'Boost PC · Optimization preview'},
-    {category:'boostpc', label:'Boost PC', src:'./img/showcase-boostpc-02.jpg', title:'Boost PC · Optimization results'},
-    {category:'hourboost', label:'Hour Boost', src:'./img/showcase-hourboost-01.jpg', title:'Hour Boost · Ready state'},
-    {category:'hourboost', label:'Hour Boost', src:'./img/showcase-hourboost-02.jpg', title:'Hour Boost · Active session'},
-    {category:'freegames', label:'Free Games', src:'./img/showcase-freegames.jpg', title:'Free Games · Live offers'},
-    {category:'achievements', label:'Achievements', src:'./img/showcase-achievements-01.jpg', title:'Achievements · Game library'},
-    {category:'achievements', label:'Achievements', src:'./img/showcase-achievements-02.jpg', title:'Achievements · Detailed unlock control'}
+    {category:'home', label:'Home', src:'./img/home-showcase-inicio-r260.webp', title:'Home · Main launcher view'},
+    {category:'accounts', label:'Accounts', src:'./img/home-showcase-accounts-r260.webp', title:'Accounts · Steam account control'},
+    {category:'boostpc', label:'Boost PC', src:'./img/home-showcase-boostpc-r260.webp', title:'Boost PC · Optimization center'},
+    {category:'hourboost', label:'Hour Boost', src:'./img/home-showcase-hourboost-r260.webp', title:'Hour Boost · Session command center'},
+    {category:'freegames', label:'Free Games', src:'./img/home-showcase-freegames-r260.webp', title:'Free Games · Live promotions radar'},
+    {category:'achievements', label:'Achievements', src:'./img/home-showcase-achievements-r260.webp', title:'Achievements · Unlock control'}
   ];
 
   let index = 0;

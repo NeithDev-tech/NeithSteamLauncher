@@ -11,7 +11,7 @@
   let dictionaryPromise = null;
 
   const scriptUrl = document.currentScript?.src || location.href;
-  const DICTIONARY_URL = new URL('./i18n-en.json?v=20261022-r236-hourboost-copy', scriptUrl).href;
+  const DICTIONARY_URL = new URL('./i18n-en.json?v=20261022-r259-vac-live-stable', scriptUrl).href;
 
   const queryLang = (() => {
     try {
@@ -27,14 +27,19 @@
   function ensureDictionary() {
     if (ES_TO_EN && EN_TO_ES) return Promise.resolve(ES_TO_EN);
     if (dictionaryPromise) return dictionaryPromise;
-    dictionaryPromise = fetch(DICTIONARY_URL, {cache:'force-cache'})
+    dictionaryPromise = fetch(DICTIONARY_URL, {cache:'no-store'})
       .then(r => {
         if (!r.ok) throw new Error(`i18n dictionary HTTP ${r.status}`);
         return r.json();
       })
       .then(data => {
         ES_TO_EN = data || {};
-        EN_TO_ES = Object.fromEntries(Object.entries(ES_TO_EN).map(([es,en]) => [en,es]));
+        const RESERVED_LABELS = new Set(['VAC LIVE']);
+        EN_TO_ES = Object.fromEntries(
+          Object.entries(ES_TO_EN)
+            .filter(([es,en]) => !RESERVED_LABELS.has(String(en).trim().toUpperCase()))
+            .map(([es,en]) => [en,es])
+        );
         return ES_TO_EN;
       })
       .catch(error => {
@@ -53,7 +58,7 @@
   }
   function toSpanish(raw) {
     const str=String(raw??''); const t=str.trim(); if(!t) return str;
-    if (t === 'VAC LIVE') return keepWS(str, 'VAC LIVE');
+    if (t.toUpperCase() === 'VAC LIVE') return keepWS(str, 'VAC LIVE');
     if (EN_TO_ES?.[t] != null) return keepWS(str, EN_TO_ES[t]);
     let m=t.match(/^(\d[\d,.]*)\s+hrs$/i); if(m) return keepWS(str, `${m[1]} h`);
     m=t.match(/^(\d+) FREE GAMES DETECTED$/i); if(m) return keepWS(str, `${m[1]} JUEGOS GRATIS DETECTADOS`);
@@ -63,7 +68,7 @@
   }
   function toEnglish(raw) {
     const str=String(raw??''); const t=str.trim(); if(!t) return str;
-    if (t === 'VAC LIVE') return keepWS(str, 'VAC LIVE');
+    if (t.toUpperCase() === 'VAC LIVE') return keepWS(str, 'VAC LIVE');
     if (ES_TO_EN?.[t] != null) return keepWS(str, ES_TO_EN[t]);
     let m=t.match(/^(\d[\d,.]*)\s+h$/i); if(m) return keepWS(str, `${m[1]} hrs`);
     m=t.match(/^(\d+) JUEGOS GRATIS DETECTADOS$/i); if(m) return keepWS(str, `${m[1]} FREE GAMES DETECTED`);

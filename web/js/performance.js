@@ -10,7 +10,7 @@
     observedZones: 0,
     navigationMode: 'native-bfcache-safe'
   };
-  window.NeithPerformance = Object.freeze({ version: 'V30', stats });
+  window.NeithPerformance = Object.freeze({ version: 'V31-R260', stats });
 
   /* Keep background work quiet when the tab is not visible. */
   const syncVisibility = () => root.classList.toggle('neith-page-hidden', document.hidden);
@@ -93,34 +93,21 @@
 
   const warmLazyImages = () => {
     const images = [...document.querySelectorAll('img[loading="lazy"]')];
-    let i = 0;
-
-    const fallbackDeadline = {timeRemaining:()=>8,didTimeout:true};
-
-    const step = deadline => {
-      while (i < images.length && (deadline.timeRemaining() > 3 || deadline.didTimeout)) {
-        const img = images[i++];
+    if (!images.length) return;
+    if (!('IntersectionObserver' in window)) return;
+    const observer = new IntersectionObserver(entries => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        const img = entry.target;
+        observer.unobserve(img);
         if (img.complete && img.decode) img.decode().catch(() => {});
       }
-
-      if (i < images.length) {
-        if ('requestIdleCallback' in window) {
-          requestIdleCallback(step, {timeout:1200});
-        } else {
-          setTimeout(()=>step(fallbackDeadline),180);
-        }
-      }
-    };
-
-    if ('requestIdleCallback' in window) {
-      requestIdleCallback(step, {timeout:1500});
-    } else {
-      setTimeout(()=>step(fallbackDeadline),220);
-    }
+    }, {rootMargin:'420px 0px',threshold:0.01});
+    images.forEach(img => observer.observe(img));
   };
 
-  if (document.readyState === 'complete') warmLazyImages();
-  else window.addEventListener('load', warmLazyImages, {once:true, passive:true});
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', warmLazyImages, {once:true, passive:true});
+  else warmLazyImages();
 })();
 
 
