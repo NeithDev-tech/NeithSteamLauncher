@@ -1628,7 +1628,7 @@ linear-gradient(180deg,#020a14 0%,#030d18 72%,#020913 100%);overflow:hidden}.acc
   .topbar .navlinks{display:none;order:4;flex:1 0 100%;position:static;margin-top:.35rem;padding:.85rem;flex-direction:column;align-items:stretch;background:#00101ff7;border:1px solid var(--line);border-radius:16px;white-space:normal}
   .topbar .navlinks.open{display:flex}
   .topbar .nav-actions{order:3;gap:.45rem;margin-left:.25rem}
-  .topbar .nav-actions .neith-owner-premium-shortcut{display:none!important}
+  .topbar .nav-actions .neith-owner-premium-shortcut{display:inline-flex!important}
   .topbar .nav-download{padding:.7rem .9rem;font-size:.7rem}
 }
 @media(max-width:700px){
@@ -1675,4 +1675,23 @@ img[loading="lazy"]{content-visibility:auto}
   .topbar .nav-actions>[data-auth-nav]{flex:1 1 9rem!important;max-width:none!important}
   .topbar .nav-actions .nav-download{flex:1 1 11rem!important;min-width:0!important}
   .topbar .nav-actions .language-switcher{margin-left:0!important}
+}
+
+
+/* R262 — PRO always visible + final responsive header */
+.topbar .nav-actions .neith-owner-premium-shortcut{display:inline-flex!important;visibility:visible!important;opacity:1!important;flex:0 0 auto!important;min-width:3.6rem!important;max-width:max-content!important;padding-inline:.64rem!important;margin:0!important}
+@media(max-width:1180px){
+  .topbar .nav-actions .neith-owner-premium-shortcut{min-width:3.2rem!important;padding-inline:.5rem!important;font-size:.55rem!important}
+}
+@media(max-width:1040px){
+  .topbar .nav-actions{display:grid!important;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"account pro" "download download" "language language";gap:.48rem .55rem!important;width:100%!important;align-items:center!important}
+  .topbar .nav-actions>[data-auth-nav]{grid-area:account;min-width:0!important;max-width:none!important;width:100%!important}
+  .topbar .nav-actions .neith-owner-premium-shortcut{grid-area:pro;display:inline-flex!important;justify-self:end!important;align-self:stretch!important;min-width:3rem!important;min-height:36px!important;padding-inline:.52rem!important}
+  .topbar .nav-actions .nav-download{grid-area:download;width:100%!important;justify-content:center!important;min-width:0!important}
+  .topbar .nav-actions .language-switcher{grid-area:language;justify-self:end!important;margin:0!important}
+}
+@media(max-width:700px){
+  .topbar .nav-actions{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"account pro" "download download" "language language";gap:.4rem .45rem!important}
+  .topbar .nav-actions>[data-auth-nav]{min-width:0!important;max-width:none!important}
+  .topbar .nav-actions .neith-owner-premium-shortcut{display:inline-flex!important;min-width:2.85rem!important;min-height:34px!important;padding-inline:.44rem!important;font-size:.52rem!important;border-radius:10px!important}
 }
