@@ -463,9 +463,34 @@
 
   async function invokeIdentityAuth(body) {
     const { data, error } = await state.client.functions.invoke('neith-auth-identity', { body });
-    if (error) throw error;
+    if (error) {
+      const err = new Error(error?.message || 'identity_auth_failed');
+      err.code = 'NEITH_IDENTITY_EDGE_ERROR';
+      err.cause = error;
+      throw err;
+    }
     if (!data?.ok) throw new Error(data?.error || 'identity_auth_failed');
     return data;
+  }
+
+  function isValidEmail(value = '') {
+    const email = normalizeEmail(value);
+    return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+  }
+
+  function friendlyAuthError(error) {
+    const raw = String(error?.message || error || '').trim();
+    const lower = raw.toLowerCase();
+    if (error?.code === 'NEITH_IDENTITY_EDGE_ERROR' || lower.includes('edge function returned a non-2xx')) {
+      return window.NeithI18n?.t?.('El servicio de identidad está temporalmente ocupado. Inténtalo de nuevo en unos segundos.') || 'El servicio de identidad está temporalmente ocupado. Inténtalo de nuevo en unos segundos.';
+    }
+    if (lower.includes('user already registered') || lower.includes('already been registered')) {
+      return window.NeithI18n?.t?.('Ya existe una cuenta con ese correo electrónico.') || 'Ya existe una cuenta con ese correo electrónico.';
+    }
+    if (lower.includes('invalid email')) {
+      return window.NeithI18n?.t?.('Introduce un correo electrónico válido.') || 'Introduce un correo electrónico válido.';
+    }
+    return raw || (window.NeithI18n?.t?.('No se pudo completar la operación. Inténtalo de nuevo.') || 'No se pudo completar la operación. Inténtalo de nuevo.');
   }
 
   function prepareRegisterForm({ clear = false } = {}) {
@@ -888,11 +913,19 @@
         const password = String(form.querySelector('input[name="register_password"]')?.value || '');
         if (!displayNameValue) throw new Error(window.NeithI18n?.t?.('Introduce tu nombre de usuario.') || 'Introduce tu nombre de usuario.');
         if (displayNameValue.length > 20) throw new Error(window.NeithI18n?.t?.('El nombre de usuario puede tener como máximo 20 caracteres.') || 'El nombre de usuario puede tener como máximo 20 caracteres.');
-        const usernameCheck = await invokeIdentityAuth({ action: 'check_username', username: displayNameValue });
-        if (!usernameCheck.available) throw new Error(window.NeithI18n?.t?.('Este nombre de usuario ya está en uso.') || 'Este nombre de usuario ya está en uso.');
-        if (!email || !email.includes('@')) throw new Error(window.NeithI18n?.t?.('Introduce un correo electrónico válido.') || 'Introduce un correo electrónico válido.');
+        // Validación local completa ANTES de cualquier llamada remota.
+        if (!isValidEmail(email)) throw new Error(window.NeithI18n?.t?.('Introduce un correo electrónico válido.') || 'Introduce un correo electrónico válido.');
         if (email !== emailConfirm) throw new Error(window.NeithI18n?.t?.('Los correos no coinciden. Revisa la dirección antes de crear la cuenta.') || 'Los correos no coinciden. Revisa la dirección antes de crear la cuenta.');
         if (password.length < 8) throw new Error(window.NeithI18n?.t?.('La contraseña debe tener al menos 8 caracteres.') || 'La contraseña debe tener al menos 8 caracteres.');
+
+        // El precheck del nick no puede tumbar el registro si la Edge Function está caída/no publicada.
+        try {
+          const usernameCheck = await invokeIdentityAuth({ action: 'check_username', username: displayNameValue });
+          if (!usernameCheck.available) throw new Error(window.NeithI18n?.t?.('Este nombre de usuario ya está en uso.') || 'Este nombre de usuario ya está en uso.');
+        } catch (usernameError) {
+          if (usernameError?.code !== 'NEITH_IDENTITY_EDGE_ERROR') throw usernameError;
+          console.warn('[NEITH AUTH] Precheck de username no disponible; continúa registro por email.', usernameError);
+        }
 
         console.info('[NEITH AUTH] Registro solicitado para:', email);
         const { data: signupData, error } = await state.client.auth.signUp({
@@ -976,7 +1009,7 @@
         closeAuth();
       }
     } catch (error) {
-      setMessage(error?.message || 'No se pudo completar la operación.', 'error');
+      setMessage(friendlyAuthError(error), 'error');
     } finally {
       submit.disabled = false;
       submit.innerHTML = original;
