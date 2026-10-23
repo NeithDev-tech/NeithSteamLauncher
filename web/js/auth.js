@@ -48,6 +48,35 @@
   const PROFILE_PERSISTENT_PREFIX = 'neith_identity_v34:';
   const PROFILE_CACHE_TTL_MS = 5 * 60 * 1000;
 
+  // R273: immutable registration draft. Chromium/password managers may silently
+  // rewrite credential fields during native form submission. Keep the values the
+  // user actually typed in JS memory and never trust a last-millisecond autofill.
+  const registerDrafts = new WeakMap();
+  function getRegisterDraft(form) {
+    if (!form) return null;
+    let draft = registerDrafts.get(form);
+    if (!draft) {
+      draft = { displayName: '', email: '', emailConfirm: '', password: '' };
+      registerDrafts.set(form, draft);
+    }
+    return draft;
+  }
+  function captureRegisterDraft(form, input = null) {
+    const draft = getRegisterDraft(form);
+    if (!draft) return null;
+    const capture = (name, key, normalize = false) => {
+      const el = input?.name === name ? input : form.querySelector(`input[name=\"${name}\"]`);
+      if (!el) return;
+      const value = normalize ? normalizeEmail(el.value) : String(el.value || '');
+      draft[key] = value;
+    };
+    if (!input || input.name === 'display_name') capture('display_name', 'displayName');
+    if (!input || input.name === 'register_email') capture('register_email', 'email', true);
+    if (!input || input.name === 'register_email_confirm') capture('register_email_confirm', 'emailConfirm', true);
+    if (!input || input.name === 'register_password') capture('register_password', 'password');
+    return draft;
+  }
+
   function parseProfileCache(raw, userId, allowStale = false) {
     if (!raw || !userId) return null;
     try {
@@ -510,6 +539,9 @@
       if (email) email.value = '';
       if (confirm) confirm.value = '';
       if (password) password.value = '';
+      registerDrafts.set(form, { displayName: '', email: '', emailConfirm: '', password: '' });
+    } else {
+      captureRegisterDraft(form);
     }
   }
 
@@ -907,10 +939,14 @@
     try {
       const data = Object.fromEntries(new FormData(form));
       if (form.dataset.authForm === 'register') {
-        const displayNameValue = String(form.querySelector('input[name="display_name"]')?.value || '').trim();
-        const email = normalizeEmail(form.querySelector('input[name="register_email"]')?.value);
-        const emailConfirm = normalizeEmail(form.querySelector('input[name="register_email_confirm"]')?.value);
-        const password = String(form.querySelector('input[name="register_password"]')?.value || '');
+        // R273: use the in-memory draft captured from user input. Do not read the
+        // credential fields again here: Chrome/password managers can mutate them
+        // immediately before the submit event without changing what the user saw.
+        const draft = getRegisterDraft(form) || captureRegisterDraft(form);
+        const displayNameValue = String(draft?.displayName || form.querySelector('input[name="display_name"]')?.value || '').trim();
+        const email = normalizeEmail(draft?.email || form.querySelector('input[name="register_email"]')?.value);
+        const emailConfirm = normalizeEmail(draft?.emailConfirm || form.querySelector('input[name="register_email_confirm"]')?.value);
+        const password = String(draft?.password || form.querySelector('input[name="register_password"]')?.value || '');
         if (!displayNameValue) throw new Error(window.NeithI18n?.t?.('Introduce tu nombre de usuario.') || 'Introduce tu nombre de usuario.');
         if (displayNameValue.length > 20) throw new Error(window.NeithI18n?.t?.('El nombre de usuario puede tener como máximo 20 caracteres.') || 'El nombre de usuario puede tener como máximo 20 caracteres.');
         // Validación local completa ANTES de cualquier llamada remota.
@@ -1123,8 +1159,21 @@
     }, true);
 
     document.addEventListener('input', e => {
-      if (e.target.matches('[data-auth-form="register"] input[name="register_email"]')) updateRegisterTarget();
+      const registerInput = e.target.closest?.('[data-auth-form="register"] input');
+      if (registerInput) {
+        const registerForm = registerInput.closest('[data-auth-form="register"]');
+        captureRegisterDraft(registerForm, registerInput);
+        if (registerInput.name === 'register_email') updateRegisterTarget();
+      }
     });
+
+    // Capture one more immutable snapshot on pointer-down, before the browser's
+    // native submit/autofill machinery has any chance to rewrite credentials.
+    document.addEventListener('pointerdown', e => {
+      const submitButton = e.target.closest?.('[data-auth-form="register"] button[type="submit"]');
+      if (!submitButton) return;
+      captureRegisterDraft(submitButton.closest('[data-auth-form="register"]'));
+    }, true);
 
     document.addEventListener('submit', e => {
       const form = e.target.closest('[data-auth-form]');
