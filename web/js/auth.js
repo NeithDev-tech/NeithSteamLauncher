@@ -928,7 +928,14 @@
         }
 
         console.info('[NEITH AUTH] Registro solicitado para:', email);
-        const { data: signupData, error } = await state.client.auth.signUp({
+
+        // R271: el alta se ejecuta con un cliente aislado, sin ninguna sesión
+        // persistida del navegador. Así una cuenta anterior nunca puede
+        // contaminar el email/identidad del nuevo registro.
+        const signupClient = window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey, {
+          auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false }
+        });
+        const { data: signupData, error } = await signupClient.auth.signUp({
           email,
           password,
           options: {
@@ -944,12 +951,25 @@
         }
         let createdSession = signupData?.session || null;
         if (!createdSession) {
-          const { data: signedData, error: signInError } = await state.client.auth.signInWithPassword({ email, password });
+          // Compatibilidad por si en el futuro se activa confirmación obligatoria.
+          const { data: signedData, error: signInError } = await signupClient.auth.signInWithPassword({ email, password });
           if (signInError) throw signInError;
           createdSession = signedData?.session || null;
         }
         if (!createdSession?.user) {
           throw new Error(window.NeithI18n?.t?.('La cuenta se creó, pero no se pudo iniciar la sesión automáticamente.') || 'La cuenta se creó, pero no se pudo iniciar la sesión automáticamente.');
+        }
+
+        // Solo después de confirmar que la nueva identidad es correcta, sustituimos
+        // la sesión principal persistida por la sesión recién creada.
+        const { data: adoptedData, error: adoptError } = await state.client.auth.setSession({
+          access_token: createdSession.access_token,
+          refresh_token: createdSession.refresh_token
+        });
+        if (adoptError) throw adoptError;
+        createdSession = adoptedData?.session || createdSession;
+        if (normalizeEmail(createdSession?.user?.email) !== email) {
+          throw new Error(window.NeithI18n?.t?.('La sesión creada no corresponde al correo indicado. Operación detenida por seguridad.') || 'La sesión creada no corresponde al correo indicado. Operación detenida por seguridad.');
         }
 
         state.session = createdSession;

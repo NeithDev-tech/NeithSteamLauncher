@@ -1,0 +1,8 @@
+Neith Web R271 — Isolated registration identity fix
+
+- Registration now uses a non-persistent isolated Supabase client.
+- Existing/stale browser sessions cannot contaminate a new signup.
+- The persistent site session is replaced only after Supabase returns the expected email.
+- The returned/adopted session email is verified before UI state is updated.
+- auth.js cache version bumped site-wide to r271 to prevent CDN/browser reuse of older auth code.
+- No changes to reviews carousel, payments, Admin, layout, social OAuth or other unrelated modules.
