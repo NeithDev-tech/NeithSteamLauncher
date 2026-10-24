@@ -101,7 +101,6 @@
     loadPromise = (async () => {
       await addScript(SUPABASE_CDN);
       await addScript(src('supabase-config.js?v=20260922-oauth-v8'));
-      await addScript(src('auth-ux-r274.js?v=20261024-r274-auth-stability'));
       await addScript(src('auth.js?v=20261024-r273-register-draft-lock'));
 
       if (!window.NeithAuth || window.NeithAuth.__lazyStub) {
