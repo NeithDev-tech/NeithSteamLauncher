@@ -275,11 +275,11 @@
 
   function injectAuthUI(kind = 'both') {
     if (kind !== 'menu' && !document.getElementById('neith-auth-modal')) {
-      if (!document.querySelector('link[data-neith-auth34]')) {
+      if (!document.querySelector('link[data-neith-auth35]')) {
         const authCss = document.createElement('link');
         authCss.rel = 'stylesheet';
-        authCss.href = siteUrl('css/neith-auth-v34.css?v=20261024-v34');
-        authCss.dataset.neithAuth34 = '1';
+        authCss.href = siteUrl('css/neith-auth-v35.css?v=20261025-v35-auth-clean');
+        authCss.dataset.neithAuth35 = '1';
         document.head.appendChild(authCss);
       }
       document.body.insertAdjacentHTML('beforeend', `

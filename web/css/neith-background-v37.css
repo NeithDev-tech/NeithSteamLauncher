@@ -1,0 +1,70 @@
+
+/* V37 — visible navy/petrol background restoration for the actual Home sections */
+:root{
+  --v37-bg-top:#08243a;
+  --v37-bg-mid:#061c2d;
+  --v37-bg-bottom:#041522;
+}
+html{background:#061c2d!important}
+body{
+  background:
+    radial-gradient(circle at 12% 4%,rgba(0,215,255,.16),transparent 30%),
+    radial-gradient(circle at 88% 16%,rgba(59,91,255,.11),transparent 28%),
+    linear-gradient(180deg,var(--v37-bg-top) 0%,var(--v37-bg-mid) 48%,var(--v37-bg-bottom) 100%)!important;
+  background-attachment:fixed!important;
+}
+body:before{
+  opacity:.88!important;
+  background-image:
+    linear-gradient(rgba(101,221,255,.055) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(101,221,255,.055) 1px,transparent 1px)!important;
+}
+main{
+  background:
+    linear-gradient(180deg,rgba(5,29,47,.34),rgba(3,20,34,.18))!important;
+}
+.hero-v14{
+  background:
+    radial-gradient(circle at 50% 20%,rgba(18,191,245,.16),transparent 34%),
+    radial-gradient(circle at 18% 12%,rgba(35,122,190,.10),transparent 26%),
+    linear-gradient(180deg,#08263d 0%,#061d30 62%,#051a2a 100%)!important;
+}
+main>.section,
+.account-section,
+.neith-chat-v7,
+.home268-reviews{
+  background:
+    linear-gradient(180deg,rgba(7,31,50,.72),rgba(5,23,38,.72))!important;
+}
+main>.section:nth-of-type(even){
+  background:
+    linear-gradient(180deg,rgba(8,35,56,.66),rgba(5,25,41,.72))!important;
+}
+.value-band{
+  background:
+    linear-gradient(90deg,rgba(7,28,45,.76),rgba(11,48,72,.92),rgba(7,28,45,.76))!important;
+  border-block-color:rgba(104,222,255,.16)!important;
+}
+#download{
+  background:
+    linear-gradient(180deg,rgba(7,31,50,.70),rgba(5,22,37,.76))!important;
+}
+.home268-reviews{
+  background:
+    radial-gradient(circle at 50% 100%,rgba(28,151,211,.14),transparent 44%),
+    linear-gradient(180deg,rgba(7,31,50,.74),rgba(5,22,37,.80))!important;
+}
+#neith-v4-footer{
+  background:
+    radial-gradient(circle at 14% 0,rgba(26,159,220,.13),transparent 32%),
+    linear-gradient(180deg,#061c2d 0%,#041522 58%,#03111d 100%)!important;
+}
+.topbar{
+  background:rgba(6,28,45,.90)!important;
+}
+@media(max-width:760px){
+  body{background-attachment:scroll!important}
+  main>.section,.account-section,.neith-chat-v7,.home268-reviews,#download{
+    background:linear-gradient(180deg,rgba(7,31,50,.82),rgba(5,22,37,.86))!important;
+  }
+}

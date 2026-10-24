@@ -1,14 +1,15 @@
 @echo off
 setlocal
 cd /d "%~dp0"
-title Neith Web - Prueba local
+title Neith Web - Local Test
 
 echo ================================================
-echo   NEITH WEB - LOCAL TEST SERVER
+echo   NEITH WEB - LOCAL TEST
+
 echo ================================================
 echo.
-echo The website will open automatically in your browser.
-echo Keep this window open while testing the website.
+echo Opening the website at http://127.0.0.1:8080/
+echo Keep this window open while testing.
 echo.
 
 where py >nul 2>nul
@@ -19,8 +20,7 @@ if %errorlevel%==0 (
   if %errorlevel%==0 (
     python "_neith_local_server.py" --port 8080
   ) else (
-    echo ERROR: Python is not installed or is not available in PATH.
-    echo Install Python 3 and run PROBAR_WEB.bat again.
+    echo ERROR: Python 3 is not installed or is not available in PATH.
     pause
     exit /b 1
   )
