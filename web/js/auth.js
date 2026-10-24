@@ -275,81 +275,81 @@
 
   function injectAuthUI(kind = 'both') {
     if (kind !== 'menu' && !document.getElementById('neith-auth-modal')) {
-      if (!document.querySelector('link[data-neith-auth26]')) {
+      if (!document.querySelector('link[data-neith-auth34]')) {
         const authCss = document.createElement('link');
         authCss.rel = 'stylesheet';
-        authCss.href = siteUrl('css/neith-auth-v27.css?v=20261024-v27');
-        authCss.dataset.neithAuth27 = '1';
+        authCss.href = siteUrl('css/neith-auth-v34.css?v=20261024-v34');
+        authCss.dataset.neithAuth34 = '1';
         document.head.appendChild(authCss);
       }
       document.body.insertAdjacentHTML('beforeend', `
-        <div class="auth-modal neith-auth26-modal" id="neith-auth-modal" aria-hidden="true">
-          <div class="auth-backdrop neith-auth26-backdrop" data-auth-close></div>
-          <section class="auth-shell neith-auth26-shell" role="dialog" aria-modal="true" aria-labelledby="auth-title">
-            <button class="auth-close neith-auth26-close" type="button" aria-label="Close" data-auth-close>×</button>
-
-            <aside class="neith-auth26-brand">
-              <div class="neith-auth26-mark" aria-hidden="true"><img src="${siteUrl('img/neith-launcher-mark.png')}" alt=""><span></span></div>
-              <div class="neith-auth26-brandcopy">
-                <span class="neith-auth26-kicker">NEITH ID · SECURE ACCESS</span>
+        <div class="neith-auth34-modal" id="neith-auth-modal" aria-hidden="true">
+          <button class="neith-auth34-backdrop" type="button" tabindex="-1" aria-label="Close sign in" data-auth-close></button>
+          <section class="neith-auth34-dialog" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+            <aside class="neith-auth34-brand">
+              <div class="neith-auth34-logo"><img src="${siteUrl('img/neith-launcher-mark.png')}" alt="Neith"></div>
+              <div class="neith-auth34-brand-copy">
+                <span class="neith-auth34-kicker">NEITH ID · SECURE ACCESS</span>
                 <h2 id="auth-title">WELCOME TO NEITH</h2>
                 <p>Sign in to your Neith ID or create a free account to keep your profile, Premium status and launcher access connected.</p>
               </div>
-              <div class="neith-auth26-trust" aria-hidden="true">
+              <div class="neith-auth34-trust" aria-hidden="true">
                 <span><i></i> SECURE SESSION</span>
                 <span>ENCRYPTED ACCESS</span>
               </div>
             </aside>
 
-            <div class="neith-auth26-panel">
-              <div class="auth-tabs neith-auth26-tabs" role="tablist">
+            <main class="neith-auth34-main">
+              <button class="neith-auth34-close" type="button" aria-label="Close" data-auth-close>×</button>
+
+              <div class="neith-auth34-tabs" role="tablist">
                 <button class="active" type="button" data-auth-tab="login">SIGN IN</button>
                 <button type="button" data-auth-tab="register">CREATE ACCOUNT</button>
               </div>
 
-              <form class="auth-form neith-auth26-form" data-auth-form="login" novalidate>
-                <label class="neith-auth26-field">
+              <form class="neith-auth34-form" data-auth-form="login" novalidate>
+                <label class="neith-auth34-field">
                   <span>EMAIL OR USERNAME</span>
-                  <div class="neith-auth26-input"><b aria-hidden="true">@</b><input name="email" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" required placeholder="your@email.com or username"></div>
+                  <div class="neith-auth34-input"><b aria-hidden="true">@</b><input name="email" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" required placeholder="your@email.com or username"></div>
                 </label>
-                <label class="neith-auth26-field">
+                <label class="neith-auth34-field">
                   <span>PASSWORD</span>
-                  <div class="neith-auth26-input neith-auth26-password"><b aria-hidden="true">◇</b><input name="password" type="password" autocomplete="current-password" required minlength="8" placeholder="••••••••"><button class="password-toggle neith-auth26-eye" type="button" data-password-toggle aria-label="Show password" aria-pressed="false">◉</button></div>
+                  <div class="neith-auth34-input neith-auth34-password"><b aria-hidden="true">◇</b><input name="password" type="password" autocomplete="current-password" required minlength="8" placeholder="••••••••"><button class="neith-auth34-eye" type="button" data-password-toggle aria-label="Show password" aria-pressed="false">◉</button></div>
                 </label>
-                <div class="neith-auth26-tools">
-                  <label class="auth-remember neith-auth26-remember"><input type="checkbox" name="remember" value="1" data-auth-remember><span class="auth-check" aria-hidden="true"><i>✓</i></span><span>Remember sign-in</span></label>
-                  <button class="auth-forgot neith-auth26-link" type="button" data-auth-switch="recover">Forgot your password?</button>
+                <div class="neith-auth34-tools">
+                  <label class="neith-auth34-remember"><input type="checkbox" name="remember" value="1" data-auth-remember><span class="neith-auth34-check" aria-hidden="true">✓</span><span>Remember sign-in</span></label>
+                  <button class="neith-auth34-link" type="button" data-auth-switch="recover">Forgot your password?</button>
                 </div>
-                <p class="neith-auth26-note">We only store your email or username in this browser. Never your password.</p>
-                <button class="auth-submit neith-auth26-submit" type="submit"><span>ENTER NEITH</span><em aria-hidden="true">→</em></button>
-                <button class="auth-switch-link neith-auth26-switch" type="button" data-auth-switch="register">New to Neith? <strong>Create a free Neith ID</strong></button>
+                <p class="neith-auth34-note">We only store your email or username in this browser. Never your password.</p>
+                <button class="neith-auth34-submit" type="submit"><span>ENTER NEITH</span><em aria-hidden="true">→</em></button>
+                <button class="neith-auth34-switch" type="button" data-auth-switch="register">New to Neith? <strong>Create a free Neith ID</strong></button>
               </form>
 
-              <form class="auth-form neith-auth26-form" data-auth-form="register" autocomplete="off" hidden novalidate>
-                <label class="neith-auth26-field"><span>USERNAME</span><div class="neith-auth26-input"><b aria-hidden="true">N</b><input name="display_name" type="text" autocomplete="nickname" required maxlength="20" placeholder="Your Neith username"></div></label>
-                <label class="neith-auth26-field"><span>EMAIL ADDRESS</span><div class="neith-auth26-input"><b aria-hidden="true">@</b><input name="register_email" type="email" autocomplete="off" autocapitalize="none" spellcheck="false" data-lpignore="true" data-1p-ignore="true" required placeholder="your@email.com"></div></label>
-                <label class="neith-auth26-field"><span>CONFIRM EMAIL</span><div class="neith-auth26-input"><b aria-hidden="true">✓</b><input name="register_email_confirm" type="email" autocomplete="off" autocapitalize="none" spellcheck="false" data-lpignore="true" data-1p-ignore="true" required placeholder="Repeat your email"></div></label>
-                <label class="neith-auth26-field"><span>PASSWORD</span><div class="neith-auth26-input neith-auth26-password"><b aria-hidden="true">◇</b><input name="register_password" type="password" autocomplete="new-password" data-lpignore="true" required minlength="8" placeholder="Minimum 8 characters"><button class="password-toggle neith-auth26-eye" type="button" data-password-toggle aria-label="Show password" aria-pressed="false">◉</button></div></label>
-                <p class="auth-register-target neith-auth26-register-target" data-register-target>The confirmation email will be sent exactly to the address entered above.</p>
-                <button class="auth-submit neith-auth26-submit" type="submit"><span>CREATE ACCOUNT</span><em aria-hidden="true">→</em></button>
-                <button class="auth-switch-link neith-auth26-switch" type="button" data-auth-switch="login">Already have an account? <strong>Sign in</strong></button>
+              <form class="neith-auth34-form" data-auth-form="register" autocomplete="off" hidden novalidate>
+                <label class="neith-auth34-field"><span>USERNAME</span><div class="neith-auth34-input"><b aria-hidden="true">N</b><input name="display_name" type="text" autocomplete="nickname" required maxlength="20" placeholder="Your Neith username"></div></label>
+                <label class="neith-auth34-field"><span>EMAIL ADDRESS</span><div class="neith-auth34-input"><b aria-hidden="true">@</b><input name="register_email" type="email" autocomplete="off" autocapitalize="none" spellcheck="false" data-lpignore="true" data-1p-ignore="true" required placeholder="your@email.com"></div></label>
+                <label class="neith-auth34-field"><span>CONFIRM EMAIL</span><div class="neith-auth34-input"><b aria-hidden="true">✓</b><input name="register_email_confirm" type="email" autocomplete="off" autocapitalize="none" spellcheck="false" data-lpignore="true" data-1p-ignore="true" required placeholder="Repeat your email"></div></label>
+                <label class="neith-auth34-field"><span>PASSWORD</span><div class="neith-auth34-input neith-auth34-password"><b aria-hidden="true">◇</b><input name="register_password" type="password" autocomplete="new-password" data-lpignore="true" required minlength="8" placeholder="Minimum 8 characters"><button class="neith-auth34-eye" type="button" data-password-toggle aria-label="Show password" aria-pressed="false">◉</button></div></label>
+                <p class="neith-auth34-register-target" data-register-target>The confirmation email will be sent exactly to the address entered above.</p>
+                <button class="neith-auth34-submit" type="submit"><span>CREATE ACCOUNT</span><em aria-hidden="true">→</em></button>
+                <button class="neith-auth34-switch" type="button" data-auth-switch="login">Already have an account? <strong>Sign in</strong></button>
               </form>
 
-              <form class="auth-form neith-auth26-form" data-auth-form="recover" hidden novalidate>
-                <div class="neith-auth26-recovery"><strong>RECOVER YOUR ACCOUNT</strong><span>Enter your email address and we will send you a secure password reset link.</span></div>
-                <label class="neith-auth26-field"><span>EMAIL ADDRESS</span><div class="neith-auth26-input"><b aria-hidden="true">@</b><input name="email" type="email" autocomplete="email" required placeholder="your@email.com"></div></label>
-                <button class="auth-submit neith-auth26-submit" type="submit"><span>SEND RECOVERY LINK</span><em aria-hidden="true">→</em></button>
-                <button class="auth-switch-link neith-auth26-switch" type="button" data-auth-switch="login">← Back to sign in</button>
+              <form class="neith-auth34-form" data-auth-form="recover" hidden novalidate>
+                <div class="neith-auth34-recovery"><strong>RECOVER YOUR ACCOUNT</strong><span>Enter your email address and we will send you a secure password reset link.</span></div>
+                <label class="neith-auth34-field"><span>EMAIL ADDRESS</span><div class="neith-auth34-input"><b aria-hidden="true">@</b><input name="email" type="email" autocomplete="email" required placeholder="your@email.com"></div></label>
+                <button class="neith-auth34-submit" type="submit"><span>SEND RECOVERY LINK</span><em aria-hidden="true">→</em></button>
+                <button class="neith-auth34-switch" type="button" data-auth-switch="login">← Back to sign in</button>
               </form>
 
-              <div class="auth-separator neith-auth26-separator" ${oauthEnabled ? '' : 'hidden'}><span>OR CONTINUE WITH</span></div>
-              <div class="auth-socials neith-auth26-socials" ${oauthEnabled ? '' : 'hidden'}>
-                <button type="button" class="social google" data-oauth="google"><span class="social-icon google-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="#4285F4" d="M21.6 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.4a4.6 4.6 0 0 1-2 3v2.5h3.3c1.9-1.8 2.9-4.4 2.9-7.3Z"/><path fill="#34A853" d="M12 22c2.7 0 5-.9 6.7-2.4l-3.3-2.5c-.9.6-2.1 1-3.4 1-2.6 0-4.8-1.8-5.6-4.2H3v2.6A10 10 0 0 0 12 22Z"/><path fill="#FBBC05" d="M6.4 13.9A6 6 0 0 1 6.1 12c0-.7.1-1.3.3-1.9V7.5H3A10 10 0 0 0 2 12c0 1.6.4 3.1 1 4.5l3.4-2.6Z"/><path fill="#EA4335" d="M12 5.9c1.5 0 2.8.5 3.8 1.5l2.9-2.8A9.7 9.7 0 0 0 3 7.5l3.4 2.6C7.2 7.7 9.4 5.9 12 5.9Z"/></svg></span><b>Continue with Google</b></button>
-                <button type="button" class="social discord" data-oauth="discord"><span class="social-icon discord-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M19.7 5.3A18 18 0 0 0 15.3 4l-.5 1a16 16 0 0 0-5.6 0l-.5-1a18 18 0 0 0-4.4 1.3C1.5 9.5.7 13.6 1.1 17.6A18 18 0 0 0 6.5 20l1.3-1.8a12 12 0 0 1-2-.9l.5-.4c3.8 1.8 7.6 1.8 11.4 0l.5.4c-.6.4-1.3.7-2 .9l1.3 1.8a18 18 0 0 0 5.4-2.4c.5-4.6-.8-8.7-3.2-12.3ZM8.2 15.2c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2.1 1 2 2.2c0 1.2-.9 2.2-2 2.2Zm7.6 0c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2.1 1 2 2.2c0 1.2-.9 2.2-2 2.2Z"/></svg></span><b>Continue with Discord</b></button>
+              <div class="neith-auth34-separator" ${oauthEnabled ? '' : 'hidden'}><span>OR CONTINUE WITH</span></div>
+              <div class="neith-auth34-socials" ${oauthEnabled ? '' : 'hidden'}>
+                <button type="button" class="neith-auth34-social neith-auth34-google" data-oauth="google"><span class="neith-auth34-social-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="#4285F4" d="M21.6 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.4a4.6 4.6 0 0 1-2 3v2.5h3.3c1.9-1.8 2.9-4.4 2.9-7.3Z"/><path fill="#34A853" d="M12 22c2.7 0 5-.9 6.7-2.4l-3.3-2.5c-.9.6-2.1 1-3.4 1-2.6 0-4.8-1.8-5.6-4.2H3v2.6A10 10 0 0 0 12 22Z"/><path fill="#FBBC05" d="M6.4 13.9A6 6 0 0 1 6.1 12c0-.7.1-1.3.3-1.9V7.5H3A10 10 0 0 0 2 12c0 1.6.4 3.1 1 4.5l3.4-2.6Z"/><path fill="#EA4335" d="M12 5.9c1.5 0 2.8.5 3.8 1.5l2.9-2.8A9.7 9.7 0 0 0 3 7.5l3.4 2.6C7.2 7.7 9.4 5.9 12 5.9Z"/></svg></span><b>Continue with Google</b></button>
+                <button type="button" class="neith-auth34-social neith-auth34-discord" data-oauth="discord"><span class="neith-auth34-social-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M19.7 5.3A18 18 0 0 0 15.3 4l-.5 1a16 16 0 0 0-5.6 0l-.5-1a18 18 0 0 0-4.4 1.3C1.5 9.5.7 13.6 1.1 17.6A18 18 0 0 0 6.5 20l1.3-1.8a12 12 0 0 1-2-.9l.5-.4c3.8 1.8 7.6 1.8 11.4 0l.5.4c-.6.4-1.3.7-2 .9l1.3 1.8a18 18 0 0 0 5.4-2.4c.5-4.6-.8-8.7-3.2-12.3ZM8.2 15.2c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2.1 1 2 2.2c0 1.2-.9 2.2-2 2.2Zm7.6 0c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2.1 1 2 2.2c0 1.2-.9 2.2-2 2.2Z"/></svg></span><b>Continue with Discord</b></button>
               </div>
-              <p class="auth-message neith-auth26-message" data-auth-message></p>
-              <p class="auth-config-note neith-auth26-config" ${configured ? 'hidden' : ''}>Visual mode is active. Configure Supabase in <code>js/supabase-config.js</code> to enable real authentication.</p>
-            </div>
+              <p class="neith-auth34-message" data-auth-message></p>
+              <p class="neith-auth34-config" ${configured ? 'hidden' : ''}>Visual mode is active. Configure Supabase in <code>js/supabase-config.js</code> to enable real authentication.</p>
+            </main>
           </section>
         </div>
       `);
@@ -602,7 +602,7 @@
     modal?.classList.add('open');
     modal?.setAttribute('aria-hidden', 'false');
     document.documentElement.classList.add('auth-open');
-    const shell = modal?.querySelector('.auth-shell');
+    const shell = modal?.querySelector('.neith-auth34-dialog');
     if (shell) {
       shell.classList.remove('auth-glitch');
       void shell.offsetWidth;
@@ -622,7 +622,7 @@
   function setTab(tab) {
     document.querySelectorAll('[data-auth-tab]').forEach(btn => btn.classList.toggle('active', btn.dataset.authTab === tab));
     document.querySelectorAll('[data-auth-form]').forEach(form => form.hidden = form.dataset.authForm !== tab);
-    const tabs = document.querySelector('.auth-tabs');
+    const tabs = document.querySelector('.neith-auth34-tabs');
     if (tabs) tabs.hidden = tab === 'recover';
     const title = document.getElementById('auth-title');
     if (title) title.textContent = tab === 'recover' ? 'RECOVER ACCESS' : (tab === 'register' ? 'CREATE YOUR NEITH ID' : 'WELCOME TO NEITH');
