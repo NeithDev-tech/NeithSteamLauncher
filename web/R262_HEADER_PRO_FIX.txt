@@ -1,4 +1,0 @@
-R262
-- PRO stays visible on desktop, laptop, tablet and mobile.
-- Mobile header uses a two-column account + PRO row, with Download below.
-- All pages load the same fresh header-controller and style.css versions.

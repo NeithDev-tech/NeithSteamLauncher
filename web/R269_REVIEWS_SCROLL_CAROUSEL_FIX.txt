@@ -1,8 +1,0 @@
-R269 REVIEWS SCROLL + CAROUSEL FIX
-- Removed horizontal modal scrolling.
-- Locked both html and body while review modals are open.
-- Single contained vertical scroll only.
-- Textarea no longer resizes and cannot create horizontal overflow.
-- Review homepage carousel: 3 cards desktop, 2 tablet, 1 mobile.
-- Previous/next arrows + page indicator appear only when needed.
-- Read All Reviews continues to show the complete list.

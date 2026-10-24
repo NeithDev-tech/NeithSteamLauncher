@@ -1,0 +1,33 @@
+/* V21 — keep header animation, remove all moving shine near footer */
+#neith-v4-footer,
+#neith-v4-footer *,
+#neith-v4-footer::before,
+#neith-v4-footer::after,
+#neith-v4-footer *::before,
+#neith-v4-footer *::after{
+  animation:none!important;
+}
+
+/* Remove the generic white button sweep from the bottom-of-page zones only. */
+#download .primary::before,
+#download .btn.primary::before,
+#download .primary::after,
+#download .btn.primary::after,
+.home268-reviews .primary::before,
+.home268-reviews .primary::after,
+.home268-reviews .btn.primary::before,
+.home268-reviews .btn.primary::after,
+.neith-chat-v7 .primary::before,
+.neith-chat-v7 .primary::after{
+  content:none!important;
+  display:none!important;
+  animation:none!important;
+}
+
+/* No moving sweep/glint on the very last content section before the footer. */
+main > section:last-of-type::before,
+main > section:last-of-type::after,
+main > section:last-of-type *::before,
+main > section:last-of-type *::after{
+  animation:none!important;
+}

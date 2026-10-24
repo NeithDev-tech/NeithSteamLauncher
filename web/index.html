@@ -1,250 +1,247 @@
-<!DOCTYPE html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Neith — Steam Launcher PRO</title>
+<link rel="icon" href="favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Orbitron:wght@600;700;800;900&family=Oxanium:wght@500;600;700;800&family=Michroma&display=swap" rel="stylesheet">
+<link href="./css/style.css?v=20261022-r262-pro-visible" rel="stylesheet">
+<link href="./css/neith-unified-v6.css?v=20261024-v6" rel="stylesheet">
+<link href="./css/home-reviews-r268.css?v=20261024-v7" rel="stylesheet">
+<link href="./css/home-shoutbox-r213.css?v=20261024-v7" rel="stylesheet">
+<link href="./css/neith-community-v7.css?v=20261024-v7" rel="stylesheet">
+<link href="./css/neith-commercial-v10.css?v=20261024-v10" rel="stylesheet">
+<link href="./css/neith-footer-v18.css?v=20261024-v18" rel="stylesheet">
+<link href="./css/neith-commercial-v12.css?v=20261024-v12" rel="stylesheet">
+<link href="./css/neith-commercial-v11.css?v=20261024-v11" rel="stylesheet">
+<link href="./css/neith-hero-v14.css?v=20261024-v14" rel="stylesheet">
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#02070d;--panel:#07111c;--panel2:#081827;--line:rgba(92,217,255,.20);
+  --cyan:#54e6ff;--cyan2:#13bde9;--blue:#1a74ff;--green:#58eda8;--white:#f4fbff;
+  --muted:#8ea8ba;--soft:#b8cedb;--radius:1.35rem;--max:86rem;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:
+ radial-gradient(ellipse at 50% -10%,rgba(22,125,195,.20),transparent 36%),
+ linear-gradient(180deg,#030a12 0%,#02070d 54%,#030810 100%);color:var(--white);font-family:Inter,Segoe UI,system-ui,sans-serif;overflow-x:hidden}
+a{color:inherit;text-decoration:none}.shell{width:min(94%,var(--max));margin-inline:auto}
+.topbar{position:sticky;inset-block-start:0;z-index:20;background:rgba(2,7,13,.78);backdrop-filter:blur(1.1rem);border-bottom:1px solid rgba(92,217,255,.12)}
+.nav{min-height:4.6rem;display:flex;align-items:center;gap:1.4rem}.brand{display:flex;align-items:center;gap:.8rem;min-width:max-content}.brand img{width:2.55rem;aspect-ratio:1;object-fit:contain}.brand strong{font-size:1.05rem;letter-spacing:.16em}.brand small{display:block;color:#6fe9ff;font-size:.58rem;letter-spacing:.28em;margin-top:.12rem}.links{display:flex;gap:1.2rem;margin-left:auto;color:#93adbe;font-weight:700;font-size:.78rem}.links a:hover{color:#fff}.nav-actions{display:flex;align-items:center;gap:.65rem}.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:2.9rem;padding:.7rem 1.1rem;border-radius:.75rem;border:1px solid rgba(92,217,255,.22);font-weight:850;letter-spacing:.045em;font-size:.78rem;background:rgba(7,24,38,.72);transition:.22s ease}.btn:hover{transform:translateY(-.08rem);border-color:rgba(92,217,255,.55)}.btn-primary{background:linear-gradient(135deg,#0ca7dc,#145fff);border-color:#5ee7ff;color:#fff;box-shadow:0 0 2.2rem rgba(30,183,255,.20)}
+.hero{padding:clamp(4.5rem,9vw,8.3rem) 0 clamp(3.2rem,6vw,5rem);position:relative}.hero:after{content:"";position:absolute;inset:auto 10% 0;height:1px;background:linear-gradient(90deg,transparent,rgba(71,220,255,.45),transparent)}
+.eyebrow{display:inline-flex;align-items:center;gap:.65rem;padding:.48rem .78rem;border:1px solid rgba(94,233,255,.22);border-radius:999rem;background:rgba(4,20,32,.72);font-size:.7rem;font-weight:850;letter-spacing:.18em;color:#79eaff}.dot{width:.45rem;aspect-ratio:1;border-radius:50%;background:#57f3aa;box-shadow:0 0 1rem #57f3aa}
+.hero-copy{text-align:center;max-width:62rem;margin-inline:auto}.hero h1{font-size:clamp(2.8rem,6.8vw,6.2rem);line-height:.92;margin:1.25rem 0 1.15rem;letter-spacing:-.055em}.hero h1 span{display:block;color:transparent;background:linear-gradient(90deg,#fff 5%,#87eeff 45%,#2dbfff 80%);-webkit-background-clip:text;background-clip:text}.hero p{max-width:46rem;margin-inline:auto;color:#9cb3c2;font-size:clamp(1rem,1.8vw,1.18rem);line-height:1.7}.hero-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:.8rem;margin-top:1.65rem}.micro{display:flex;justify-content:center;gap:1.1rem;flex-wrap:wrap;margin-top:1.15rem;color:#708b9d;font-size:.72rem;font-weight:700}.micro b{color:#a7bdca}
+.product-stage{margin:clamp(2.6rem,5vw,4.8rem) auto 0;max-width:76rem;position:relative}.product-stage:before{content:"";position:absolute;inset:8% 6% -8%;background:radial-gradient(ellipse,rgba(0,187,255,.20),transparent 65%);filter:blur(2rem);z-index:-1}.screen-frame{padding:.6rem;border-radius:1.35rem;border:1px solid rgba(94,233,255,.32);background:linear-gradient(145deg,rgba(13,38,58,.98),rgba(4,12,20,.98));box-shadow:0 2.4rem 7rem rgba(0,0,0,.55),0 0 4rem rgba(0,180,255,.12)}.screen-bar{height:2.15rem;display:flex;align-items:center;gap:.45rem;padding-inline:.55rem}.screen-bar i{width:.5rem;aspect-ratio:1;border-radius:50%;background:#294657}.screen-bar i:first-child{background:#19bfe8}.screen-frame img{display:block;width:100%;height:auto;max-height:44rem;object-fit:contain;border-radius:.9rem;background:#030a10}
+.quick-value{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:.75rem;margin-top:1.1rem}.quick-value div{padding:.9rem .7rem;text-align:center;border:1px solid rgba(92,217,255,.12);background:rgba(5,18,29,.66);border-radius:.9rem;color:#8ca7b8;font-size:.7rem;font-weight:800;letter-spacing:.06em}.quick-value b{display:block;color:#e8faff;font-size:.84rem;margin-bottom:.2rem}
+.section{padding:clamp(4.5rem,8vw,7.2rem) 0}.section-head{text-align:center;max-width:49rem;margin:0 auto clamp(2rem,4vw,3.6rem)}.kicker{color:#5de4ff;font-size:.72rem;letter-spacing:.22em;font-weight:900;text-transform:uppercase}.section h2{font-size:clamp(2.1rem,4.4vw,4rem);line-height:1.02;letter-spacing:-.035em;margin:.75rem 0 1rem}.section-head p{color:#8da6b6;line-height:1.7;margin:0}
+.hooks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}.hook{position:relative;overflow:hidden;border-radius:var(--radius);border:1px solid rgba(92,217,255,.18);background:linear-gradient(160deg,rgba(8,27,43,.94),rgba(3,11,19,.98));min-width:0;box-shadow:0 1.4rem 4rem rgba(0,0,0,.25)}.hook-media{aspect-ratio:16/10;display:grid;place-items:center;padding:.8rem;background:radial-gradient(circle at 50% 100%,rgba(31,166,222,.15),transparent 65%)}.hook-media img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 1rem 1.8rem rgba(0,0,0,.32))}.hook-copy{padding:1.25rem 1.25rem 1.45rem}.hook-tag{font-size:.62rem;color:#58e6ff;font-weight:900;letter-spacing:.18em}.hook h3{font-size:clamp(1.15rem,2vw,1.5rem);margin:.5rem 0 .55rem}.hook p{margin:0;color:#8da8b9;line-height:1.55;font-size:.88rem}.hook strong{color:#dff9ff}.hook .mini-cta{display:inline-flex;margin-top:1rem;color:#61e8ff;font-size:.72rem;font-weight:900;letter-spacing:.07em}
+.problem-wrap{display:grid;grid-template-columns:.92fr 1.08fr;gap:clamp(1rem,3vw,2rem);align-items:center}.problem-card{border:1px solid rgba(92,217,255,.16);border-radius:var(--radius);background:rgba(5,16,26,.76);padding:clamp(1.35rem,3vw,2.2rem)}.problem-card h3{font-size:clamp(1.7rem,3vw,2.5rem);margin:.5rem 0 1.1rem}.comparison{display:grid;gap:.65rem}.compare-row{display:grid;grid-template-columns:auto 1fr;gap:.75rem;align-items:start;padding:.78rem;border-radius:.8rem;background:rgba(255,255,255,.025);color:#96adbc;font-size:.86rem}.compare-row .x{color:#ff6f84}.compare-row .ok{color:#55edaa}.compare-row strong{display:block;color:#eafaff;margin-bottom:.14rem}.problem-visual{position:relative}.problem-visual .screen-frame{transform:perspective(70rem) rotateY(-2deg) rotateX(1deg)}
+.value-band{border-block:1px solid rgba(92,217,255,.12);background:linear-gradient(90deg,rgba(4,14,24,.4),rgba(7,31,46,.75),rgba(4,14,24,.4));padding:1.15rem 0}.value-band .shell{display:flex;justify-content:center;gap:clamp(1.2rem,4vw,4rem);flex-wrap:wrap}.stat{text-align:center}.stat b{display:block;font-size:1.2rem;color:#eafdff}.stat span{font-size:.67rem;color:#6f899a;letter-spacing:.11em;text-transform:uppercase}
+.features-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}.feature-wide{border:1px solid rgba(92,217,255,.15);border-radius:var(--radius);background:rgba(5,18,29,.72);overflow:hidden;display:grid;grid-template-columns:1fr 1fr;min-height:19rem}.feature-wide:nth-child(even) .feature-img{order:2}.feature-img{display:grid;place-items:center;padding:1rem;background:radial-gradient(circle,rgba(19,166,222,.12),transparent 70%)}.feature-img img{width:100%;height:100%;object-fit:contain;max-height:22rem}.feature-text{padding:clamp(1.35rem,3vw,2.2rem);display:flex;flex-direction:column;justify-content:center}.feature-text small{color:#52dfff;font-weight:900;letter-spacing:.16em}.feature-text h3{font-size:clamp(1.4rem,2.5vw,2rem);margin:.55rem 0}.feature-text p{color:#8ca6b7;line-height:1.6;margin:0;font-size:.88rem}
+.pricing{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;max-width:57rem;margin-inline:auto}.price-card{border:1px solid rgba(92,217,255,.16);border-radius:1.4rem;background:linear-gradient(160deg,rgba(7,24,38,.92),rgba(3,11,19,.96));padding:clamp(1.4rem,3vw,2rem)}.price-card.pro{border-color:rgba(65,224,255,.48);box-shadow:0 0 3rem rgba(20,176,255,.10)}.price-badge{font-size:.65rem;font-weight:900;letter-spacing:.16em;color:#63e8ff}.price-card h3{font-size:1.55rem;margin:.5rem 0}.price{font-size:clamp(2.3rem,5vw,4rem);font-weight:950;letter-spacing:-.05em}.price span{font-size:.8rem;color:#849dac;letter-spacing:0}.price-list{display:grid;gap:.65rem;margin:1.2rem 0 1.4rem;color:#a7bbc8;font-size:.83rem}.price-list div:before{content:"✓";color:#55edaa;margin-right:.55rem;font-weight:900}.price-card .btn{width:100%}
+.community{position:relative;overflow:hidden;text-align:center;border:1px solid rgba(92,217,255,.20);border-radius:1.7rem;background:radial-gradient(circle at 50% 110%,rgba(28,178,235,.24),transparent 48%),linear-gradient(145deg,#071827,#040c14);padding:clamp(2.8rem,6vw,5.4rem) clamp(1.2rem,4vw,3rem)}.community h2{margin:.6rem auto 1rem;max-width:48rem}.community p{max-width:42rem;margin:0 auto 1.5rem;color:#8fa8b9;line-height:1.6}.social-proof{display:flex;justify-content:center;gap:.7rem;flex-wrap:wrap;margin-bottom:1.5rem}.proof-pill{padding:.65rem .9rem;border-radius:999rem;border:1px solid rgba(92,217,255,.15);background:rgba(5,17,27,.7);font-size:.72rem;color:#9db4c2;font-weight:800}.proof-pill b{color:#effcff}
+footer{padding:2rem 0 3rem;color:#607c8e;font-size:.72rem;text-align:center}
 
-<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><meta content="dark" name="color-scheme"/><meta content="#000813" name="theme-color"/><style id="neith-critical-paint">html{min-height:100%;background-color:#000813;color-scheme:dark}body{margin:0;min-height:100vh;background-color:#00101F;color:#F3FDFF}</style><title>Neith Launcher PRO | VAC LIVE, Hour Boost, Boost PC and Steam</title><meta content="Neith Launcher PRO for Windows: manage Steam accounts, Hour Boost, VAC LIVE, Boost PC, achievements, library and free games from one launcher." name="description"/><meta content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" name="robots"/><link href="https://www.neithlauncher.com/" rel="canonical"/><meta content="website" property="og:type"/><meta content="Neith Launcher PRO | VAC LIVE &amp; Hour Boost" property="og:title"/><meta content="Manage your Steam accounts with Hour Boost, VAC LIVE, Boost PC, achievements, library and free games from Neith Launcher PRO." property="og:description"/><meta content="https://www.neithlauncher.com/" property="og:url"/><meta content="Neith Launcher PRO" property="og:site_name"/><meta content="https://www.neithlauncher.com/img/og-neith.jpg" property="og:image"/><meta content="Neith Launcher PRO for Windows" property="og:image:alt"/><meta content="summary_large_image" name="twitter:card"/><meta content="Neith Launcher PRO | VAC LIVE &amp; Hour Boost" name="twitter:title"/><meta content="Hour Boost, VAC LIVE, Boost PC, accounts, achievements and free games for Steam on Windows." name="twitter:description"/><meta content="https://www.neithlauncher.com/img/og-neith.jpg" name="twitter:image"/><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.neithlauncher.com/#website","url":"https://www.neithlauncher.com/","name":"Neith Launcher PRO","inLanguage":["es","en"],"publisher":{"@id":"https://www.neithlauncher.com/#software"}},{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Neith Launcher PRO","alternateName":"Neith Steam Launcher","url":"https://www.neithlauncher.com/","image":"https://www.neithlauncher.com/img/og-neith.jpg","applicationCategory":"GameApplication","operatingSystem":"Windows 10, Windows 11","softwareVersion":"1.0.0","description":"Windows launcher with Steam account management, Hour Boost, VAC LIVE, Boost PC, achievements, library and free games.","featureList":["Steam account management","Hour Boost","VAC LIVE","Boost PC","Steam achievements","Game library","Free games"],"@id":"https://www.neithlauncher.com/#software"}]}</script><link href="./favicon.ico" rel="icon"/><link href="./site.webmanifest" rel="manifest"/><link crossorigin="" href="https://cdn.jsdelivr.net" rel="preconnect"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Orbitron:wght@600;700;800;900&amp;family=Rajdhani:wght@500;600;700&amp;family=Syncopate:wght@400;700&amp;display=swap" rel="stylesheet"/><link href="./css/style.css?v=20261022-r262-pro-visible" rel="stylesheet"/><link href="./css/landing-r45.css?v=20261010-r128" rel="stylesheet"/><link href="./css/performance-r61.css?v=20260924-r85-lightbox" rel="stylesheet"/><link href="./css/web-commercial-r94.css?v=20261005-r94" rel="stylesheet"/><link href="./css/neith-approved-mockup.css?v=20261006-r117" rel="stylesheet"/><link href="css/web-breathe-r123.css?v=20261010-r123" rel="stylesheet"/><link href="./css/home-trailer-r165.css?v=20261012-r165" rel="stylesheet"/><link href="./css/home-showcase-r205.css?v=20261022-r259" rel="stylesheet"/><link href="./css/home-shoutbox-r218.css?v=20261020-r218" rel="stylesheet"/><link href="./css/admin-presence-footer-r220.css?v=20261020-r220" rel="stylesheet"/><link href="./css/home-reviews-r268.css?v=20261023-r269-scroll-carousel" rel="stylesheet"/></head><body><header class="topbar"><nav class="nav shell"><a aria-label="Neith Steam Launcher" class="brand nav-brand-r47" href="./"><span aria-hidden="true" class="nav-brand-r47__visual"><img alt="" class="nav-brand-r47__image" decoding="async" fetchpriority="high" height="109" loading="eager" src="img/neith-navbar-logo-transparent.png" width="260"/></span><span class="nav-brand-r47__sr">Neith Steam Launcher</span></a><button aria-expanded="false" aria-label="Open menu" class="menu">☰</button><div class="navlinks"><a href="./hourboost/">Hour Boost</a><a href="vac-live/">VAC LIVE</a><a href="./boostpc/">Boost PC</a><a href="./logros/">Achievements</a><a href="./juegos-gratis/">Free Games</a><a href="./cuentas/">Accounts</a><button aria-controls="neith-auth-modal" aria-haspopup="dialog" class="nav-auth-button nav-login-visible" data-auth-nav="" type="button"><span aria-hidden="true" class="nav-auth-led"></span><span data-auth-nav-label="">SIGN IN</span></button></div><div class="nav-actions"><a class="btn primary nav-download" href="./descargar">DOWNLOAD LAUNCHER</a><div aria-label="Language" class="language-switcher" role="group"><button aria-label="Spanish" class="lang-flag lang-flag--es" data-lang="es" title="Spanish" type="button"><svg aria-hidden="true" focusable="false" viewbox="0 0 24 24"><defs><clippath id="esCircle"><circle cx="12" cy="12" r="11"></circle></clippath></defs><g clip-path="url(#esCircle)"><rect fill="#AA151B" height="24" width="24"></rect><rect fill="#F1BF00" height="12" width="24" y="6"></rect><rect fill="#AA151B" height="5.5" rx=".25" width="1.5" x="6.8" y="9"></rect><rect fill="#fff" height="1" opacity=".9" width="2.2" x="6.45" y="10"></rect></g><circle cx="12" cy="12" fill="none" r="11" stroke="rgba(255,255,255,.78)" stroke-width=".7"></circle></svg></button><button aria-label="English" class="lang-flag lang-flag--en" data-lang="en" title="English" type="button"><svg aria-hidden="true" focusable="false" viewbox="0 0 24 24"><defs><clippath id="gbCircle"><circle cx="12" cy="12" r="11"></circle></clippath></defs><g clip-path="url(#gbCircle)"><rect fill="#012169" height="24" width="24"></rect><path d="M0 0 24 24M24 0 0 24" stroke="#fff" stroke-width="5"></path><path d="M0 0 24 24M24 0 0 24" stroke="#C8102E" stroke-width="2.2"></path><path d="M12 0v24M0 12h24" stroke="#fff" stroke-width="7"></path><path d="M12 0v24M0 12h24" stroke="#C8102E" stroke-width="4"></path></g><circle cx="12" cy="12" fill="none" r="11" stroke="rgba(255,255,255,.78)" stroke-width=".7"></circle></svg></button></div></div></nav></header><main><section class="home45-hero">
-<div aria-hidden="true" class="home165-gamewall">
-<div class="home165-cover home165-cover--01"><img alt="" decoding="async" src="./img/home-hero-covers-r165/cover-01.webp"/></div>
-<div class="home165-cover home165-cover--02"><img alt="" decoding="async" src="./img/home-hero-covers-r165/cover-02.webp"/></div>
-<div class="home165-cover home165-cover--03"><img alt="" decoding="async" src="./img/home-hero-covers-r165/cover-03.webp"/></div>
-<div class="home165-cover home165-cover--04"><img alt="" decoding="async" src="./img/home-hero-covers-r165/cover-04.webp"/></div>
-<div class="home165-cover home165-cover--05"><img alt="" decoding="async" src="./img/home-hero-covers-r165/cover-05.webp"/></div>
-<div class="home165-cover home165-cover--06"><img alt="" decoding="async" src="./img/home-hero-covers-r165/cover-06.webp"/></div>
-<div class="home165-cover home165-cover--07"><img alt="" decoding="async" src="./img/home-hero-covers-r165/cover-07.webp"/></div>
-<div class="home165-cover home165-cover--08"><img alt="" decoding="async" src="./img/home-hero-covers-r165/cover-08.webp"/></div>
-<div class="home165-cover home165-cover--09"><img alt="" decoding="async" src="./img/home-hero-covers-r165/cover-09.webp"/></div>
-<div class="home165-gamewall-shade"></div>
-</div>
-<div aria-hidden="true" class="home45-bg-grid"></div>
-<div aria-hidden="true" class="home45-aurora home45-aurora-a"></div>
-<div aria-hidden="true" class="home45-aurora home45-aurora-b"></div>
-<div aria-hidden="true" class="home45-orbit home45-orbit-a"></div>
-<div aria-hidden="true" class="home45-orbit home45-orbit-b"></div>
-<div class="shell home45-shell">
-<div class="home45-copy reveal">
-<div class="home45-brand-lockup"><img alt="Premium NEITH Steam Launcher logo" decoding="async" fetchpriority="high" height="819" loading="lazy" src="./img/neith-master-logo-premium-transparent.webp" width="1920"/></div>
-<div class="home45-kicker"><i></i><span>STEAM LAUNCHER // WINDOWS</span></div>
-<h1>YOUR ENTIRE GAMING UNIVERSE.<br/><span>ONE NEITH.</span></h1>
-<p>Neith brings accounts, boost, performance, achievements and game opportunities together in one fast, visual experience built around Steam.</p>
-<div class="home45-actions">
-<a class="home45-btn home45-btn--primary" href="./descargar"><span>DOWNLOAD NEITH</span><b aria-hidden="true">↓</b></a>
-<a class="home45-btn home45-btn--ghost" href="#features"><span>VIEW FEATURES</span><b aria-hidden="true">›</b></a>
-</div>
-<div aria-label="Main features" class="home45-feature-chips">
-<a href="./hourboost/"><i></i><span>HOUR BOOST</span><b>24/7</b></a>
-<a href="./boostpc/"><i></i><span>BOOST PC</span><b>LIVE</b></a>
-<a href="./juegos-gratis/"><i></i><span>FREE GAMES</span><b>RADAR</b></a>
-</div>
-<div aria-label="Compatibility and status" class="home45-proofline">
-<span><i></i> WINDOWS 10 / 11</span>
-<span><i></i> MULTI PROFILE</span>
-<span><i></i> REAL INTERFACE</span>
-</div>
-</div>
-<section aria-label="HOME — official Neith trailer" class="neith-approved-poster-section neith-approved-home-refined neith-home-video-section"><div class="shell"><div class="neith-approved-poster-head reveal"><div class="kicker">NEITH // OFFICIAL TRAILER</div><h2 class="title neith-home-video-title">ALL YOUR STEAM.<br/><span>ONE NEITH.</span></h2></div><div class="neith-approved-poster-card neith-home-video-card reveal"><div class="neith-home-youtube-shell neith-trailer-player" data-neith-trailer="" data-video-id="WNh3SSI9vPs"><a aria-label="Play official Neith trailer" class="neith-trailer-poster" href="https://youtu.be/WNh3SSI9vPs" rel="noopener" target="_blank"><img alt="Official Neith Steam Launcher trailer" decoding="async" fetchpriority="low" height="941" loading="lazy" src="./img/neith-official-trailer-thumbnail.webp" width="1672"/><span aria-hidden="true" class="neith-trailer-shade"></span><span aria-hidden="true" class="neith-trailer-play"><svg focusable="false" viewbox="0 0 96 96"><circle cx="48" cy="48" r="46"></circle><path d="M39 31 68 48 39 65Z"></path></svg></span><span class="neith-trailer-action">WATCH OFFICIAL TRAILER</span></a></div></div></div></section>
-</div>
+.account-grid{display:grid;grid-template-columns:.92fr 1.08fr;gap:clamp(1.4rem,4vw,3.6rem);align-items:center}.account-copy h2{font-size:clamp(2.1rem,4.4vw,4rem);line-height:1.03;letter-spacing:-.04em;margin:.7rem 0 1rem}.account-copy>p{color:#8ea8b9;line-height:1.7;max-width:42rem}.account-benefits{display:grid;gap:.7rem;margin:1.35rem 0}.account-benefits>span{display:grid;grid-template-columns:2.2rem 1fr;column-gap:.8rem;align-items:center;padding:.9rem 1rem;border:1px solid rgba(92,217,255,.13);border-radius:.9rem;background:rgba(4,17,28,.7)}.account-benefits b{grid-row:1/3;display:grid;place-items:center;width:2.2rem;aspect-ratio:1;border-radius:.65rem;background:rgba(42,204,255,.1);color:#55e3ff;font:900 .72rem Orbitron,sans-serif}.account-benefits strong{font-size:.84rem}.account-benefits small{color:#7893a4;margin-top:.15rem;line-height:1.45}.account-actions{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.2rem}.account-visual{position:relative}.account-glow-card{position:absolute;right:1rem;bottom:-1.4rem;max-width:min(24rem,85%);padding:1rem 1.15rem;border:1px solid rgba(91,229,255,.38);border-radius:1rem;background:rgba(3,15,26,.92);box-shadow:0 1rem 3rem rgba(0,0,0,.46),0 0 2rem rgba(31,191,255,.12)}.account-glow-card span,.donation-label{display:block;color:#58e4ff;font:900 .62rem Orbitron,sans-serif;letter-spacing:.16em}.account-glow-card strong{display:block;margin:.35rem 0;font-size:.82rem}.account-glow-card small{color:#718fa1;font-weight:800;font-size:.62rem;letter-spacing:.08em}.donation-panel{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(17rem,.5fr);border:1px solid rgba(89,228,255,.28);border-radius:1.55rem;overflow:hidden;background:linear-gradient(145deg,rgba(6,24,39,.96),rgba(2,10,18,.98));box-shadow:0 2rem 6rem rgba(0,0,0,.32),0 0 3.2rem rgba(14,180,235,.08)}.donation-main{padding:clamp(1.35rem,3vw,2.2rem)}.donation-top{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start}.donation-top h3{font-size:clamp(1.25rem,2.5vw,2rem);margin:.45rem 0}.donation-verified{padding:.5rem .68rem;border:1px solid rgba(80,237,177,.22);border-radius:999rem;color:#67efbc;background:rgba(25,109,80,.12);font-size:.62rem;font-weight:900;white-space:nowrap}.donation-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.7rem;margin:1.2rem 0}.donation-steps>div{padding:1rem;border:1px solid rgba(92,217,255,.12);border-radius:.85rem;background:rgba(255,255,255,.02)}.donation-steps b{display:block;color:#54e4ff;font:900 .7rem Orbitron,sans-serif;margin-bottom:.6rem}.donation-steps strong{display:block;font-size:.76rem;margin-bottom:.38rem}.donation-steps span{display:block;color:#7894a5;line-height:1.5;font-size:.74rem}.donation-alert{display:flex;gap:.7rem;padding:.85rem 1rem;border-left:2px solid #50e5ff;background:rgba(12,89,117,.12);color:#96afbe;font-size:.76rem;line-height:1.45}.donation-alert strong{color:#dffbff}.donation-actions{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1rem}.donation-paypal{min-width:min(100%,20rem)}.premium-pass{padding:clamp(1.4rem,3vw,2rem);border-left:1px solid rgba(92,217,255,.15);background:radial-gradient(circle at 50% 110%,rgba(30,179,239,.18),transparent 55%),rgba(5,18,29,.74);display:flex;flex-direction:column;justify-content:center}.premium-pass>span{color:#63e8ff;font-size:.62rem;font-weight:900;letter-spacing:.15em}.premium-pass>strong{font-size:1.15rem;margin:.35rem 0 1rem}.premium-price{font:950 clamp(3.2rem,6vw,5.4rem)/.9 Inter,sans-serif;letter-spacing:-.07em;color:#fff}.premium-price sup{font-size:1.1rem;color:#62e8ff;vertical-align:top;margin-right:.12rem}.premium-pass>small{color:#6e8b9c;font-weight:800;letter-spacing:.11em;margin:.6rem 0 1rem}.premium-pass ul{list-style:none;padding:0;margin:0;display:grid;gap:.6rem;color:#a4bac7;font-size:.76rem}.premium-pass li:before{content:'✓';color:#55edaa;margin-right:.5rem;font-weight:900}.nav-auth-button{font-family:Orbitron,Inter,sans-serif}.nav-actions{flex-wrap:nowrap}
+
+@media(max-width:64rem){.links{display:none}.account-grid{grid-template-columns:1fr}.account-visual{margin-top:1rem}.donation-panel{grid-template-columns:1fr}.premium-pass{border-left:0;border-top:1px solid rgba(92,217,255,.15)}.quick-value{grid-template-columns:repeat(3,minmax(0,1fr))}.hooks{grid-template-columns:1fr}.hook{display:grid;grid-template-columns:1fr 1fr;align-items:center}.problem-wrap{grid-template-columns:1fr}.features-grid{grid-template-columns:1fr}.feature-wide{min-height:16rem}}
+@media(max-width:46rem){.nav{min-height:4rem}.donation-steps{grid-template-columns:1fr}.donation-top{flex-direction:column}.donation-verified{white-space:normal}.account-glow-card{position:static;max-width:none;margin-top:.7rem}.brand small{display:none}.nav-actions .btn:not(.btn-primary){display:none}.hero{padding-top:3.6rem}.quick-value{grid-template-columns:repeat(2,minmax(0,1fr))}.hook{grid-template-columns:1fr}.hook-media{aspect-ratio:16/9}.feature-wide{grid-template-columns:1fr}.feature-wide:nth-child(even) .feature-img{order:0}.pricing{grid-template-columns:1fr}.micro{gap:.6rem}.screen-frame{padding:.38rem}.screen-bar{height:1.55rem}}
+</style>
+<script>(function(){try{localStorage.setItem('neith_language','en');localStorage.setItem('neith_language_user_choice_r204','en');}catch(e){}document.documentElement.lang='en';})();</script>
+<link href="./css/neith-footer-v19.css?v=20261024-v19" rel="stylesheet">
+<link href="./css/neith-footer-no-sweep-v21.css?v=20261024-v21" rel="stylesheet">
+<link rel="stylesheet" href="./css/neith-v30-global.css?v=20261024-v30">
+</head>
+<body>
+<header class="topbar"><div class="shell nav">
+  <a class="brand" href="index.html"><img decoding="async" src="img/neith-navbar-logo-transparent.png" alt="Neith"><span><strong>NEITH</strong><small>STEAM LAUNCHER PRO</small></span></a>
+  <nav class="links"><a href="#neith-id">Neith ID</a><a href="#power">Features</a><a href="#compare">Why Neith</a><a href="#premium">Premium</a><a href="#download">Download</a></nav>
+  <div class="nav-actions"><button aria-controls="neith-auth-modal" aria-haspopup="dialog" class="nav-auth-button nav-login-visible" data-auth-nav type="button"><span aria-hidden="true" class="nav-auth-led"></span><span data-auth-nav-label>SIGN IN</span></button><a class="btn btn-primary" href="./descargar">DOWNLOAD</a></div>
+</div></header>
+
+<main>
+<section class="hero-v14" aria-labelledby="hero-v14-title"><div class="shell hero-v14-shell">
+  <div class="hero-v14-brandline"><span class="hero-v14-brandline-rule"></span><span>NEITH STEAM LAUNCHER PRO</span><span class="hero-v14-brandline-rule"></span></div>
+  <div class="hero-v14-title-wrap">
+    <h1 id="hero-v14-title" class="hero-v14-title"><span class="hero-v14-line hero-v14-line-a">YOUR STEAM.</span><span class="hero-v14-line hero-v14-line-b">ONE LAUNCHER.</span></h1>
+    <div class="hero-v14-underbar"><i></i><b></b><i></i></div>
+  </div>
+  <p class="hero-v14-lead">VAC Live, Hour Boost, instant account switching, free game discoveries and Steam achievements, all in one premium launcher.</p>
+  <div class="hero-v14-actions"><a class="btn btn-primary" href="./descargar">DOWNLOAD NEITH FREE</a><button class="btn" type="button" data-open-register>CREATE FREE NEITH ID</button><a class="btn" href="#power">EXPLORE FEATURES</a></div>
+  <div class="hero-v14-trust"><span>FREE VERSION</span><span>WINDOWS</span><span>NEITH ID SYNC</span><span>PREMIUM BY DONATION</span></div>
+  <div class="hero-v14-stage">
+    <div class="hero-v14-stage-frame"><div class="screen-bar"><i></i><i></i><i></i></div><img decoding="async" src="img/home-showcase-inicio-r260.webp" alt="Neith Steam Launcher PRO interface"></div>
+    <div class="hero-v14-stage-glow"></div>
+  </div>
+</div></section>
+
+<section class="section account-section" id="neith-id"><div class="shell account-grid">
+  <div class="account-copy"><div class="kicker">YOUR NEITH ID</div><h2>Try the launcher first. Keep your account with you.</h2><p>Create a free Neith ID to keep your website identity, Premium status and account access connected. Existing users can sign in from the same place.</p>
+    <div class="account-benefits"><span><b>01</b><strong>Create your free Neith ID</strong><small>Username, email and password in one short flow.</small></span><span><b>02</b><strong>Sign in from the header</strong><small>Your profile and account menu stay available across the website.</small></span><span><b>03</b><strong>Premium stays linked to your ID</strong><small>Use your exact Neith username when requesting Premium activation.</small></span></div>
+    <div class="account-actions"><button class="btn btn-primary" type="button" data-open-register>CREATE FREE ACCOUNT</button><button class="btn" type="button" data-open-login>ALREADY HAVE AN ACCOUNT? SIGN IN</button></div>
+  </div>
+  <div class="account-visual"><div class="screen-frame"><div class="screen-bar"><i></i><i></i><i></i></div><img decoding="async" src="img/home-showcase-accounts-r260.webp" alt="Neith accounts"></div><div class="account-glow-card"><span>NEITH ID</span><strong>ONE ACCOUNT FOR THE WEBSITE + PREMIUM</strong><small>FREE TO CREATE · SIGN IN ANYTIME</small></div></div>
+</div></section>
+
+<section class="section" id="power"><div class="shell">
+  <div class="section-head"><div class="kicker">The reasons to install it</div><h2>Three hooks. One decision.</h2><p>The tools that make Neith different, shown directly inside the launcher.</p></div>
+  <div class="hooks">
+    <article class="hook"><div class="hook-media"><img decoding="async" src="img/vac-live-account-neith-r234.png" alt="VAC Live"></div><div class="hook-copy"><div class="hook-tag">VAC LIVE</div><h3>Stop checking VAC manually.</h3><p>See the live VAC status and remaining time for your connected Steam accounts from the same place.</p><span class="mini-cta">SEE VAC LIVE →</span></div></article>
+    <article class="hook"><div class="hook-media"><img decoding="async" src="img/home-showcase-hourboost-r260.webp" alt="Hour Boost"></div><div class="hook-copy"><div class="hook-tag">HOUR BOOST</div><h3>Your PC can be off.</h3><p><strong>Premium: up to 3 accounts × 5 games.</strong> Keep Hour Boost sessions running remotely without keeping your gaming PC on.</p><span class="mini-cta">DISCOVER HOUR BOOST →</span></div></article>
+    <article class="hook"><div class="hook-media"><img decoding="async" src="img/home-showcase-accounts-r260.webp" alt="Steam accounts"></div><div class="hook-copy"><div class="hook-tag">1-CLICK ACCOUNTS</div><h3>Stop logging in one by one.</h3><p>Keep your Steam accounts organized and switch between them from one launcher.</p><span class="mini-cta">SEE ACCOUNTS →</span></div></article>
+  </div>
+</div></section>
+
+<div class="value-band"><div class="shell"><div class="stat"><b>1 launcher</b><span>all your tools</span></div><div class="stat"><b>FREE</b><span>start without paying</span></div><div class="stat"><b>20 accounts</b><span>premium capacity</span></div><div class="stat"><b>15 games</b><span>hour boost premium</span></div></div></div>
+
+<section class="section" id="compare"><div class="shell problem-wrap">
+  <div class="problem-card"><div class="kicker">Why Neith?</div><h3>Less switching. Less searching. More control.</h3><div class="comparison">
+    <div class="compare-row"><span class="x">✕</span><div><strong>Without Neith</strong>Check VAC separately, sign into accounts one by one and search stores manually for temporary giveaways.</div></div>
+    <div class="compare-row"><span class="ok">✓</span><div><strong>With Neith</strong>VAC Live, accounts, Hour Boost, free games and Steam tools stay together in one interface.</div></div>
+    <div class="compare-row"><span class="ok">✓</span><div><strong>Start free</strong>The visitor can try the launcher first and only upgrade when Premium limits become useful.</div></div>
+  </div></div>
+  <div class="problem-visual"><div class="screen-frame"><div class="screen-bar"><i></i><i></i><i></i></div><img decoding="async" src="img/home-showcase-accounts-r260.webp" alt="Neith accounts"></div></div>
+</div></section>
+
+<section class="section"><div class="shell">
+  <div class="section-head"><div class="kicker">More reasons to stay</div><h2>Show the product. Don’t just describe it.</h2><p>Everything is built around one idea: keep your Steam tools together and easy to reach.</p></div>
+  <div class="features-grid">
+    <article class="feature-wide"><div class="feature-img"><img decoding="async" src="img/home-showcase-freegames-r260.webp" alt="Free Games"></div><div class="feature-text"><small>LIVE OPPORTUNITIES</small><h3>Don’t miss paid games when they become free.</h3><p>One place to check current 0€ promotions across supported stores instead of hunting through multiple pages.</p></div></article>
+    <article class="feature-wide"><div class="feature-img"><img decoding="async" src="img/home-showcase-achievements-r260.webp" alt="Achievements"></div><div class="feature-text"><small>STEAM ACHIEVEMENTS</small><h3>Your achievement tools are already here.</h3><p>Keep achievement management inside the same launcher instead of jumping between separate utilities.</p></div></article>
+    <article class="feature-wide"><div class="feature-img"><img decoding="async" src="img/home-showcase-boostpc-r260.webp" alt="Boost PC"></div><div class="feature-text"><small>BOOST PC</small><h3>Prepare Windows for the game, not the background noise.</h3><p>Expose the performance tools visually so visitors immediately understand that Neith goes beyond account management.</p></div></article>
+    <article class="feature-wide"><div class="feature-img"><img decoding="async" src="img/neith-current-biblioteca.jpg" alt="Library"></div><div class="feature-text"><small>YOUR LIBRARY</small><h3>Games and accounts feel like one ecosystem.</h3><p>Your games, accounts and tools stay together inside the same Steam control center.</p></div></article>
+  </div>
+</div></section>
+
+<section class="section" id="premium"><div class="shell">
+  <div class="section-head"><div class="kicker">NEITH PREMIUM // SUPPORT THE PROJECT</div><h2>Support Neith. Unlock 30 days Premium.</h2><p>No monthly subscription. Make a one-time €4.90 donation, include your exact Neith username in the PayPal note and Premium is manually verified for your account.</p></div>
+  <div class="donation-panel">
+    <div class="donation-main">
+      <div class="donation-top"><div><span class="donation-label">NEITH PREMIUM</span><h3>€4.90 DONATION · 30 DAYS PREMIUM</h3></div><span class="donation-verified">✓ VERIFIED ACTIVATION</span></div>
+      <div class="donation-steps"><div><b>01</b><strong>DONATE €4.90</strong><span>Open the official Neith PayPal donation link.</span></div><div><b>02</b><strong>ADD YOUR NEITH USERNAME</strong><span>Write your exact Neith username in the PayPal note.</span></div><div><b>03</b><strong>PREMIUM ACTIVATED</strong><span>The donation is verified and 30 full Premium days are activated.</span></div></div>
+      <div class="donation-alert"><strong>IMPORTANT</strong><span>Your Neith username in the PayPal note is required so we know which account to activate.</span></div>
+      <div class="donation-actions"><a class="btn btn-primary donation-paypal" href="https://www.paypal.com/paypalme/Lokodoco/4.90" target="_blank" rel="noopener">♥ DONATE €4.90 · GET PREMIUM</a><a class="btn home228-contact" href="#neith-contact" data-neith-contact-open>✉ CONTACT NEITH BY EMAIL</a><button class="btn" type="button" data-open-register>CREATE NEITH ID FIRST</button></div>
+    </div>
+    <aside class="premium-pass"><span>SUPPORT EDITION</span><strong>NEITH PREMIUM PASS</strong><div class="premium-price"><sup>€</sup>4.90</div><small>ONE-TIME DONATION</small><ul><li>30 full days of Premium</li><li>All Premium features</li><li>No automatic renewal</li><li>Family &amp; Friends donation</li></ul></aside>
+  </div>
+</div></section>
+
+
+<section class="section neith-chat-v7" aria-labelledby="neith-chat-title">
+  <div class="shell">
+    <div class="section-head neith-community-head">
+      <div class="kicker">NEITH COMMUNITY // LIVE</div>
+      <h2 id="neith-chat-title">Talk with the community.</h2>
+      <p>Live website chat for registered Neith users. Everyone can read it; signed-in users can participate.</p>
+    </div>
+    <div class="home209-shoutbox-wrap" data-neith-shoutbox>
+      <div class="home209-shoutbox neith-chat-panel-v7">
+        <div class="home209-shoutbox-head">
+          <div class="home209-shoutbox-title"><strong>NEITH LIVE CHAT</strong><span>COMMUNITY SHOUTBOX · LAST 50 MESSAGES</span></div>
+          <div class="home209-shoutbox-status"><i></i><span data-shoutbox-status>CONNECTING</span></div>
+        </div>
+        <div class="home209-shoutbox-list" data-shoutbox-list>
+          <div class="home209-shoutbox-empty" data-shoutbox-empty>No messages yet. Start the conversation.</div>
+        </div>
+        <div class="home209-shoutbox-compose">
+          <div class="home209-shoutbox-guest" data-shoutbox-guest><span>Visible to everyone · sign in to write.</span></div>
+          <div class="home209-shoutbox-inputrow" data-shoutbox-inputrow hidden>
+            <input data-shoutbox-input maxlength="300" autocomplete="off" placeholder="Type your message..." aria-label="Chat message">
+            <button type="button" data-shoutbox-send>SEND</button>
+          </div>
+          <div class="home209-shoutbox-meta"><span data-shoutbox-meta>Connecting to Neith community…</span><span data-shoutbox-counter>0 / 300</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
-<section aria-label="Neith Shoutbox" class="home209-shoutbox-wrap">
-<div class="shell">
-<div class="home209-shoutbox reveal" data-neith-shoutbox="">
-<div class="home209-shoutbox-head">
-<div class="home209-shoutbox-title"><strong>NEITH LIVE SHOUTBOX</strong><span>Public community feed · premium live chat</span></div>
-<div class="home209-shoutbox-status"><i></i><span data-shoutbox-status="">Connecting…</span></div>
-</div>
-<div aria-live="polite" class="home209-shoutbox-list" data-shoutbox-list=""></div>
-<div class="home209-shoutbox-empty" data-shoutbox-empty="" hidden="">No messages yet.</div>
-<div class="home209-shoutbox-compose">
-<div class="home209-shoutbox-guest" data-shoutbox-guest="">
-<span>Visible to everyone · only registered website users can write · messages auto-clean after 24 hours.</span>
-</div>
-<div class="home209-shoutbox-inputrow" data-shoutbox-inputrow="" hidden="">
-<input autocomplete="off" data-shoutbox-input="" maxlength="300" placeholder="Type your message..." type="text"/>
-<button data-shoutbox-send="" type="button">SEND</button>
-<button data-shoutbox-clean="" hidden="" type="button">CLEAN</button>
-<button data-shoutbox-bans="" hidden="" type="button">BANS</button>
-</div>
-<div class="home209-shoutbox-meta">
-<span data-shoutbox-meta="">Live for everyone · posting only for registered users · last 50 messages</span>
-<span data-shoutbox-counter="">0 / 300</span>
-</div>
-</div>
-</div>
-</div>
+
+
+
+<section class="section" id="download"><div class="shell"><div class="community">
+  <div class="kicker">Neith Steam Launcher PRO</div><h2>Ready to put your Steam tools in one place?</h2><p>Start with the free version and upgrade only when you want the Premium limits.</p>
+  <div class="social-proof"><span class="proof-pill"><b>●</b> System online</span><span class="proof-pill"><b>FREE</b> version available</span><span class="proof-pill"><b>Windows</b> launcher</span><span class="proof-pill"><b>ES / EN</b></span></div>
+  <div class="hero-actions"><a class="btn btn-primary" href="./descargar">DOWNLOAD NEITH FREE</a><button class="btn" type="button" data-open-register>CREATE FREE NEITH ID</button></div>
+</div></div></section>
+
+<section class="home268-reviews" data-neith-reviews aria-labelledby="neith-reviews-title">
+  <div class="shell home268-reviews-shell">
+    <div class="home268-reviews-head">
+      <div class="home268-reviews-kicker">REAL NEITH USERS</div>
+      <h2 id="neith-reviews-title">Community <span>reviews</span></h2>
+      <div class="home268-reviews-summary" data-reviews-summary>
+        <span class="home268-summary-stars" data-reviews-summary-stars>☆☆☆☆☆</span>
+        <strong data-reviews-summary-text>Loading reviews…</strong>
+      </div>
+      <div class="home268-reviews-trust">Verified Neith accounts · existing reviews preserved</div>
+    </div>
+    <div class="home268-reviews-stage">
+      <div class="home268-reviews-grid" data-reviews-grid></div>
+      <div class="home268-reviews-nav" data-reviews-nav hidden>
+        <button class="home268-reviews-arrow" type="button" data-reviews-prev aria-label="Previous reviews">‹</button>
+        <span class="home268-reviews-page" data-reviews-page>01 / 01</span>
+        <button class="home268-reviews-arrow" type="button" data-reviews-next aria-label="Next reviews">›</button>
+      </div>
+    </div>
+    <div class="home268-reviews-actions">
+      <button class="home268-reviews-btn" type="button" data-reviews-all>READ ALL REVIEWS</button>
+      <button class="home268-reviews-btn primary" type="button" data-reviews-leave>LEAVE A REVIEW</button>
+    </div>
+  </div>
 </section>
-<div aria-hidden="true" class="home218-bans-modal" data-shoutbox-bans-modal="" hidden="">
-<div class="home218-bans-backdrop" data-shoutbox-bans-close=""></div>
-<section aria-labelledby="home218-bans-title" aria-modal="true" class="home218-bans-panel" role="dialog">
-<header class="home218-bans-head">
-<div><span>NEITH MODERATION</span><strong id="home218-bans-title">SHOUTBOX BANS</strong></div>
-<button aria-label="Close" class="home218-bans-close" data-shoutbox-bans-close="" type="button">×</button>
-</header>
-<div class="home218-ban-create" data-shoutbox-ban-create="" hidden="">
-<div class="home218-ban-create-user">Ban <strong data-shoutbox-ban-target-name=""></strong> from the shoutbox only</div>
-<div class="home218-ban-create-row">
-<input aria-label="Ban reason" data-shoutbox-ban-reason="" maxlength="240" type="text" value="Shoutbox moderation"/>
-<button data-shoutbox-ban-confirm="" type="button">BAN USER</button>
-<button class="ghost" data-shoutbox-ban-cancel="" type="button">CANCEL</button>
+
+
+
+<div class="home268-modal" data-reviews-all-modal hidden aria-hidden="true">
+  <div class="home268-modal-backdrop" data-reviews-close></div>
+  <div class="home268-modal-panel" role="dialog" aria-modal="true" aria-label="All reviews">
+    <div class="home268-modal-head"><div><span>NEITH COMMUNITY</span><strong>ALL REVIEWS</strong></div><button class="home268-modal-close" type="button" data-reviews-close aria-label="Close">×</button></div>
+    <div class="home268-all-grid" data-reviews-all-grid></div>
+  </div>
 </div>
+
+<div class="home268-modal" data-reviews-editor hidden aria-hidden="true">
+  <div class="home268-modal-backdrop" data-reviews-close></div>
+  <div class="home268-modal-panel editor" role="dialog" aria-modal="true" aria-label="Review editor">
+    <div class="home268-modal-head"><div><span>YOUR EXPERIENCE</span><strong data-reviews-editor-title>LEAVE A REVIEW</strong></div><button class="home268-modal-close" type="button" data-reviews-close aria-label="Close">×</button></div>
+    <label class="home268-editor-label">RATING</label>
+    <div class="home268-editor-stars" aria-label="Rating">
+      <button class="home268-editor-star" type="button" data-review-star="1">★</button><button class="home268-editor-star" type="button" data-review-star="2">★</button><button class="home268-editor-star" type="button" data-review-star="3">★</button><button class="home268-editor-star" type="button" data-review-star="4">★</button><button class="home268-editor-star" type="button" data-review-star="5">★</button>
+    </div>
+    <label class="home268-editor-label" for="neith-review-v7">REVIEW</label>
+    <textarea id="neith-review-v7" class="home268-editor-text" data-reviews-editor-text maxlength="800" placeholder="Tell other users what you think about Neith."></textarea>
+    <div class="home268-editor-meta"><span>One review per registered user · editable later</span><span data-reviews-editor-count>0 / 800</span></div>
+    <div data-reviews-editor-message></div>
+    <div class="home268-editor-actions"><button class="home268-reviews-btn" type="button" data-reviews-close>CANCEL</button><button class="home268-reviews-btn primary" type="button" data-reviews-editor-save>SAVE REVIEW</button></div>
+  </div>
 </div>
-<div class="home218-bans-content">
-<div class="home218-bans-empty" data-shoutbox-bans-empty="">No shoutbox bans.</div>
-<div class="home218-bans-list" data-shoutbox-bans-list=""></div>
-</div>
-<footer class="home218-bans-foot">Shoutbox bans only · website access is not affected.</footer>
-</section>
-</div>
-<section aria-label="Neith launcher showcase" class="home205-showcase" data-home205-showcase="">
-<div class="shell home205-showcase-shell">
-<div class="home205-showcase-head reveal">
-<div class="home205-showcase-kicker">NEITH // REAL INTERFACE</div>
-<h2>SEE NEITH <span>IN ACTION.</span></h2>
-<p>Explore real launcher captures one by one. Every view stays complete, sharp and ready to open fullscreen.</p>
-</div>
-<div aria-label="Launcher sections" class="home205-showcase-tabs reveal" role="tablist">
-<button aria-selected="true" class="home205-showcase-tab is-active" data-home205-tab="home" role="tab" type="button">Home</button>
-<button aria-selected="false" class="home205-showcase-tab" data-home205-tab="accounts" role="tab" type="button">Accounts</button>
-<button aria-selected="false" class="home205-showcase-tab" data-home205-tab="boostpc" role="tab" type="button">Boost PC</button>
-<button aria-selected="false" class="home205-showcase-tab" data-home205-tab="hourboost" role="tab" type="button">Hour Boost</button>
-<button aria-selected="false" class="home205-showcase-tab" data-home205-tab="freegames" role="tab" type="button">Free Games</button>
-<button aria-selected="false" class="home205-showcase-tab" data-home205-tab="achievements" role="tab" type="button">Achievements</button>
-</div>
-<div class="home205-showcase-frame reveal">
-<div class="home205-showcase-stage">
-<img alt="Home · Main launcher view" class="home205-showcase-image" data-home205-image="" decoding="async" fetchpriority="low" loading="lazy" src="./img/home-showcase-inicio-r260.webp"/>
-<button aria-label="Previous image" class="home205-showcase-arrow home205-showcase-arrow--prev" data-home205-prev="" type="button">‹</button>
-<button aria-label="Next image" class="home205-showcase-arrow home205-showcase-arrow--next" data-home205-next="" type="button">›</button>
-</div>
-<div class="home205-showcase-footer">
-<div class="home205-showcase-meta"><strong data-home205-title="">Home · Main launcher view</strong><span data-home205-count="">01 / 06</span></div>
-<div aria-label="Screenshot navigation" class="home205-showcase-dots" data-home205-dots=""></div>
-<button aria-label="Open fullscreen" class="home205-showcase-expand" data-home205-expand="" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"></path></svg><span>OPEN FULLSCREEN</span></button>
-</div>
-</div>
-<p class="home205-showcase-note">USE THE ARROWS · CLICK THE IMAGE TO ENLARGE · SWIPE ON MOBILE</p>
-</div>
-</section><section aria-label="Neith community reviews" class="home268-reviews" data-neith-reviews="">
-<div class="shell home268-reviews-shell reveal">
-<div class="home268-reviews-head">
-<div class="home268-reviews-kicker">COMMUNITY REVIEWS</div>
-<h2>WHAT PLAYERS ARE <span>SAYING</span></h2>
-<div class="home268-reviews-summary" data-reviews-summary=""><span class="home268-summary-stars" data-reviews-summary-stars="">☆☆☆☆☆</span><span data-reviews-summary-text="">No reviews yet</span></div>
-<div class="home268-reviews-trust"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 20 6v6c0 5-3.5 8.2-8 9-4.5-.8-8-4-8-9V6Z"></path><path d="m8.5 12 2.2 2.2 4.8-5"></path></svg><span>Registered Neith users</span></div>
-</div>
-<div class="home268-reviews-stage"><div class="home268-reviews-grid" data-reviews-grid=""><div class="home268-reviews-empty"><div><strong>NO REVIEWS YET</strong><span>Be the first registered Neith user to share a real experience.</span></div></div></div><div class="home268-reviews-nav" data-reviews-nav hidden><button class="home268-reviews-arrow" type="button" data-reviews-prev aria-label="Previous reviews">‹</button><span class="home268-reviews-page" data-reviews-page>01 / 01</span><button class="home268-reviews-arrow" type="button" data-reviews-next aria-label="Next reviews">›</button></div></div>
-<div class="home268-reviews-actions"><button class="home268-reviews-btn" data-reviews-all="" type="button">READ ALL REVIEWS</button><button class="home268-reviews-btn primary" data-reviews-leave="" type="button">LEAVE A REVIEW</button></div>
-</div>
-</section><section aria-label="Featured games in Neith" class="home45-games">
-<div class="shell home45-games-shell reveal">
-<div class="home45-games-head">
-<div><span>NEITH // STEAM ECOSYSTEM</span><b>FEATURED GAMES</b></div>
-<p>Your library is part of the experience too.</p>
-<div class="home45-games-controls">
-<button aria-label="Previous games" data-home45-prev="" type="button">‹</button>
-<button aria-label="Next games" data-home45-next="" type="button">›</button>
-</div>
-</div>
-<div class="home45-games-viewport" data-home45-carousel="">
-<div class="home45-games-track">
-<article class="home45-game"><img alt="Counter-Strike 2" decoding="async" fetchpriority="low" loading="lazy" src="https://cdn.cloudflare.steamstatic.com/steam/apps/730/header.jpg"/><span>COUNTER-STRIKE 2</span></article>
-<article class="home45-game"><img alt="Cyberpunk 2077" decoding="async" fetchpriority="low" loading="lazy" src="https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/header.jpg"/><span>CYBERPUNK 2077</span></article>
-<article class="home45-game"><img alt="Elden Ring" decoding="async" fetchpriority="low" loading="lazy" src="https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/header.jpg"/><span>ELDEN RING</span></article>
-<article class="home45-game"><img alt="Rust" decoding="async" fetchpriority="low" loading="lazy" src="https://cdn.cloudflare.steamstatic.com/steam/apps/252490/header.jpg"/><span>RUST</span></article>
-<article class="home45-game"><img alt="Dead by Daylight" decoding="async" fetchpriority="low" loading="lazy" src="https://cdn.cloudflare.steamstatic.com/steam/apps/381210/header.jpg"/><span>DEAD BY DAYLIGHT</span></article>
-<article class="home45-game"><img alt="Hollow Knight" decoding="async" fetchpriority="low" loading="lazy" src="https://cdn.cloudflare.steamstatic.com/steam/apps/367520/header.jpg"/><span>HOLLOW KNIGHT</span></article>
-<article class="home45-game"><img alt="Red Dead Redemption 2" decoding="async" fetchpriority="low" loading="lazy" src="https://cdn.cloudflare.steamstatic.com/steam/apps/1174180/header.jpg"/><span>RED DEAD REDEMPTION 2</span></article>
-<article class="home45-game"><img alt="Helldivers 2" decoding="async" fetchpriority="low" loading="lazy" src="https://cdn.cloudflare.steamstatic.com/steam/apps/553850/header.jpg"/><span>HELLDIVERS 2</span></article>
-<article aria-hidden="true" class="home45-game"><img alt="" decoding="async" fetchpriority="low" loading="lazy" src="https://cdn.cloudflare.steamstatic.com/steam/apps/730/header.jpg"/><span>COUNTER-STRIKE 2</span></article>
-<article aria-hidden="true" class="home45-game"><img alt="" decoding="async" fetchpriority="low" loading="lazy" src="https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/header.jpg"/><span>CYBERPUNK 2077</span></article>
-<article aria-hidden="true" class="home45-game"><img alt="" decoding="async" fetchpriority="low" loading="lazy" src="https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/header.jpg"/><span>ELDEN RING</span></article>
-<article aria-hidden="true" class="home45-game"><img alt="" decoding="async" fetchpriority="low" loading="lazy" src="https://cdn.cloudflare.steamstatic.com/steam/apps/252490/header.jpg"/><span>RUST</span></article>
-<article aria-hidden="true" class="home45-game"><img alt="" decoding="async" fetchpriority="low" loading="lazy" src="https://cdn.cloudflare.steamstatic.com/steam/apps/381210/header.jpg"/><span>DEAD BY DAYLIGHT</span></article>
-<article aria-hidden="true" class="home45-game"><img alt="" decoding="async" fetchpriority="low" loading="lazy" src="https://cdn.cloudflare.steamstatic.com/steam/apps/367520/header.jpg"/><span>HOLLOW KNIGHT</span></article>
-<article aria-hidden="true" class="home45-game"><img alt="" decoding="async" fetchpriority="low" loading="lazy" src="https://cdn.cloudflare.steamstatic.com/steam/apps/1174180/header.jpg"/><span>RED DEAD REDEMPTION 2</span></article>
-<article aria-hidden="true" class="home45-game"><img alt="" decoding="async" fetchpriority="low" loading="lazy" src="https://cdn.cloudflare.steamstatic.com/steam/apps/553850/header.jpg"/><span>HELLDIVERS 2</span></article>
-</div>
-</div>
-<div aria-hidden="true" class="home45-games-progress"><i></i><span></span><span></span><span></span></div>
-</div>
-</section><section class="section home41-features" id="features"><div class="shell"><div class="section-head reveal"><div class="kicker">NEITH ECOSYSTEM</div><h2 class="title feature-section-title home41-simple-title">EVERY FEATURE.<br/><span>ONE ECOSYSTEM.</span></h2><p class="lead">Each module has a clear purpose and shares the same visual language: fast, direct and built for gaming.</p></div><div class="grid feature-grid">
-<a class="card feature-card feature-hour reveal" data-feature="hour" href="./hourboost/"><span class="feature-radar"></span><div class="feature-head"><div aria-hidden="true" class="icon feature-icon"><svg viewbox="0 0 64 64"><circle class="clock-ring-svg" cx="32" cy="32" fill="none" r="24" stroke="currentColor" stroke-width="4"></circle><path class="clock-hands-svg" d="M32 17v16l11 7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"></path></svg></div><div class="feature-status"><b>BOOST ENGINE</b><span>Standby</span></div></div><h3>Hour Boost</h3><p>Automated boost sessions with visual control of activity, progress and real-time status.</p><div class="micro-progress"><i></i></div><div class="feature-meta"><span>24/7 READY</span><em>BOOSTING ACTIVE</em></div></a>
-<a class="card feature-card feature-boost reveal" data-feature="boost" href="./boostpc/"><span class="feature-radar"></span><div class="feature-head"><div aria-hidden="true" class="icon feature-icon"><svg viewbox="0 0 64 64"><path class="rocket-body" d="M39 7c7 2 13 8 16 15L42 35 29 22Z"></path><path class="rocket-core" d="m27 24 13 13-8 8-6-2-7-7-2-6Z"></path><path class="rocket-flame" d="m17 39 8 8-4 9-6-8-7-5Z"></path></svg></div><div class="feature-status boost-meter"><b>RAM FREED</b><span data-ram-value="">+85%</span></div></div><h3>Boost PC</h3><p>Instant optimization to free memory, prioritize processes and prepare your system for maximum gaming smoothness.</p><div class="digital-line"><i></i><i></i><i></i><i></i><i></i></div><div class="feature-meta"><span>TURBO MODE</span><em>PERFORMANCE ONLINE</em></div></a>
-<a class="card feature-card feature-achievements reveal" data-feature="achievements" href="./logros/"><span class="feature-radar"></span><div class="feature-head"><div aria-hidden="true" class="icon feature-icon"><svg viewbox="0 0 64 64"><path class="trophy-main" d="M19 7h26v9c0 10-5 17-13 20-8-3-13-10-13-20Z"></path><path class="trophy-side" d="M19 11H7v7c0 8 5 13 12 14M45 11h12v7c0 8-5 13-12 14" fill="none" stroke="currentColor" stroke-width="4"></path><path class="trophy-base-svg" d="M28 36h8v9h-8M20 45h24v11H20Z"></path></svg></div><div class="feature-status gold-status"><b>LVL</b><span>100</span></div></div><h3>Achievements</h3><p>Track your progress, complete goals and turn every unlock into a visible part of your gaming profile.</p><div class="level-track"><i></i></div><div class="feature-meta"><span>100% COMPLETE</span><em>PREMIUM TROPHY MODE</em></div></a>
-<a class="card feature-card feature-accounts reveal" data-feature="accounts" href="./cuentas/"><span class="feature-radar"></span><div class="feature-head"><div aria-hidden="true" class="icon feature-icon avatar-swap-icon"><span class="avatar-main"></span><span class="avatar-alt"></span></div><div class="feature-status"><b>ACCOUNT CORE</b><span>Ready</span></div></div><h3>Accounts</h3><p>Switch profiles, organize favorites and centralize access to manage your Steam ecosystem without friction.</p><div class="swap-track"><i></i><i></i></div><div class="feature-meta"><span>INSTANT SWAP</span><em>MULTI PROFILE</em></div></a>
-<a class="card feature-card feature-free reveal" data-feature="free" href="./juegos-gratis/"><span class="feature-radar"></span><div class="feature-head"><div aria-hidden="true" class="icon feature-icon gift-icon"><span class="gift-box-mini"></span><span class="gift-lid-mini"></span></div><div class="feature-status live-status"><b>LIVE RADAR</b><span><i class="live-led"></i>Scanning</span></div></div><h3>Free Games</h3><p>Detect limited-time promotions and free opportunities with fast alerts and real-time visual tracking.</p><div class="radar-sweep"><i></i></div><div class="feature-meta"><span>RADAR ACTIVE</span><em>FREE DROP WATCH</em></div></a>
-<article aria-label="Abrir VAC LIVE" class="card feature-card feature-vaclive reveal" data-feature="vaclive" data-library-link="./vac-live/" role="link" tabindex="0"><span class="feature-radar"></span><div class="feature-head"><div aria-hidden="true" class="icon feature-icon vaclive-icon"><span></span><span></span><span></span></div><div class="feature-status live-status"><b>VAC LIVE</b><span><i class="live-led"></i>Online</span></div></div><h3>VAC LIVE</h3><p>Visual VAC status verification for CS2, live monitoring and quick access to competitive account protection.</p><div aria-hidden="true" class="vaclive-scanline"><i></i><b></b></div><div class="feature-meta"><span>CS2 STATUS</span><em>SHIELD ACTIVE</em></div></article>
-</div></div></section><section class="section home44-membership" id="planes">
-<div aria-hidden="true" class="home44-membership-ambient"><i></i><i></i><i></i></div>
-<div class="shell home44-membership-shell">
-<div class="home44-membership-head reveal">
-<div class="home44-membership-kicker"><i></i><span>NEITH MEMBERSHIP</span><b>FREE / PREMIUM</b></div>
-<h2>CHOOSE HOW YOU WANT TO <span>EXPERIENCE NEITH.</span></h2>
-<p>Start free and expand Neith when you need more accounts, more sessions and advanced features. The same Neith ID keeps your status synchronized.</p>
-</div>
-<div class="home44-plan-grid reveal">
-<article class="home44-plan home44-plan-free">
-<div class="home44-plan-top"><div><span>FREE</span><small>CORE ACCESS</small></div><b>01</b></div>
-<div class="home44-plan-name"><h3>NEITH FREE</h3><p>The launcher essentials, with no payment and no ads.</p></div>
-<div class="home44-plan-access"><strong>0€</strong><span>FOREVER</span></div>
-<ul><li><i></i>1 stored Steam account</li><li><i></i>Hour Boost: 1 account + 1 game, 2 hrs/day</li><li><i></i>Library and Free Games fully available</li><li><i></i>Boost PC maintenance and diagnostics</li></ul>
-<a class="home44-plan-action home44-plan-action-free" href="./?register=1"><span>CREATE FREE ACCOUNT</span><b>→</b></a>
-</article>
-<article class="home44-plan home44-plan-premium">
-<div aria-hidden="true" class="home44-plan-beam"></div><div aria-hidden="true" class="home44-plan-orbit"></div>
-<div class="home44-plan-top"><div><span>PREMIUM</span><small>FULL ACCESS</small></div><b>02</b></div>
-<div class="home44-premium-label"><i></i> FULL EXPERIENCE</div>
-<div class="home44-plan-name"><h3>NEITH PREMIUM</h3><p>The complete core: more accounts, advanced Hour Boost, VAC LIVE and powerful optimization.</p></div>
-<div class="neith-plan-dualprice"><div><b>€7.99</b><span>PER MONTH</span></div><div class="annual"><b>€69.99</b><span>PER YEAR</span><em>SAVE VS MONTHLY</em></div></div>
-<ul><li><i></i>Up to 20 stored Steam accounts</li><li><i></i>Hour Boost: 3 accounts × 5 games, unlimited hours</li><li><i></i>VAC LIVE + Achievement modification</li><li><i></i>Boost PC with advanced optimizations</li></ul>
-<a class="home44-plan-action home44-plan-action-premium" href="./free-premium/"><span>VIEW PREMIUM</span><b>↗</b></a>
-</article>
-</div>
-<div class="home44-membership-notes reveal"><span><i></i> SAME NEITH ID</span><span><i></i> NO ADS</span><span><i></i> DOWNGRADE WITHOUT DELETING DATA</span></div>
-</div>
-</section></main><div aria-hidden="true" class="home268-modal" data-reviews-all-modal="" hidden="">
-<div class="home268-modal-backdrop" data-reviews-close=""></div><section aria-modal="true" class="home268-modal-panel" role="dialog"><header class="home268-modal-head"><div><span>NEITH COMMUNITY</span><strong>ALL REVIEWS</strong></div><button aria-label="Close" class="home268-modal-close" data-reviews-close="" type="button">×</button></header><div class="home268-all-grid" data-reviews-all-grid=""></div></section></div>
-<div aria-hidden="true" class="home268-modal" data-reviews-editor="" hidden="">
-<div class="home268-modal-backdrop" data-reviews-close=""></div><section aria-modal="true" class="home268-modal-panel editor" role="dialog"><header class="home268-modal-head"><div><span>NEITH COMMUNITY</span><strong data-reviews-editor-title="">LEAVE A REVIEW</strong></div><button aria-label="Close" class="home268-modal-close" data-reviews-close="" type="button">×</button></header><label class="home268-editor-label">YOUR RATING</label><div aria-label="Rating" class="home268-editor-stars"><button aria-label="1 star" class="home268-editor-star" data-review-star="1" type="button">★</button><button aria-label="2 stars" class="home268-editor-star" data-review-star="2" type="button">★</button><button aria-label="3 stars" class="home268-editor-star" data-review-star="3" type="button">★</button><button aria-label="4 stars" class="home268-editor-star" data-review-star="4" type="button">★</button><button aria-label="5 stars" class="home268-editor-star" data-review-star="5" type="button">★</button></div><label class="home268-editor-label" for="home268-review-text">YOUR REVIEW</label><textarea class="home268-editor-text" data-reviews-editor-text="" id="home268-review-text" maxlength="800" placeholder="Tell the community about your experience with Neith..."></textarea><div class="home268-editor-meta"><span>One review per registered user · you can edit it later</span><span data-reviews-editor-count="">0 / 800</span></div><div data-reviews-editor-message=""></div><div class="home268-editor-actions"><button class="home268-reviews-btn" data-reviews-close="" type="button">CANCEL</button><button class="home268-reviews-btn primary" data-reviews-editor-save="" type="button">SAVE REVIEW</button></div></section></div><div aria-hidden="true" class="home205-lightbox" data-home205-lightbox=""><div class="home205-lightbox-backdrop" data-home205-backdrop=""></div><div aria-label="Expanded launcher screenshot" aria-modal="true" class="home205-lightbox-dialog" role="dialog"><div class="home205-lightbox-bar"><div class="home205-lightbox-title"><span>NEITH // REAL INTERFACE</span><strong data-home205-lightbox-title="">Home · Main launcher view</strong></div><button aria-label="Close viewer" class="home205-lightbox-close" data-home205-close="" type="button">×</button></div><div class="home205-lightbox-stage"><img alt="Home · Main launcher view" data-home205-lightbox-image="" decoding="async" src="./img/home-showcase-inicio-r260.webp"/><button aria-label="Previous image" class="home205-lightbox-arrow home205-lightbox-arrow--prev" data-home205-lightbox-prev="" type="button">‹</button><button aria-label="Next image" class="home205-lightbox-arrow home205-lightbox-arrow--next" data-home205-lightbox-next="" type="button">›</button></div><div class="home205-lightbox-foot"><span>ARROW KEYS TO NAVIGATE · ESC TO CLOSE</span><b class="home205-lightbox-count" data-home205-lightbox-count="">01 / 06</b></div></div></div><div aria-hidden="true" class="hourboost-lightbox" data-hourboost-modal=""><div class="hourboost-lightbox-backdrop" data-hourboost-close=""></div><div aria-label="Main Neith screenshot" aria-modal="true" class="hourboost-lightbox-dialog" role="dialog"><div class="hourboost-lightbox-bar"><div><span>NEITH // LANDING PREVIEW</span><b data-hourboost-caption="">REAL CAPTURE</b></div><div class="hourboost-lightbox-actions"><button aria-label="Previous image" data-hourboost-prev="" type="button">‹</button><button aria-label="Next image" data-hourboost-next="" type="button">›</button><button aria-label="Close viewer" class="hourboost-lightbox-close" data-hourboost-close="" type="button">×</button></div></div><div class="hourboost-lightbox-stage"><img alt="Expanded Neith screenshot" data-hourboost-modal-image="" decoding="async"/><span aria-hidden="true" class="hourboost-lightbox-grid"></span></div><div class="hourboost-lightbox-hint">CLICK THE IMAGE TO ENLARGE · ESC TO CLOSE</div></div></div><footer class="footer footer-premium home44-footer">
-<div aria-hidden="true" class="home44-footer-atmosphere"><i></i><i></i><i></i></div>
-<div class="shell home44-footer-shell">
-<div class="home44-footer-main">
-<div class="home44-footer-brand">
-<a aria-label="Neith Steam Launcher" class="home44-footer-logo" href="./"><img alt="Neith Steam Launcher" decoding="async" fetchpriority="low" height="819" loading="lazy" src="./img/neith-master-logo-premium-transparent.webp" width="1920"/></a>
-<p>A Windows gaming experience built around Steam, performance, automation and control.</p>
-<div class="home44-footer-status"><span><i></i>NEITH CORE ACTIVE</span><span>WINDOWS 10/11 x64</span></div>
-</div>
-<div class="home44-footer-links">
-<div><span>PRODUCTO</span><a href="./hourboost/">Hour Boost</a><a href="vac-live/">VAC LIVE</a><a href="./boostpc/">Boost PC</a><a href="./logros/">Achievements</a><a href="./juegos-gratis/">Free Games</a><a href="./cuentas/">Accounts</a></div>
-<div><span>NEITH</span><a href="./faq/">FAQ</a><a href="./free-premium/">Free / Premium</a><a href="./descargar">Download</a></div>
-<div><span>OFFICIAL</span><a href="https://github.com/NeithDev-tech/NeithSteamLauncher">GitHub</a><a href="./mi-cuenta/">My account</a><a href="./seguridad/">Security</a><a href="./licencia/">License</a></div>
-</div></div>
-<section aria-hidden="true" aria-label="Owner realtime website information" class="neith-admin-presence" data-neith-admin-presence="" hidden="">
-<div class="neith-admin-presence-head">
-<div><div class="neith-admin-presence-title"><b>OWNER</b> // LIVE WEBSITE OPERATIONS <span class="neith-admin-presence-sub">PRIVATE TELEMETRY · OWNER ONLY</span></div></div>
-<div class="neith-admin-presence-live"><i></i><span data-presence-state="">SYNCING</span></div>
-</div>
-<div class="neith-admin-presence-grid">
-<div class="neith-admin-presence-stat is-accent"><span>ACTIVE NOW</span><strong data-presence-total="">0</strong></div>
-<div class="neith-admin-presence-stat"><span>MEMBERS</span><strong data-presence-members-count="">0</strong></div>
-<div class="neith-admin-presence-stat"><span>GUESTS</span><strong data-presence-guests="">0</strong></div>
-<div class="neith-admin-presence-stat"><span>LIVE SESSIONS</span><strong data-presence-sessions="">0</strong></div>
-<div class="neith-admin-presence-stat is-green"><span>PREMIUM ONLINE</span><strong data-presence-premium="">0</strong></div>
-<div class="neith-admin-presence-stat"><span>ACTIVE 5 MIN</span><strong data-presence-five="">0</strong></div>
-</div>
-<div class="neith-admin-presence-panels">
-<div class="neith-admin-presence-panel"><div class="neith-admin-presence-label"><span>REGISTERED MEMBERS ONLINE</span><em>NAME · PLAN · CURRENT PAGE</em></div><div class="neith-admin-presence-users" data-presence-members=""></div></div>
-<div class="neith-admin-presence-panel"><div class="neith-admin-presence-label"><span>ACTIVE PAGES</span><em>REALTIME</em></div><div class="neith-admin-presence-pages" data-presence-pages=""></div></div>
-</div>
-<div class="neith-admin-presence-ops">
-<div class="neith-admin-presence-op"><span>TOP PAGE NOW</span><b data-presence-top-page="">—</b></div>
-<div class="neith-admin-presence-op"><span>REGISTERED TOTAL</span><b data-presence-registered="">0</b></div>
-<div class="neith-admin-presence-op"><span>NEW MEMBERS TODAY</span><b data-presence-registered-today="">0</b></div>
-<div class="neith-admin-presence-op"><span>NEW VISITORS TODAY</span><b data-presence-visitors-today="">0</b></div>
-<div class="neith-admin-presence-op"><span>SHOUTBOX 24H / BANS</span><b><span data-presence-shoutbox="">0</span> / <span data-presence-bans="">0</span></b></div>
-</div>
-<div class="neith-admin-presence-foot">
-<span>Newest member: <b data-presence-newest="">—</b> · <b data-presence-newest-at="">—</b></span>
-<span class="latency">API latency: <b data-presence-latency="">—</b></span>
-<span>Updated: <b data-presence-updated="">—</b></span>
-</div>
-</section>
-<div class="home44-footer-divider"><span></span><b>NEITH // STEAM LAUNCHER</b><span></span></div>
-<div class="home44-footer-bottom"><span>© <b data-year=""></b> Neith Steam Launcher</span><span class="home44-footer-center"><span class="home44-footer-pulse"><i></i> SYSTEM ONLINE</span><span class="home44-footer-separator"> - </span><span class="home44-footer-visitors" data-unique-visitors="" hidden="">V:<b data-unique-visitors-value="">—</b></span></span><span>Built for Windows</span></div>
-</div></footer><script defer="" src="./js/i18n.js?v=20261022-r268-reviews"></script><script defer="" src="./js/main.js?v=20260924-r85-lightbox"></script><script defer="" src="./js/auth-public-loader.js?v=20261024-r273-register-draft-lock"></script><script defer="" src="./js/header-controller.js?v=20261022-r262-pro-visible"></script><script defer="" src="./js/performance.js?v=20261022-r260-light"></script><script defer="" src="./js/landing-r45.js?v=20260924-r85-lightbox"></script><script defer="" src="./js/neith-gallery-lightbox.js?v=20260924-r86-universal-gallery"></script><script defer="True" src="./js/neith-library-link.js?v=20261006-r110"></script><script defer="" src="./js/home-trailer-r161.js?v=20261011-r161"></script><script defer="" src="./js/visitor-counter-r192.js?v=20261018-r192"></script><script defer="" src="./js/home-showcase-r205.js?v=20261022-r259"></script><script defer="" src="./js/home-shoutbox-r218.js?v=20261022-r264-live-stable"></script><script defer="" src="./js/home-reviews-r268.js?v=20261023-r269-scroll-carousel"></script><script defer="" src="./js/site-presence-r220.js?v=20261020-r220"></script><script defer="" src="./js/admin-presence-footer-r220.js?v=20261020-r220"></script></body></html>
+
+
+</main>
+<footer><div class="shell">NEITH · STEAM LAUNCHER PRO · FREE VERSION AVAILABLE</div></footer>
+
+<script defer src="./js/i18n.js?v=20261024-v11-force-en"></script>
+<script defer src="./js/auth-public-loader.js?v=20261024-r273-register-draft-lock"></script>
+<script defer src="./js/header-controller.js?v=20261024-v5"></script>
+<script defer src="./js/neith-unified-v6.js?v=20261024-v10"></script>
+<script defer src="./js/home-reviews-r268.js?v=20261024-v7"></script>
+<script defer src="./js/home-shoutbox-r213.js?v=20261024-v7"></script>
+<script>
+(function(){
+  function openAuth(mode){
+    if(window.NeithAuth && typeof window.NeithAuth.open==='function') window.NeithAuth.open(mode);
+  }
+  document.addEventListener('click',function(e){
+    const reg=e.target.closest('[data-open-register]'); if(reg){e.preventDefault();openAuth('register');return;}
+    const log=e.target.closest('[data-open-login]'); if(log){e.preventDefault();openAuth('login');return;}
+    const nav=e.target.closest('[data-auth-nav]'); if(nav){e.preventDefault(); if(window.NeithAuth?.handleHeaderTrigger) window.NeithAuth.handleHeaderTrigger(nav); else openAuth('login');}
+  });
+})();
+</script>
+</body>
+</html>

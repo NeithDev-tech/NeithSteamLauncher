@@ -1,8 +1,8 @@
 (() => {
   'use strict';
 
-  const DEFAULT_STATE = 'PayPal LIVE activo · pago seguro · renovación automática gestionable desde Neith.';
-  const ERROR_PREFIX = 'No se pudo abrir PayPal';
+  const DEFAULT_STATE = 'PayPal LIVE active · secure payment · automatic renewal managed from Neith.';
+  const ERROR_PREFIX = 'PayPal could not be opened';
 
   const stateNode = button => button.closest('.premium147-plan, .neith-plan-card')?.querySelector('.neith-store-state span') || document.querySelector('.premium147-store-state span') || null;
   const setState = (button, text, error=false) => {
@@ -24,7 +24,7 @@
     const u = new URL(String(raw || ''));
     const host = u.hostname.toLowerCase();
     if (u.protocol !== 'https:' || !(host === 'paypal.com' || host.endsWith('.paypal.com'))) {
-      throw new Error('PayPal devolvió una dirección de pago no válida.');
+      throw new Error('PayPal returned an invalid payment URL.');
     }
     return u.href;
   }
@@ -44,7 +44,7 @@
 
   async function openCheckout(button) {
     const kind = String(button.dataset.plan || '').toLowerCase();
-    if (!['monthly','annual'].includes(kind)) throw new Error('Plan PREMIUM no válido.');
+    if (!['monthly','annual'].includes(kind)) throw new Error('Invalid PREMIUM plan.');
 
     const session = await currentSession();
     if (!session?.user || !session?.access_token) {
@@ -55,7 +55,7 @@
     const cfg = window.NEITH_CONFIG || {};
     const base = String(cfg.supabaseUrl || '').replace(/\/+$/,'');
     const anon = String(cfg.supabaseAnonKey || '');
-    if (!base.startsWith('https://') || !anon) throw new Error('Neith Billing no está disponible.');
+    if (!base.startsWith('https://') || !anon) throw new Error('Neith Billing is not available.');
 
     let attemptId = null;
     attemptId = await safeRpc('neith_purchase_attempt_start', {
@@ -79,10 +79,10 @@
     if (!response.ok || data?.ok === false) {
       const raw = String(data?.error || data?.message || `HTTP ${response.status}`);
       if (/auto-renewing subscription is already active/i.test(raw)) {
-        throw new Error('Ya tienes una suscripción con renovación automática activa. Cancela su renovación antes de contratar otro plan.');
+        throw new Error('You already have an active auto-renewing subscription. Cancel its renewal before purchasing another plan.');
       }
       if (/Permanent PREMIUM/i.test(raw)) {
-        throw new Error('Tu cuenta ya tiene PREMIUM permanente y no necesita otra suscripción.');
+        throw new Error('Your account already has permanent PREMIUM and does not need another subscription.');
       }
       if (attemptId) await safeRpc('neith_purchase_attempt_mark_failed', {p_attempt_id: attemptId, p_error: raw});
       throw new Error(raw);
@@ -104,7 +104,7 @@
     const original = button.textContent;
     button.disabled = true;
     button.setAttribute('aria-busy','true');
-    button.textContent = 'CONECTANDO CON PAYPAL…';
+    button.textContent = 'CONNECTING TO PAYPAL…';
     setState(button, 'Creando checkout seguro en PayPal LIVE…');
     try {
       const approval = await openCheckout(button);
@@ -115,7 +115,7 @@
       setState(button, 'Redirigiendo a PayPal…');
       window.location.assign(approval);
     } catch (error) {
-      const message = String(error?.message || error || 'Error desconocido');
+      const message = String(error?.message || error || 'Unknown error');
       setState(button, `${ERROR_PREFIX}: ${message}`, true);
       window.setTimeout(() => setState(button, DEFAULT_STATE), 9000);
     } finally {

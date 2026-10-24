@@ -1,0 +1,47 @@
+/* V19 — actual n12 footer navigation columns centered to their own links */
+#neith-v4-footer .n12-nav{
+  display:flex!important;
+  justify-content:center!important;
+  align-items:flex-start!important;
+  gap:64px!important;
+  padding-top:10px!important;
+}
+#neith-v4-footer .n12-nav>div{
+  flex:0 0 150px!important;
+  width:150px!important;
+  min-width:150px!important;
+  max-width:150px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:13px!important;
+  margin:0!important;
+  padding:0!important;
+  text-align:center!important;
+}
+#neith-v4-footer .n12-nav>div>b{
+  display:block!important;
+  width:100%!important;
+  margin:0 0 5px!important;
+  padding:0!important;
+  text-align:center!important;
+  color:#e8fbff!important;
+}
+#neith-v4-footer .n12-nav>div>a{
+  display:block!important;
+  width:100%!important;
+  max-width:none!important;
+  margin:0!important;
+  padding:0!important;
+  text-align:center!important;
+  transform:none!important;
+}
+#neith-v4-footer .n12-nav>div>a:hover{transform:none!important}
+@media(max-width:760px){
+  #neith-v4-footer .n12-nav{gap:32px!important}
+  #neith-v4-footer .n12-nav>div{flex-basis:140px!important;width:140px!important;min-width:140px!important;max-width:140px!important}
+}
+@media(max-width:520px){
+  #neith-v4-footer .n12-nav{flex-direction:column!important;align-items:center!important;gap:28px!important}
+}

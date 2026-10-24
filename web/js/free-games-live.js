@@ -66,7 +66,7 @@
   }
 
   function formatEndDate(raw) {
-    if (!raw || raw === 'N/A') return t('FIN NO PUBLICADO', 'END NOT PUBLISHED');
+    if (!raw || raw === 'N/A') return 'END NOT PUBLISHED';
     const date = new Date(raw.includes('T') ? raw : raw.replace(' ', 'T') + 'Z');
     if (Number.isNaN(date.getTime())) return t('FECHA VERIFICADA', 'VERIFIED DATE');
     return new Intl.DateTimeFormat(lang() === 'en' ? 'en-GB' : 'es-ES', {
@@ -186,10 +186,10 @@
       remaining.className = 'freegames-live-card-time';
       const parts = remainingParts(game.endAt);
       remaining.textContent = parts.undated
-        ? t('SIN FECHA DE FIN PUBLICADA', 'NO END DATE PUBLISHED')
+        ? 'NO END DATE PUBLISHED'
         : parts.days > 0
-          ? `${t('TERMINA EN', 'ENDS IN')} ${parts.days} ${t('DÍAS', 'DAYS')}`
-          : `${t('TERMINA EN', 'ENDS IN')} ${String(parts.hours).padStart(2,'0')}H ${String(parts.minutes).padStart(2,'0')}M`;
+          ? `${'ENDS IN'} ${parts.days} ${'DAYS'}`
+          : `${'ENDS IN'} ${String(parts.hours).padStart(2,'0')}H ${String(parts.minutes).padStart(2,'0')}M`;
       copy.append(name, platform, free, remaining);
       button.append(media, copy);
       button.addEventListener('click', () => setHero(game, index));
@@ -206,17 +206,17 @@
     spotlight.setAttribute('aria-busy', 'false');
     titleEl.textContent = kind === 'empty'
       ? t('No hay ofertas verificadas ahora mismo', 'No verified offers right now')
-      : t('No se pudieron comprobar las ofertas', 'Offers could not be checked');
+      : t('Offers could not be checked', 'Offers could not be checked');
     platformEl.textContent = 'NEITH // LIVE';
     worthEl.textContent = '—';
     imageEl.removeAttribute('src');
     imageEl.classList.remove('is-ready');
     bgEl.style.backgroundImage = 'none';
-    endDateEl.textContent = t('COMPROBACIÓN AUTOMÁTICA', 'AUTOMATIC CHECK');
+    endDateEl.textContent = t('AUTOMATIC CHECK', 'AUTOMATIC CHECK');
     if (claimEl) { claimEl.href = '#'; claimEl.hidden = true; }
     ['days','hours','minutes','seconds'].forEach(key => timeEls[key].textContent = '--');
-    countEl.textContent = kind === 'empty' ? t('0 JUEGOS GRATIS DETECTADOS', '0 FREE GAMES DETECTED') : t('CONEXIÓN DE DATOS NO DISPONIBLE', 'DATA CONNECTION UNAVAILABLE');
-    cardsHost.innerHTML = `<div class="freegames-live-empty"><b>${kind === 'empty' ? t('NO HAY OFERTAS VERIFICADAS AHORA MISMO','NO VERIFIED OFFERS RIGHT NOW') : t('NO SE PUDIERON COMPROBAR LAS OFERTAS','OFFERS COULD NOT BE CHECKED')}</b><p>${kind === 'empty' ? t('Neith seguirá comprobando las promociones disponibles automáticamente.','Neith will keep checking available promotions automatically.') : t('La conexión de datos en tiempo real no está disponible. Vuelve a intentarlo más tarde.','The real-time data connection is unavailable. Please try again later.')}</p></div>`;
+    countEl.textContent = kind === 'empty' ? t('0 JUEGOS GRATIS DETECTADOS', '0 FREE GAMES DETECTED') : t('DATA CONNECTION UNAVAILABLE', 'DATA CONNECTION UNAVAILABLE');
+    cardsHost.innerHTML = `<div class="freegames-live-empty"><b>${kind === 'empty' ? t('NO HAY OFERTAS VERIFICADAS AHORA MISMO','NO VERIFIED OFFERS RIGHT NOW') : t('OFFERS COULD NOT BE CHECKED','OFFERS COULD NOT BE CHECKED')}</b><p>${kind === 'empty' ? t('Neith will keep checking available promotions automatically.','Neith will keep checking available promotions automatically.') : t('The real-time data connection is unavailable. Please try again later.','The real-time data connection is unavailable. Please try again later.')}</p></div>`;
   }
 
   function normalizeGamerPower(items) {

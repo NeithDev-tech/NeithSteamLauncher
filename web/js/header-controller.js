@@ -100,9 +100,7 @@
     }
   };
 
-  function donationLanguage() {
-    return window.NeithI18n?.language === 'es' ? 'es' : 'en';
-  }
+  function donationLanguage() { return 'en'; }
 
   function ensureDonationStyle() {
     if (document.getElementById('neith-home-donation-r229-style')) return;
@@ -273,7 +271,7 @@
     let lastTrigger = null;
 
     const paintLanguage = () => {
-      const es = donationLanguage() === 'es';
+      const es = false;
       modal.querySelector('#neith-support-title').textContent = es ? 'CONTACTAR CON NEITH' : 'CONTACT NEITH';
       modal.querySelector('label[for="neith-support-subject"]').textContent = es ? 'ASUNTO' : 'SUBJECT';
       modal.querySelector('label[for="neith-support-message"]').textContent = es ? 'MENSAJE' : 'MESSAGE';
@@ -287,7 +285,7 @@
       status.className = 'neith-support-status';
       const auth = window.NeithAuth;
       const user = auth?.session?.user;
-      userLabel.textContent = user?.email || auth?.profile?.display_name || (donationLanguage()==='es'?'INICIA SESIÓN PARA ENVIAR':'SIGN IN TO SEND');
+      userLabel.textContent = user?.email || auth?.profile?.display_name || 'SIGN IN TO SEND';
       modal.classList.add('is-open'); modal.setAttribute('aria-hidden','false'); document.body.classList.add('neith-support-open');
       setTimeout(()=>form.elements.subject.focus(),30);
     };
@@ -310,22 +308,22 @@
       const message = String(form.elements.message.value || '').trim();
       if (!auth?.client || !auth?.session?.user) {
         status.className='neith-support-status error';
-        status.textContent = donationLanguage()==='es' ? 'Inicia sesión con tu cuenta Neith para enviar el mensaje.' : 'Sign in with your Neith account to send the message.';
+        status.textContent = 'Sign in with your Neith account to send the message.';
         return;
       }
       if (subject.length < 3 || message.length < 3) return;
-      send.disabled = true; send.textContent = donationLanguage()==='es' ? 'ENVIANDO...' : 'SENDING...';
+      send.disabled = true; send.textContent = 'SENDING...';
       status.className='neith-support-status'; status.textContent='';
       try {
         const { data, error } = await auth.client.functions.invoke('neith-support-email',{ body:{subject,message} });
         if (error || !data?.ok) throw error || new Error(data?.error || 'delivery_failed');
         status.className='neith-support-status ok';
-        status.textContent = donationLanguage()==='es' ? 'Mensaje enviado correctamente a Neith.' : 'Message sent successfully to Neith.';
+        status.textContent = 'Message sent successfully to Neith.';
         form.elements.message.value='';
       } catch (err) {
         console.error('neith_support_send_error',err);
         status.className='neith-support-status error';
-        status.textContent = donationLanguage()==='es' ? 'No se pudo enviar el mensaje. Comprueba tu sesión e inténtalo de nuevo.' : 'The message could not be sent. Check your session and try again.';
+        status.textContent = 'The message could not be sent. Check your session and try again.';
       } finally {
         send.disabled=false; paintLanguage();
       }

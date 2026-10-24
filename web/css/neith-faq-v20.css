@@ -1,0 +1,38 @@
+/* V20 Help Center */
+.faq-system-heading{max-width:980px!important}.faq-system-title{text-transform:uppercase!important}.faq-system-subtitle{max-width:760px!important}.faq-category-panel{padding:18px!important}.faq-category{min-height:58px!important}.faq-category strong{font-size:.68rem!important;line-height:1.35!important}.faq-data-panel{padding:26px!important}.faq-question{min-height:78px!important}.faq-answer-inner p{max-width:900px!important;font-size:1rem!important;line-height:1.72!important}.faq-help-cta{margin-top:30px;padding:28px 30px;border:1px solid rgba(88,217,255,.18);background:linear-gradient(135deg,rgba(5,22,37,.92),rgba(3,10,20,.96));display:flex;align-items:center;justify-content:space-between;gap:30px;clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px);box-shadow:0 24px 60px rgba(0,0,0,.28)}.faq-help-cta>div:first-child{max-width:700px}.faq-help-cta span{color:#58e6ff;font:800 .62rem/1 Orbitron,Inter,sans-serif;letter-spacing:.15em}.faq-help-cta h2{margin:.5rem 0 .55rem;font:800 clamp(1.6rem,2.8vw,2.5rem)/1.05 Orbitron,Inter,sans-serif;letter-spacing:.02em;color:#e9fbff}.faq-help-cta p{margin:0;color:#87a5b6;line-height:1.65}.faq-help-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}.faq-help-actions .btn{min-width:175px}@media(max-width:980px){.faq-category-panel{grid-template-columns:repeat(2,minmax(0,1fr))!important}.faq-help-cta{flex-direction:column;align-items:flex-start}.faq-help-actions{justify-content:flex-start}}@media(max-width:650px){.faq-category-panel{grid-template-columns:1fr!important}.faq-help-cta{padding:22px 18px}.faq-help-actions{width:100%}.faq-help-actions .btn{width:100%}}
+
+
+/* V22 FAQ support CTA layout fix */
+.faq-help-cta{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;gap:28px!important;width:100%!important;max-width:100%!important;overflow:hidden!important;clip-path:none!important;border-radius:18px!important;padding:28px 30px!important}
+.faq-help-cta>div:first-child{min-width:0!important;max-width:720px!important}.faq-help-cta h2,.faq-help-cta p{overflow-wrap:anywhere!important}
+.faq-help-actions{display:flex!important;flex-wrap:wrap!important;align-items:center!important;justify-content:flex-end!important;gap:12px!important;min-width:0!important}
+.faq-help-actions .btn{min-width:170px!important;max-width:100%!important;white-space:nowrap!important}.faq-help-actions [hidden]{display:none!important}
+@media(max-width:900px){.faq-help-cta{grid-template-columns:1fr!important;align-items:start!important}.faq-help-actions{justify-content:flex-start!important;width:100%!important}}
+@media(max-width:560px){.faq-help-cta{padding:22px 18px!important}.faq-help-actions{display:grid!important;grid-template-columns:1fr!important}.faq-help-actions .btn{width:100%!important;min-width:0!important}}
+
+/* V23: FAQ support CTA spans the full Help Center grid */
+.faq-system-grid > .faq-help-cta{
+  grid-column:1 / -1!important;
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+  margin-top:34px!important;
+}
+.faq-system-grid > .faq-help-cta > div:first-child{
+  min-width:0!important;
+  max-width:760px!important;
+}
+.faq-system-grid > .faq-help-cta h2{
+  white-space:normal!important;
+  word-break:normal!important;
+  overflow-wrap:normal!important;
+}
+.faq-system-grid > .faq-help-cta p{
+  white-space:normal!important;
+  word-break:normal!important;
+  overflow-wrap:normal!important;
+}
+@media(max-width:900px){
+  .faq-system-grid > .faq-help-cta{grid-column:1!important;}
+}

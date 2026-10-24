@@ -40,7 +40,7 @@
   function renderCarousel(visible){
     if(!visible.length){
       state.page=0;
-      ui.grid.innerHTML=`<div class="home268-reviews-empty"><div><strong>${tx('NO REVIEWS YET','TODAVÍA NO HAY REVIEWS')}</strong><span>${tx('Be the first registered Neith user to share a real experience.','Sé el primer usuario registrado de Neith en compartir una experiencia real.')}</span></div></div>`;
+      ui.grid.innerHTML=`<div class="home268-reviews-empty"><div><strong>${tx('NO REVIEWS YET','NO REVIEWS YET')}</strong><span>${tx('Be the first registered Neith user to share a real experience.','Be the first registered Neith user to share a real experience.')}</span></div></div>`;
       if(ui.nav) ui.nav.hidden=true;
       return;
     }
@@ -59,16 +59,16 @@
     const visible=visibleReviews();
     if(!visible.length){
       renderCarousel(visible);
-      ui.summaryStars.textContent='☆☆☆☆☆'; ui.summaryText.textContent=tx('No reviews yet','Sin reviews todavía');
+      ui.summaryStars.textContent='☆☆☆☆☆'; ui.summaryText.textContent=tx('No reviews yet','No reviews yet');
     } else {
       renderCarousel(visible);
       const avg=visible.reduce((a,r)=>a+Number(r.rating||0),0)/visible.length;
       ui.summaryStars.textContent='★'.repeat(Math.round(avg))+'☆'.repeat(5-Math.round(avg));
       ui.summaryText.textContent=`${avg.toFixed(1)}/5 · ${visible.length} ${visible.length===1?tx('review','review'):tx('reviews','reviews')}`;
     }
-    if(ui.allGrid){ ui.allGrid.innerHTML=visible.length?visible.map(r=>reviewCard(r)).join(''):`<div class="home268-all-empty">${tx('No reviews have been published yet.','Todavía no se ha publicado ninguna review.')}</div>`; }
+    if(ui.allGrid){ ui.allGrid.innerHTML=visible.length?visible.map(r=>reviewCard(r)).join(''):`<div class="home268-all-empty">${tx('No reviews have been published yet.','No reviews have been published yet.')}</div>`; }
     const own=state.session?.user?.id?state.reviews.find(r=>r.user_id===state.session.user.id):null;
-    ui.leave.textContent=own?tx('EDIT MY REVIEW','EDITAR MI REVIEW'):tx('LEAVE A REVIEW','DEJAR UNA REVIEW');
+    ui.leave.textContent=own?tx('EDIT MY REVIEW','EDITAR MI REVIEW'):tx('LEAVE A REVIEW','LEAVE A REVIEW');
   }
   async function waitForAuth(){
     for(let i=0;i<100;i++){
@@ -104,7 +104,7 @@
     await syncIdentity(true);
     if(!state.session?.user){ state.auth?.open?.('login'); return; }
     state.editing=review; setRating(review?.rating||5); ui.editorText.value=review?.body||''; ui.editorCount.textContent=`${ui.editorText.value.length} / 800`;
-    ui.editorTitle.textContent=review ? (state.isAdmin && review.user_id!==state.session.user.id ? tx('EDIT REVIEW · ADMIN','EDITAR REVIEW · ADMIN') : tx('EDIT YOUR REVIEW','EDITAR TU REVIEW')) : tx('LEAVE A REVIEW','DEJAR UNA REVIEW');
+    ui.editorTitle.textContent=review ? (state.isAdmin && review.user_id!==state.session.user.id ? tx('EDIT REVIEW · ADMIN','EDITAR REVIEW · ADMIN') : tx('EDIT YOUR REVIEW','EDITAR TU REVIEW')) : tx('LEAVE A REVIEW','LEAVE A REVIEW');
     ui.editorMessage.textContent=''; ui.editorMessage.className=''; openModal(ui.editor);
   }
   async function saveReview(){
@@ -131,13 +131,13 @@
       ui.editorMessage.textContent=tx('Review saved.','Review guardada.');ui.editorMessage.className='home268-review-success'; await loadReviews(); setTimeout(()=>closeModal(ui.editor),350);
     }catch(e){
       const duplicate=String(e?.message||'').toLowerCase().includes('duplicate');
-      ui.editorMessage.textContent=duplicate?tx('You already have a review. Edit your existing review instead.','Ya tienes una review. Edita la que ya existe.'):String(e?.message||tx('Could not save the review.','No se pudo guardar la review.'));
+      ui.editorMessage.textContent=duplicate?tx('You already have a review. Edit your existing review instead.','You already have a review. Edit your existing review instead.'):String(e?.message||tx('Could not save the review.','Could not save the review.'));
       ui.editorMessage.className='home268-review-error';
     }finally{ui.editorSave.disabled=false;}
   }
   async function deleteReview(review){
     if(!review)return; await syncIdentity(true); if(!canEdit(review))return;
-    if(!confirm(tx('Delete this review permanently?','¿Borrar esta review definitivamente?')))return;
+    if(!confirm(tx('Delete this review permanently?','Delete this review permanently?')))return;
     const {error}=await state.client.from('neith_reviews').delete().eq('id',review.id); if(error){alert(error.message);return;} await loadReviews();
   }
   function bindRealtime(){

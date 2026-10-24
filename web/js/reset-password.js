@@ -23,7 +23,7 @@
     const reveal = input.type === 'password';
     input.type = reveal ? 'text' : 'password';
     button.setAttribute('aria-pressed', String(reveal));
-    button.setAttribute('aria-label', t(reveal ? 'Ocultar contraseña' : 'Mostrar contraseña'));
+    button.setAttribute('aria-label', (reveal ? 'Hide password' : 'Show password'));
     button.classList.toggle('is-visible', reveal);
   }
 
@@ -33,11 +33,11 @@
   });
 
   async function bootstrapRecovery() {
-    if (!client) { setReady(false); setMessage('La conexión segura con Neith no está configurada.', 'error'); return; }
+    if (!client) { setReady(false); setMessage('The secure Neith connection is not configured.', 'error'); return; }
     setReady(false);
-    setMessage('Verificando enlace seguro de recuperación…', '');
+    setMessage('Verifying secure recovery link…', '');
     if (!recoveryEvidence) {
-      setMessage('Abre esta pantalla desde el enlace de recuperación enviado a tu correo.', 'error');
+      setMessage('Open this page from the recovery link sent to your email.', 'error');
       return;
     }
     try {
@@ -45,7 +45,7 @@
       if (error) throw error;
       if (data?.session?.user) {
         setReady(true);
-        setMessage('Enlace verificado. Ya puedes crear tu nueva contraseña.', 'success');
+        setMessage('Link verified. You can now create your new password.', 'success');
         return;
       }
       // detectSessionInUrl may finish just after DOM ready; give Supabase a short grace period.
@@ -54,12 +54,12 @@
         attempts += 1;
         const { data: retry } = await client.auth.getSession();
         if (retry?.session?.user) {
-          clearInterval(timer); setReady(true); setMessage('Enlace verificado. Ya puedes crear tu nueva contraseña.', 'success');
+          clearInterval(timer); setReady(true); setMessage('Link verified. You can now create your new password.', 'success');
         } else if (attempts >= 10) {
-          clearInterval(timer); setReady(false); setMessage('Este enlace de recuperación no es válido o ha caducado. Solicita uno nuevo desde Iniciar sesión.', 'error');
+          clearInterval(timer); setReady(false); setMessage('This recovery link is invalid or has expired. Request a new one from Sign in.', 'error');
         }
       }, 180);
-    } catch (error) { setReady(false); setMessage(error?.message || 'No se pudo verificar el enlace de recuperación.', 'error'); }
+    } catch (error) { setReady(false); setMessage(error?.message || 'The recovery link could not be verified.', 'error'); }
   }
 
   client?.auth.onAuthStateChange((event, session) => {
@@ -69,7 +69,7 @@
     }
     if (recoveryEvidence && session?.user) {
       setReady(true);
-      setMessage('Enlace verificado. Ya puedes crear tu nueva contraseña.', 'success');
+      setMessage('Link verified. You can now create your new password.', 'success');
     }
   });
 
@@ -78,25 +78,25 @@
     const values = Object.fromEntries(new FormData(form));
     const password = String(values.password || '');
     const confirm = String(values.password_confirm || '');
-    if (password.length < 8) return setMessage('La contraseña debe tener al menos 8 caracteres.', 'error');
-    if (password !== confirm) return setMessage('Las dos contraseñas no coinciden.', 'error');
-    if (!client || !recoveryReady || recoveryConsumed) return setMessage('El enlace de recuperación no está activo. Solicita uno nuevo.', 'error');
+    if (password.length < 8) return setMessage('The password must be at least 8 characters long.', 'error');
+    if (password !== confirm) return setMessage('The two passwords do not match.', 'error');
+    if (!client || !recoveryReady || recoveryConsumed) return setMessage('The recovery link is not active. Request a new one.', 'error');
     const original = submit?.textContent || '';
     if (submit) { submit.disabled = true; submit.textContent = t('GUARDANDO…'); }
-    setMessage('Actualizando tu contraseña de forma segura…', '');
+    setMessage('Updating your password securely…', '');
     try {
       const { error } = await client.auth.updateUser({ password });
       if (error) throw error;
       recoveryConsumed = true;
       setReady(false);
       form.reset();
-      setMessage('Contraseña actualizada correctamente. Cerrando la sesión de recuperación…', 'success');
+      setMessage('Password updated successfully. Closing the recovery session…', 'success');
       await client.auth.signOut({ scope: 'local' });
       try { sessionStorage.removeItem(RECOVERY_VERIFIED_KEY); } catch {}
       history.replaceState(null, '', location.pathname);
       setTimeout(() => { location.replace('../?login=1&password=updated'); }, 1300);
     } catch (error) {
-      setMessage(error?.message || 'No se pudo actualizar la contraseña.', 'error');
+      setMessage(error?.message || 'The password could not be updated.', 'error');
       if (submit) { submit.disabled = false; submit.textContent = original; }
     }
   });

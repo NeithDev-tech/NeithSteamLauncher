@@ -1,0 +1,21 @@
+
+/* V7 — community surfaces aligned with the new Neith visual system */
+.home268-reviews{padding:clamp(4.8rem,8vw,7rem) 0;background:transparent}
+.home268-reviews-shell{width:min(94%,86rem);margin:auto;border-color:rgba(84,230,255,.18);border-radius:1.55rem;background:linear-gradient(155deg,rgba(7,22,35,.90),rgba(3,10,17,.96));box-shadow:0 2rem 6rem rgba(0,0,0,.28)}
+.home268-reviews-head h2{font-family:Inter,Segoe UI,sans-serif;font-weight:900;letter-spacing:-.045em;text-transform:none;font-size:clamp(2.15rem,4.2vw,3.7rem)}
+.home268-reviews-kicker,.home268-reviews-page,.home268-review-action,.home268-reviews-btn,.home268-modal-head span,.home268-modal-head strong,.home268-editor-label{font-family:Inter,Segoe UI,sans-serif;letter-spacing:.10em}
+.home268-review-card{border-color:rgba(84,230,255,.15);background:linear-gradient(155deg,rgba(8,27,42,.9),rgba(3,12,20,.92));border-radius:1rem}
+.home268-review-card:hover{border-color:rgba(84,230,255,.38);transform:translateY(-1px)}
+.home268-review-avatar{font-family:Inter,Segoe UI,sans-serif}.home268-reviews-btn{border-radius:.75rem;min-height:2.9rem}.home268-reviews-btn.primary{background:linear-gradient(135deg,#0ca7dc,#145fff);color:white}
+.home268-modal-panel{border-radius:1.25rem;background:linear-gradient(155deg,#071827,#030b13);border-color:rgba(84,230,255,.24)}
+.home268-modal-head strong{font-family:Inter,Segoe UI,sans-serif;font-weight:900;letter-spacing:-.02em}
+.neith-chat-v7{padding-top:1rem}.neith-community-head{margin-bottom:2rem}.neith-chat-panel-v7{border-radius:1.35rem;border-color:rgba(84,230,255,.18);background:linear-gradient(155deg,rgba(7,22,35,.92),rgba(3,10,17,.98));box-shadow:0 2rem 6rem rgba(0,0,0,.26)}
+.neith-chat-panel-v7 .home209-shoutbox-head{min-height:4.2rem;padding:1rem 1.15rem;background:rgba(7,25,39,.75);border-bottom-color:rgba(84,230,255,.12)}
+.neith-chat-panel-v7 .home209-shoutbox-title strong{font-family:Inter,Segoe UI,sans-serif;font-size:.95rem;letter-spacing:.08em}
+.neith-chat-panel-v7 .home209-shoutbox-title span{font-family:Inter,Segoe UI,sans-serif;letter-spacing:.06em;color:#6f8fa4}
+.neith-chat-panel-v7 .home209-shoutbox-list{height:18rem;padding:1rem;background:rgba(2,9,15,.56)}
+.neith-chat-panel-v7 .home209-msg{padding:.65rem .7rem;border-radius:.75rem}.neith-chat-panel-v7 .home209-msg:hover{background:rgba(24,75,105,.17)}
+.neith-chat-panel-v7 .home209-shoutbox-compose{padding:1rem 1.15rem 1.1rem;background:rgba(4,15,24,.9)}
+.neith-chat-panel-v7 .home209-shoutbox-inputrow input{height:3rem;border-radius:.75rem;border-color:rgba(84,230,255,.16);background:#030d16;padding:0 1rem}
+.neith-chat-panel-v7 .home209-shoutbox-inputrow button{min-width:7rem;border-radius:.75rem;background:linear-gradient(135deg,#0ca7dc,#145fff)}
+@media(max-width:700px){.neith-chat-panel-v7 .home209-shoutbox-list{height:15rem}.home268-reviews-shell{width:min(94%,86rem)}}

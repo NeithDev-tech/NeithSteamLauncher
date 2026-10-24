@@ -11,7 +11,7 @@
     return;
   }
   window.__NEITH_WEB_BUILD__ = 'V34';
-  console.info('[NEITH WEB] Build V34 activo · identidad instantánea + autoridad Supabase');
+  console.info('[NEITH WEB] Build V34 active · instant identity + Supabase authority');
   const scriptUrl = document.currentScript?.src || '';
   const siteBase = (() => {
     try { return new URL('../', scriptUrl || window.location.href); }
@@ -130,7 +130,7 @@
     if (cached?.profile) return cached.profile;
     const meta = user.user_metadata || {};
     return {
-      display_name: meta.display_name || meta.full_name || meta.name || meta.preferred_username || meta.user_name || user.email?.split('@')[0] || 'Usuario',
+      display_name: meta.display_name || meta.full_name || meta.name || meta.preferred_username || meta.user_name || user.email?.split('@')[0] || 'User',
       avatar_url: meta.avatar_url || meta.picture || null,
       status: 'active',
       updated_at: null
@@ -202,7 +202,7 @@
     const isOwner = await loadOwnerAccess();
     if (!isOwner) { existing?.remove(); return; }
     if (existing) return;
-    nav.insertAdjacentHTML('beforeend', `<a href="${siteUrl('admin/')}" role="menuitem" data-admin-menu-link data-owner-only="true"><span class="account-menu-icon">◆</span><span><b>ADMIN CENTER</b><small>Control de Neith</small></span><em>›</em></a>`);
+    nav.insertAdjacentHTML('beforeend', `<a href="${siteUrl('admin/')}" role="menuitem" data-admin-menu-link data-owner-only="true"><span class="account-menu-icon">◆</span><span><b>ADMIN CENTER</b><small>Neith control center</small></span><em>›</em></a>`);
   }
 
 
@@ -266,7 +266,7 @@
   }
 
   function displayName(user) {
-    return user?.user_metadata?.display_name || user?.user_metadata?.full_name || user?.user_metadata?.name || user?.user_metadata?.preferred_username || user?.user_metadata?.user_name || user?.email?.split('@')[0] || 'Usuario';
+    return user?.user_metadata?.display_name || user?.user_metadata?.full_name || user?.user_metadata?.name || user?.user_metadata?.preferred_username || user?.user_metadata?.user_name || user?.email?.split('@')[0] || 'User';
   }
 
   function avatarUrl(user) {
@@ -275,100 +275,105 @@
 
   function injectAuthUI(kind = 'both') {
     if (kind !== 'menu' && !document.getElementById('neith-auth-modal')) {
+      if (!document.querySelector('link[data-neith-auth26]')) {
+        const authCss = document.createElement('link');
+        authCss.rel = 'stylesheet';
+        authCss.href = siteUrl('css/neith-auth-v27.css?v=20261024-v27');
+        authCss.dataset.neithAuth27 = '1';
+        document.head.appendChild(authCss);
+      }
       document.body.insertAdjacentHTML('beforeend', `
-        <div class="auth-modal auth-modal-v19 auth-modal-v20" id="neith-auth-modal" aria-hidden="true">
-          <div class="auth-backdrop" data-auth-close></div>
-          <section class="auth-shell auth-shell-v19 auth-shell-v20" role="dialog" aria-modal="true" aria-labelledby="auth-title">
-            <span class="auth-corner auth-corner-a" aria-hidden="true"></span>
-            <span class="auth-corner auth-corner-b" aria-hidden="true"></span>
-            <div class="auth-scanline" aria-hidden="true"></div>
-            <button class="auth-close" type="button" aria-label="Cerrar" data-auth-close><span class="auth-close-icon" aria-hidden="true">×</span></button>
+        <div class="auth-modal neith-auth26-modal" id="neith-auth-modal" aria-hidden="true">
+          <div class="auth-backdrop neith-auth26-backdrop" data-auth-close></div>
+          <section class="auth-shell neith-auth26-shell" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+            <button class="auth-close neith-auth26-close" type="button" aria-label="Close" data-auth-close>×</button>
 
-            <header class="auth-v19-head">
-              <div class="auth-v19-emblem" aria-hidden="true"><span>N</span><i></i></div>
-              <div class="auth-v19-headcopy">
-                <div class="auth-brandline"><span class="auth-led"></span> NEITH ID // SECURE ACCESS</div>
-                <h2 id="auth-title">ACCESO NEITH</h2>
-                <p class="auth-subtitle">Tu identidad Neith, protegida y sincronizada en un único acceso.</p>
+            <aside class="neith-auth26-brand">
+              <div class="neith-auth26-mark" aria-hidden="true"><img src="${siteUrl('img/neith-launcher-mark.png')}" alt=""><span></span></div>
+              <div class="neith-auth26-brandcopy">
+                <span class="neith-auth26-kicker">NEITH ID · SECURE ACCESS</span>
+                <h2 id="auth-title">WELCOME TO NEITH</h2>
+                <p>Sign in to your Neith ID or create a free account to keep your profile, Premium status and launcher access connected.</p>
               </div>
-            </header>
-
-            <div class="auth-v19-status" aria-hidden="true"><span><i></i>NÚCLEO SEGURO</span><b>256-BIT SESSION</b></div>
-
-            <div class="auth-tabs" role="tablist">
-              <button class="active" type="button" data-auth-tab="login">INICIAR SESIÓN</button>
-              <button type="button" data-auth-tab="register">CREAR CUENTA</button>
-            </div>
-
-            <form class="auth-form auth-form-v19 auth-form-v20" data-auth-form="login" novalidate>
-              <label class="auth-field">
-                <span class="auth-field-title">CORREO O NOMBRE DE USUARIO</span>
-                <div class="auth-input-shell"><span class="auth-field-icon" aria-hidden="true">@</span><input name="email" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" required placeholder="tu@correo.com o usuario"></div>
-              </label>
-              <label class="auth-field">
-                <span class="auth-field-title">CONTRASEÑA</span>
-                <div class="auth-input-shell password-field"><span class="auth-field-icon auth-lock-icon" aria-hidden="true">◇</span><input name="password" type="password" autocomplete="current-password" required minlength="8" placeholder="••••••••"><button class="password-toggle" type="button" data-password-toggle aria-label="Mostrar contraseña" aria-pressed="false"><svg class="password-eye" viewBox="0 0 24 24" aria-hidden="true"><path class="eye-open" d="M2.4 12s3.4-6 9.6-6 9.6 6 9.6 6-3.4 6-9.6 6-9.6-6-9.6-6Z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle class="eye-open" cx="12" cy="12" r="2.7" fill="none" stroke="currentColor" stroke-width="1.8"/><path class="eye-slash" d="M4 4l16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></button></div>
-              </label>
-
-              <div class="auth-login-tools">
-                <label class="auth-remember"><input type="checkbox" name="remember" value="1" data-auth-remember><span class="auth-check" aria-hidden="true"><i>✓</i></span><span>Recordar identificación</span></label>
-                <button class="auth-forgot" type="button" data-auth-switch="recover">¿Olvidaste tu contraseña?</button>
+              <div class="neith-auth26-trust" aria-hidden="true">
+                <span><i></i> SECURE SESSION</span>
+                <span>ENCRYPTED ACCESS</span>
               </div>
-              <p class="auth-remember-note">Guardamos únicamente tu correo o nombre de usuario en este navegador. Nunca tu contraseña.</p>
+            </aside>
 
-              <button class="auth-submit auth-submit-v19" type="submit"><span>ENTRAR EN NEITH</span><em aria-hidden="true">→</em></button>
-              <button class="auth-switch-link" type="button" data-auth-switch="register">¿No tienes cuenta? <strong>Crear Neith ID</strong></button>
-            </form>
+            <div class="neith-auth26-panel">
+              <div class="auth-tabs neith-auth26-tabs" role="tablist">
+                <button class="active" type="button" data-auth-tab="login">SIGN IN</button>
+                <button type="button" data-auth-tab="register">CREATE ACCOUNT</button>
+              </div>
 
-            <form class="auth-form auth-form-v19 auth-form-v20" data-auth-form="register" autocomplete="off" hidden novalidate>
-              <label class="auth-field"><span class="auth-field-title">NOMBRE DE USUARIO</span><div class="auth-input-shell"><span class="auth-field-icon" aria-hidden="true">N</span><input name="display_name" type="text" autocomplete="nickname" required maxlength="20" placeholder="Tu nombre en Neith"></div></label>
-              <label class="auth-field"><span class="auth-field-title">CORREO ELECTRÓNICO</span><div class="auth-input-shell"><span class="auth-field-icon" aria-hidden="true">@</span><input name="register_email" type="email" autocomplete="off" autocapitalize="none" spellcheck="false" data-lpignore="true" data-1p-ignore="true" required placeholder="tu@correo.com"></div></label>
-              <label class="auth-field"><span class="auth-field-title">CONFIRMAR CORREO</span><div class="auth-input-shell"><span class="auth-field-icon" aria-hidden="true">✓</span><input name="register_email_confirm" type="email" autocomplete="off" autocapitalize="none" spellcheck="false" data-lpignore="true" data-1p-ignore="true" required placeholder="Repite tu correo"></div></label>
-              <label class="auth-field"><span class="auth-field-title">CONTRASEÑA</span><div class="auth-input-shell password-field"><span class="auth-field-icon auth-lock-icon" aria-hidden="true">◇</span><input name="register_password" type="password" autocomplete="new-password" data-lpignore="true" required minlength="8" placeholder="Mínimo 8 caracteres"><button class="password-toggle" type="button" data-password-toggle aria-label="Mostrar contraseña" aria-pressed="false"><svg class="password-eye" viewBox="0 0 24 24" aria-hidden="true"><path class="eye-open" d="M2.4 12s3.4-6 9.6-6 9.6 6 9.6 6-3.4 6-9.6 6-9.6-6-9.6-6Z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle class="eye-open" cx="12" cy="12" r="2.7" fill="none" stroke="currentColor" stroke-width="1.8"/><path class="eye-slash" d="M4 4l16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></button></div></label>
-              <p class="auth-register-target" data-register-target>La confirmación se enviará exactamente al correo indicado arriba.</p>
-              <button class="auth-submit auth-submit-v19" type="submit"><span>CREAR CUENTA</span><em aria-hidden="true">→</em></button>
-            </form>
+              <form class="auth-form neith-auth26-form" data-auth-form="login" novalidate>
+                <label class="neith-auth26-field">
+                  <span>EMAIL OR USERNAME</span>
+                  <div class="neith-auth26-input"><b aria-hidden="true">@</b><input name="email" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" required placeholder="your@email.com or username"></div>
+                </label>
+                <label class="neith-auth26-field">
+                  <span>PASSWORD</span>
+                  <div class="neith-auth26-input neith-auth26-password"><b aria-hidden="true">◇</b><input name="password" type="password" autocomplete="current-password" required minlength="8" placeholder="••••••••"><button class="password-toggle neith-auth26-eye" type="button" data-password-toggle aria-label="Show password" aria-pressed="false">◉</button></div>
+                </label>
+                <div class="neith-auth26-tools">
+                  <label class="auth-remember neith-auth26-remember"><input type="checkbox" name="remember" value="1" data-auth-remember><span class="auth-check" aria-hidden="true"><i>✓</i></span><span>Remember sign-in</span></label>
+                  <button class="auth-forgot neith-auth26-link" type="button" data-auth-switch="recover">Forgot your password?</button>
+                </div>
+                <p class="neith-auth26-note">We only store your email or username in this browser. Never your password.</p>
+                <button class="auth-submit neith-auth26-submit" type="submit"><span>ENTER NEITH</span><em aria-hidden="true">→</em></button>
+                <button class="auth-switch-link neith-auth26-switch" type="button" data-auth-switch="register">New to Neith? <strong>Create a free Neith ID</strong></button>
+              </form>
 
-            <form class="auth-form auth-form-v19 auth-form-v20" data-auth-form="recover" hidden novalidate>
-              <div class="auth-recovery-copy"><strong>RECUPERAR ACCESO</strong><span>Te enviaremos un enlace seguro para crear una nueva contraseña.</span></div>
-              <label class="auth-field"><span class="auth-field-title">CORREO ELECTRÓNICO</span><div class="auth-input-shell"><span class="auth-field-icon" aria-hidden="true">@</span><input name="email" type="email" autocomplete="email" required placeholder="tu@correo.com"></div></label>
-              <button class="auth-submit auth-submit-v19" type="submit"><span>ENVIAR ENLACE DE RECUPERACIÓN</span><em aria-hidden="true">→</em></button>
-              <button class="auth-switch-link" type="button" data-auth-switch="login">← Volver a iniciar sesión</button>
-            </form>
+              <form class="auth-form neith-auth26-form" data-auth-form="register" autocomplete="off" hidden novalidate>
+                <label class="neith-auth26-field"><span>USERNAME</span><div class="neith-auth26-input"><b aria-hidden="true">N</b><input name="display_name" type="text" autocomplete="nickname" required maxlength="20" placeholder="Your Neith username"></div></label>
+                <label class="neith-auth26-field"><span>EMAIL ADDRESS</span><div class="neith-auth26-input"><b aria-hidden="true">@</b><input name="register_email" type="email" autocomplete="off" autocapitalize="none" spellcheck="false" data-lpignore="true" data-1p-ignore="true" required placeholder="your@email.com"></div></label>
+                <label class="neith-auth26-field"><span>CONFIRM EMAIL</span><div class="neith-auth26-input"><b aria-hidden="true">✓</b><input name="register_email_confirm" type="email" autocomplete="off" autocapitalize="none" spellcheck="false" data-lpignore="true" data-1p-ignore="true" required placeholder="Repeat your email"></div></label>
+                <label class="neith-auth26-field"><span>PASSWORD</span><div class="neith-auth26-input neith-auth26-password"><b aria-hidden="true">◇</b><input name="register_password" type="password" autocomplete="new-password" data-lpignore="true" required minlength="8" placeholder="Minimum 8 characters"><button class="password-toggle neith-auth26-eye" type="button" data-password-toggle aria-label="Show password" aria-pressed="false">◉</button></div></label>
+                <p class="auth-register-target neith-auth26-register-target" data-register-target>The confirmation email will be sent exactly to the address entered above.</p>
+                <button class="auth-submit neith-auth26-submit" type="submit"><span>CREATE ACCOUNT</span><em aria-hidden="true">→</em></button>
+                <button class="auth-switch-link neith-auth26-switch" type="button" data-auth-switch="login">Already have an account? <strong>Sign in</strong></button>
+              </form>
 
-            <div class="auth-separator" ${oauthEnabled ? '' : 'hidden'}><span>O CONTINÚA CON</span></div>
-            <div class="auth-socials" ${oauthEnabled ? '' : 'hidden'}>
-              <button type="button" class="social google" data-oauth="google"><span class="social-icon google-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="#4285F4" d="M21.6 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.4a4.6 4.6 0 0 1-2 3v2.5h3.3c1.9-1.8 2.9-4.4 2.9-7.3Z"/><path fill="#34A853" d="M12 22c2.7 0 5-.9 6.7-2.4l-3.3-2.5c-.9.6-2.1 1-3.4 1-2.6 0-4.8-1.8-5.6-4.2H3v2.6A10 10 0 0 0 12 22Z"/><path fill="#FBBC05" d="M6.4 13.9A6 6 0 0 1 6.1 12c0-.7.1-1.3.3-1.9V7.5H3A10 10 0 0 0 2 12c0 1.6.4 3.1 1 4.5l3.4-2.6Z"/><path fill="#EA4335" d="M12 5.9c1.5 0 2.8.5 3.8 1.5l2.9-2.8A9.7 9.7 0 0 0 3 7.5l3.4 2.6C7.2 7.7 9.4 5.9 12 5.9Z"/></svg></span><b>Continuar con Google</b></button>
-              <button type="button" class="social discord" data-oauth="discord"><span class="social-icon discord-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M19.7 5.3A18 18 0 0 0 15.3 4l-.5 1a16 16 0 0 0-5.6 0l-.5-1a18 18 0 0 0-4.4 1.3C1.5 9.5.7 13.6 1.1 17.6A18 18 0 0 0 6.5 20l1.3-1.8a12 12 0 0 1-2-.9l.5-.4c3.8 1.8 7.6 1.8 11.4 0l.5.4c-.6.4-1.3.7-2 .9l1.3 1.8a18 18 0 0 0 5.4-2.4c.5-4.6-.8-8.7-3.2-12.3ZM8.2 15.2c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2.1 1 2 2.2c0 1.2-.9 2.2-2 2.2Zm7.6 0c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2.1 1 2 2.2c0 1.2-.9 2.2-2 2.2Z"/></svg></span><b>Continuar con Discord</b></button>
+              <form class="auth-form neith-auth26-form" data-auth-form="recover" hidden novalidate>
+                <div class="neith-auth26-recovery"><strong>RECOVER YOUR ACCOUNT</strong><span>Enter your email address and we will send you a secure password reset link.</span></div>
+                <label class="neith-auth26-field"><span>EMAIL ADDRESS</span><div class="neith-auth26-input"><b aria-hidden="true">@</b><input name="email" type="email" autocomplete="email" required placeholder="your@email.com"></div></label>
+                <button class="auth-submit neith-auth26-submit" type="submit"><span>SEND RECOVERY LINK</span><em aria-hidden="true">→</em></button>
+                <button class="auth-switch-link neith-auth26-switch" type="button" data-auth-switch="login">← Back to sign in</button>
+              </form>
+
+              <div class="auth-separator neith-auth26-separator" ${oauthEnabled ? '' : 'hidden'}><span>OR CONTINUE WITH</span></div>
+              <div class="auth-socials neith-auth26-socials" ${oauthEnabled ? '' : 'hidden'}>
+                <button type="button" class="social google" data-oauth="google"><span class="social-icon google-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="#4285F4" d="M21.6 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.4a4.6 4.6 0 0 1-2 3v2.5h3.3c1.9-1.8 2.9-4.4 2.9-7.3Z"/><path fill="#34A853" d="M12 22c2.7 0 5-.9 6.7-2.4l-3.3-2.5c-.9.6-2.1 1-3.4 1-2.6 0-4.8-1.8-5.6-4.2H3v2.6A10 10 0 0 0 12 22Z"/><path fill="#FBBC05" d="M6.4 13.9A6 6 0 0 1 6.1 12c0-.7.1-1.3.3-1.9V7.5H3A10 10 0 0 0 2 12c0 1.6.4 3.1 1 4.5l3.4-2.6Z"/><path fill="#EA4335" d="M12 5.9c1.5 0 2.8.5 3.8 1.5l2.9-2.8A9.7 9.7 0 0 0 3 7.5l3.4 2.6C7.2 7.7 9.4 5.9 12 5.9Z"/></svg></span><b>Continue with Google</b></button>
+                <button type="button" class="social discord" data-oauth="discord"><span class="social-icon discord-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M19.7 5.3A18 18 0 0 0 15.3 4l-.5 1a16 16 0 0 0-5.6 0l-.5-1a18 18 0 0 0-4.4 1.3C1.5 9.5.7 13.6 1.1 17.6A18 18 0 0 0 6.5 20l1.3-1.8a12 12 0 0 1-2-.9l.5-.4c3.8 1.8 7.6 1.8 11.4 0l.5.4c-.6.4-1.3.7-2 .9l1.3 1.8a18 18 0 0 0 5.4-2.4c.5-4.6-.8-8.7-3.2-12.3ZM8.2 15.2c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2.1 1 2 2.2c0 1.2-.9 2.2-2 2.2Zm7.6 0c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2.1 1 2 2.2c0 1.2-.9 2.2-2 2.2Z"/></svg></span><b>Continue with Discord</b></button>
+              </div>
+              <p class="auth-message neith-auth26-message" data-auth-message></p>
+              <p class="auth-config-note neith-auth26-config" ${configured ? 'hidden' : ''}>Visual mode is active. Configure Supabase in <code>js/supabase-config.js</code> to enable real authentication.</p>
             </div>
-            <p class="auth-message" data-auth-message></p>
-            <p class="auth-config-note" ${configured ? 'hidden' : ''}>Modo visual activo. Pega tu <strong>Project URL</strong> y tu <strong>anon/public key</strong> en <code>js/supabase-config.js</code>. Después activa Google y Discord en Supabase Authentication → Providers.</p>
-            <footer class="auth-v19-footer"><span><i></i>NEITH AUTH ONLINE</span><b>SESSION ENCRYPTED</b></footer>
           </section>
         </div>
       `);
-      hydrateRememberedIdentity();
     }
 
     if (kind !== 'modal' && !document.getElementById('neith-account-menu')) {
       document.body.insertAdjacentHTML('beforeend', `
-        <section class="neith-account-menu" id="neith-account-menu" role="menu" aria-hidden="true" aria-label="Cuenta Neith">
+        <section class="neith-account-menu" id="neith-account-menu" role="menu" aria-hidden="true" aria-label="Neith Account">
           <div class="account-menu-glow" aria-hidden="true"></div>
           <div class="account-menu-profile">
             <div class="account-menu-avatar" data-account-menu-avatar>N</div>
             <div class="account-menu-identity">
-              <strong data-account-menu-name>Usuario</strong>
+              <strong data-account-menu-name>User</strong>
               <span data-account-menu-email>—</span>
             </div>
             <span class="account-menu-plan" data-account-menu-plan>FREE</span>
           </div>
-          <div class="account-menu-status"><i></i><span>Cuenta Neith</span><b data-account-menu-status>ACTIVO</b></div>
-          <nav class="account-menu-links" aria-label="Cuenta Neith">
-            <a href="${siteUrl('dashboard/')}" role="menuitem"><span class="account-menu-icon">◈</span><span><b>MI PANEL</b><small>Ir al panel</small></span><em>›</em></a>
-            <a href="${siteUrl('mi-cuenta/')}" role="menuitem"><span class="account-menu-icon">◎</span><span><b>MI CUENTA</b><small>Gestionar cuenta</small></span><em>›</em></a>
-            <a href="${siteUrl('seguridad/')}" role="menuitem"><span class="account-menu-icon">⌾</span><span><b>SEGURIDAD</b><small>Seguridad</small></span><em>›</em></a>
+          <div class="account-menu-status"><i></i><span>NEITH ACCOUNT</span><b data-account-menu-status>ACTIVE</b></div>
+          <nav class="account-menu-links" aria-label="Neith Account">
+            <a href="${siteUrl('dashboard/')}" role="menuitem"><span class="account-menu-icon">◈</span><span><b>MY DASHBOARD</b><small>Open dashboard</small></span><em>›</em></a>
+            <a href="${siteUrl('mi-cuenta/')}" role="menuitem"><span class="account-menu-icon">◎</span><span><b>MY ACCOUNT</b><small>Manage account</small></span><em>›</em></a>
+            <a href="${siteUrl('seguridad/')}" role="menuitem"><span class="account-menu-icon">⌾</span><span><b>SECURITY</b><small>Security settings</small></span><em>›</em></a>
           </nav>
-          <button class="account-menu-logout" type="button" data-logout role="menuitem"><span>⏻</span><b>CERRAR SESIÓN</b></button>
+          <button class="account-menu-logout" type="button" data-logout role="menuitem"><span>⏻</span><b>SIGN OUT</b></button>
         </section>
       `);
       if (state.session?.user) syncUI();
@@ -388,7 +393,7 @@
       button.dataset.authNav = '';
       button.setAttribute('aria-haspopup', 'dialog');
       button.setAttribute('aria-controls', 'neith-auth-modal');
-      button.innerHTML = '<span class="nav-auth-led"></span><span data-auth-nav-label>INICIAR SESIÓN</span>';
+      button.innerHTML = '<span class="nav-auth-led"></span><span data-auth-nav-label>SIGN IN</span>';
       button.dataset.accountTrigger = 'true';
       if (download) actions.insertBefore(button, download); else actions.prepend(button);
     });
@@ -403,16 +408,49 @@
     const menu = document.getElementById('neith-account-menu');
     const anchor = accountMenuAnchor;
     if (!menu || !anchor || !menu.classList.contains('open')) return;
+
+    // V32: the account dropdown is positioned from the clicked visible Neith button.
+    // Explicitly clear right/inset so no responsive stylesheet can push it to the viewport edge.
     const rect = anchor.getBoundingClientRect();
-    const width = Math.min(360, Math.max(300, window.innerWidth - 24));
-    menu.style.width = `${width}px`;
-    const left = Math.min(window.innerWidth - width - 12, Math.max(12, rect.right - width));
-    const menuHeight = menu.getBoundingClientRect().height || 390;
-    const below = rect.bottom + 12;
-    const above = Math.max(12, rect.top - menuHeight - 12);
-    const top = below + menuHeight <= window.innerHeight - 12 ? below : above;
-    menu.style.left = `${left}px`;
-    menu.style.top = `${top}px`;
+    const viewportW = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+    const viewportH = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+    const gutter = viewportW <= 560 ? 8 : 12;
+    const width = Math.min(340, Math.max(280, viewportW - gutter * 2));
+
+    menu.style.setProperty('position', 'fixed', 'important');
+    menu.style.setProperty('width', `${width}px`, 'important');
+    menu.style.setProperty('max-width', `${viewportW - gutter * 2}px`, 'important');
+    menu.style.setProperty('right', 'auto', 'important');
+    menu.style.setProperty('inset-inline-end', 'auto', 'important');
+    menu.style.setProperty('inset-inline-start', 'auto', 'important');
+
+    // Align the dropdown's right edge with the Neith button, like a normal account menu.
+    let left = rect.right - width;
+    left = Math.max(gutter, Math.min(left, viewportW - width - gutter));
+
+    // If a stale/detached trigger produced an invalid rect, recover from the visible trigger.
+    if (!Number.isFinite(left) || rect.width <= 0) {
+      const visibleTrigger = [...document.querySelectorAll('[data-auth-nav]')].find(el => {
+        const r = el.getBoundingClientRect();
+        return r.width > 0 && r.height > 0 && r.bottom > 0 && r.top < viewportH;
+      });
+      if (visibleTrigger) {
+        const r = visibleTrigger.getBoundingClientRect();
+        left = Math.max(gutter, Math.min(r.right - width, viewportW - width - gutter));
+      } else {
+        left = gutter;
+      }
+    }
+
+    menu.style.setProperty('left', `${Math.round(left)}px`, 'important');
+
+    // Measure after width/left are settled so vertical placement is stable.
+    const menuHeight = Math.min(menu.scrollHeight || menu.getBoundingClientRect().height || 390, viewportH - gutter * 2);
+    const below = rect.bottom + 8;
+    const above = Math.max(gutter, rect.top - menuHeight - 8);
+    const top = below + menuHeight <= viewportH - gutter ? below : above;
+    menu.style.setProperty('top', `${Math.round(Math.max(gutter, top))}px`, 'important');
+    menu.style.setProperty('bottom', 'auto', 'important');
   }
 
   function closeAccountMenu() {
@@ -511,15 +549,15 @@
     const raw = String(error?.message || error || '').trim();
     const lower = raw.toLowerCase();
     if (error?.code === 'NEITH_IDENTITY_EDGE_ERROR' || lower.includes('edge function returned a non-2xx')) {
-      return window.NeithI18n?.t?.('El servicio de identidad está temporalmente ocupado. Inténtalo de nuevo en unos segundos.') || 'El servicio de identidad está temporalmente ocupado. Inténtalo de nuevo en unos segundos.';
+      return window.NeithI18n?.t?.('The identity service is temporarily busy. Please try again in a few seconds.') || 'The identity service is temporarily busy. Please try again in a few seconds.';
     }
     if (lower.includes('user already registered') || lower.includes('already been registered')) {
-      return window.NeithI18n?.t?.('Ya existe una cuenta con ese correo electrónico.') || 'Ya existe una cuenta con ese correo electrónico.';
+      return 'An account with that email address already exists.';
     }
     if (lower.includes('invalid email')) {
-      return window.NeithI18n?.t?.('Introduce un correo electrónico válido.') || 'Introduce un correo electrónico válido.';
+      return 'Enter a valid email address.';
     }
-    return raw || (window.NeithI18n?.t?.('No se pudo completar la operación. Inténtalo de nuevo.') || 'No se pudo completar la operación. Inténtalo de nuevo.');
+    return raw || (window.NeithI18n?.t?.('The operation could not be completed. Please try again.') || 'The operation could not be completed. Please try again.');
   }
 
   function prepareRegisterForm({ clear = false } = {}) {
@@ -550,8 +588,8 @@
     const target = form?.querySelector('[data-register-target]');
     const email = normalizeEmail(form?.querySelector('input[name="register_email"]')?.value);
     if (!target) return;
-    const base = window.NeithI18n?.t?.('La confirmación se enviará exactamente al correo indicado arriba.') || 'La confirmación se enviará exactamente al correo indicado arriba.';
-    const withEmail = window.NeithI18n?.t?.('La confirmación se enviará a:') || 'La confirmación se enviará a:';
+    const base = 'The confirmation email will be sent exactly to the address entered above.';
+    const withEmail = 'The confirmation email will be sent to:';
     target.textContent = email ? `${withEmail} ${email}` : base;
   }
 
@@ -587,7 +625,7 @@
     const tabs = document.querySelector('.auth-tabs');
     if (tabs) tabs.hidden = tab === 'recover';
     const title = document.getElementById('auth-title');
-    if (title) title.textContent = tab === 'recover' ? 'RECUPERAR CONTRASEÑA' : 'ACCESO NEITH';
+    if (title) title.textContent = tab === 'recover' ? 'RECOVER ACCESS' : (tab === 'register' ? 'CREATE YOUR NEITH ID' : 'WELCOME TO NEITH');
     if (tab === 'login') hydrateRememberedIdentity();
     if (tab === 'register') { prepareRegisterForm({ clear: true }); updateRegisterTarget(); }
     setMessage('');
@@ -671,7 +709,7 @@
     } catch (error) {
       if (!silent) console.warn('[NEITH MEMBERSHIP] No se pudo sincronizar:', error?.message || error);
       const badge = document.querySelector('[data-dashboard-sync-badge]');
-      if (badge) badge.innerHTML = '<i></i> SIN CONEXIÓN';
+      if (badge) badge.innerHTML = '<i></i> OFFLINE';
       return state.membership;
     }
   }
@@ -747,7 +785,7 @@
           btn.removeAttribute('data-account-trigger');
           btn.removeAttribute('data-initials');
           btn.classList.remove('nav-account-trigger');
-          btn.innerHTML = '<span class="nav-auth-led" aria-hidden="true"></span><span data-auth-nav-label>INICIAR SESIÓN</span>';
+          btn.innerHTML = '<span class="nav-auth-led" aria-hidden="true"></span><span data-auth-nav-label>SIGN IN</span>';
           btn.dataset.authSignature = signature;
         }
         return;
@@ -761,7 +799,7 @@
       btn.classList.add('nav-account-trigger');
       if (btn.dataset.authSignature !== signature) {
         const avatarMarkup = avatar
-          ? `<img src="${escapeHtml(avatar)}" alt="Avatar de ${escapeHtml(name)}" decoding="async">`
+          ? `<img src="${escapeHtml(avatar)}" alt="Avatar for ${escapeHtml(name)}" decoding="async">`
           : `<span>${escapeHtml(init)}</span>`;
         btn.innerHTML = `<span class="nav-account-avatar" aria-hidden="true">${avatarMarkup}</span><span class="nav-account-name" data-auth-nav-label>${escapeHtml(name)}</span><span class="nav-account-divider" aria-hidden="true"></span><span class="nav-auth-chevron" aria-hidden="true"><svg viewBox="0 0 16 16" focusable="false"><path d="M3.2 5.8 8 10.2l4.8-4.4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`;
         btn.dataset.authSignature = signature;
@@ -780,12 +818,12 @@
       const avatar = state.profile?.avatar_url || avatarUrl(user) || '';
       const menuAvatar = accountMenu.querySelector('[data-account-menu-avatar]');
       if (menuAvatar) {
-        if (avatar) menuAvatar.innerHTML = `<img src="${escapeHtml(avatar)}" alt="Avatar de ${escapeHtml(displayName(user))}">`;
+        if (avatar) menuAvatar.innerHTML = `<img src="${escapeHtml(avatar)}" alt="Avatar for ${escapeHtml(displayName(user))}">`;
         else menuAvatar.textContent = user ? initials(user) : 'N';
       }
       const menuName = accountMenu.querySelector('[data-account-menu-name]');
       const menuEmail = accountMenu.querySelector('[data-account-menu-email]');
-      if (menuName) menuName.textContent = user ? (state.profile?.display_name || displayName(user)) : 'Usuario';
+      if (menuName) menuName.textContent = user ? (state.profile?.display_name || displayName(user)) : 'User';
       if (menuEmail) menuEmail.textContent = user?.email || '—';
     }
 
@@ -796,27 +834,27 @@
     const isPremium = planKey === 'premium';
     const isPermanent = isPremium && Boolean(membership?.premium_permanent);
     const plan = planKey.toUpperCase();
-    const planLabel = isPermanent ? 'PREMIUM PERMANENTE' : (isPremium ? 'PREMIUM' : (planKey === 'checking' ? 'COMPROBANDO…' : 'FREE'));
+    const planLabel = isPermanent ? 'PERMANENT PREMIUM' : (isPremium ? 'PREMIUM' : (planKey === 'checking' ? 'CHECKING…' : 'FREE'));
     const subscription = membership?.subscription_status || (planKey === 'checking' ? 'checking' : (state.profile?.subscription_status || (isPremium ? 'active' : 'free')));
     const menuPlan = document.querySelector('[data-account-menu-plan]');
     const menuStatus = document.querySelector('[data-account-menu-status]');
     if (menuPlan) { menuPlan.textContent = planLabel; menuPlan.dataset.plan = isPremium ? 'premium' : (planKey === 'checking' ? 'checking' : 'free'); }
-    if (menuStatus) menuStatus.textContent = isPermanent ? 'SIN CADUCIDAD' : (subscription === 'active' ? 'ACTIVO' : (planKey === 'checking' ? 'SINCRONIZANDO' : String(subscription || 'FREE').toUpperCase()));
+    if (menuStatus) menuStatus.textContent = isPermanent ? 'NO EXPIRY' : (subscription === 'active' ? 'ACTIVE' : (planKey === 'checking' ? 'SYNCING' : String(subscription || 'FREE').toUpperCase()));
 
     // Public product pages have no dashboard fields. Avoid 20+ document-wide
     // selector scans on every authenticated page load.
     if (!document.querySelector('[data-auth-required], [data-dashboard-name], [data-dashboard-email]')) return;
 
-    document.querySelectorAll('[data-dashboard-name]').forEach(el => el.textContent = user ? (state.profile?.display_name || displayName(user)) : 'Usuario');
+    document.querySelectorAll('[data-dashboard-name]').forEach(el => el.textContent = user ? (state.profile?.display_name || displayName(user)) : 'User');
     document.querySelectorAll('[data-dashboard-email]').forEach(el => el.textContent = user?.email || '—');
     document.querySelectorAll('[data-dashboard-plan]').forEach(el => {
-      el.textContent = isPermanent ? 'PREMIUM PERMANENTE' : (isPremium ? 'USUARIO PREMIUM ACTIVADO' : (planKey === 'checking' ? 'SINCRONIZANDO PLAN…' : 'USUARIO GRATIS'));
+      el.textContent = isPermanent ? 'PERMANENT PREMIUM' : (isPremium ? 'PREMIUM USER ACTIVE' : (planKey === 'checking' ? 'SYNCING PLAN…' : 'FREE USER'));
       el.dataset.plan = isPremium ? 'premium' : (planKey === 'checking' ? 'checking' : 'free');
     });
-    document.querySelectorAll('[data-dashboard-status]').forEach(el => el.textContent = planKey === 'checking' ? 'SINCRONIZANDO' : (isPermanent ? 'PREMIUM PERMANENTE' : String(subscription || (isPremium ? 'active' : 'free')).toUpperCase()));
+    document.querySelectorAll('[data-dashboard-status]').forEach(el => el.textContent = planKey === 'checking' ? 'SYNCING' : (isPermanent ? 'PERMANENT PREMIUM' : String(subscription || (isPremium ? 'active' : 'free')).toUpperCase()));
     document.querySelectorAll('[data-dashboard-avatar]').forEach(el => {
       const avatar = state.profile?.avatar_url || avatarUrl(user) || '';
-      if (avatar) el.innerHTML = `<img src="${escapeHtml(avatar)}" alt="Avatar de ${escapeHtml(displayName(user))}">`;
+      if (avatar) el.innerHTML = `<img src="${escapeHtml(avatar)}" alt="Avatar for ${escapeHtml(displayName(user))}">`;
       else el.textContent = user ? initials(user) : 'N';
     });
 
@@ -829,7 +867,7 @@
     });
 
     document.querySelectorAll('[data-dashboard-license]').forEach(el => {
-      el.textContent = planKey === 'checking' ? 'SINCRONIZANDO' : (isPremium ? 'VINCULADA' : 'NO ACTIVA');
+      el.textContent = planKey === 'checking' ? 'SYNCING' : (isPremium ? 'VINCULADA' : 'NO ACTIVA');
     });
 
 
@@ -843,29 +881,29 @@
     });
     document.querySelectorAll('[data-dashboard-plan-orb]').forEach(el => el.textContent = isPermanent ? '∞' : (isPremium ? 'PRO' : (planKey === 'checking' ? '…' : 'FREE')));
     document.querySelectorAll('[data-dashboard-license-type]').forEach(el => el.textContent = planLabel);
-    document.querySelectorAll('[data-dashboard-license-state]').forEach(el => el.textContent = planKey === 'checking' ? 'Consultando membresía autoritativa' : (isPermanent ? 'Acceso permanente activo' : (isPremium ? 'Membresía Premium activa' : 'Plan FREE activo')));
-    document.querySelectorAll('[data-dashboard-license-expiry]').forEach(el => el.textContent = isPermanent ? 'SIN CADUCIDAD' : (isPremium ? formatMembershipDate(membership?.premium_until || membership?.current_period_end) : '—'));
+    document.querySelectorAll('[data-dashboard-license-state]').forEach(el => el.textContent = planKey === 'checking' ? 'Checking authoritative membership' : (isPermanent ? 'Permanent access active' : (isPremium ? 'Premium membership active' : 'FREE plan active')));
+    document.querySelectorAll('[data-dashboard-license-expiry]').forEach(el => el.textContent = isPermanent ? 'NO EXPIRY' : (isPremium ? formatMembershipDate(membership?.premium_until || membership?.current_period_end) : '—'));
     document.querySelectorAll('[data-dashboard-license-key]').forEach(el => el.textContent = isPremium ? 'PROTEGIDA' : '—');
     const purchaseAt = membership?.latest_purchase_at || null;
     const periodStart = membership?.current_period_start || state.membershipPeriods?.[0]?.starts_at || null;
     const expiry = membership?.premium_until || membership?.current_period_end || null;
-    const intervalMap = { monthly:'MENSUAL', annual:'ANUAL', gift:'REGALO', admin:'ADMIN', permanent:'PERMANENTE', other:'OTRO' };
+    const intervalMap = { monthly:'MONTHLY', annual:'ANNUAL', gift:'GIFT', admin:'ADMIN', permanent:'PERMANENT', other:'OTHER' };
     const provider = currentBillingProviderLabel(membership, isPermanent);
-    const interval = isPermanent ? 'PERMANENTE' : (intervalMap[String(membership?.billing_interval || membership?.active_period_kind || 'other').toLowerCase()] || String(membership?.billing_interval || '—').toUpperCase());
+    const interval = isPermanent ? 'PERMANENT' : (intervalMap[String(membership?.billing_interval || membership?.active_period_kind || 'other').toLowerCase()] || String(membership?.billing_interval || '—').toUpperCase());
     const cancelAt = membership?.cancel_effective_at || (membership?.cancel_at_period_end ? expiry : null);
-    document.querySelectorAll('[data-dashboard-purchase-date]').forEach(el => el.textContent = purchaseAt ? formatMembershipDate(purchaseAt, {dateOnly:false}) : (isPermanent ? 'ASIGNACIÓN PERMANENTE' : '—'));
-    document.querySelectorAll('[data-dashboard-period-start]').forEach(el => el.textContent = isPermanent ? (membership?.first_premium_at ? formatMembershipDate(membership.first_premium_at) : 'PERMANENTE') : formatMembershipDate(periodStart));
-    document.querySelectorAll('[data-dashboard-renewal]').forEach(el => el.textContent = isPermanent ? 'NO APLICA' : (membership?.auto_renew ? 'AUTOMÁTICA · ACTIVA' : (isPremium ? 'DESACTIVADA' : 'NO APLICA')));
-    document.querySelectorAll('[data-dashboard-subscription-state]').forEach(el => el.textContent = planKey === 'checking' ? 'SINCRONIZANDO' : (isPermanent ? 'PERMANENTE' : String(subscription || 'inactive').toUpperCase()));
+    document.querySelectorAll('[data-dashboard-purchase-date]').forEach(el => el.textContent = purchaseAt ? formatMembershipDate(purchaseAt, {dateOnly:false}) : (isPermanent ? 'PERMANENT ASSIGNMENT' : '—'));
+    document.querySelectorAll('[data-dashboard-period-start]').forEach(el => el.textContent = isPermanent ? (membership?.first_premium_at ? formatMembershipDate(membership.first_premium_at) : 'PERMANENT') : formatMembershipDate(periodStart));
+    document.querySelectorAll('[data-dashboard-renewal]').forEach(el => el.textContent = isPermanent ? 'NO APLICA' : (membership?.auto_renew ? 'AUTOMATIC · ACTIVE' : (isPremium ? 'DESACTIVADA' : 'NO APLICA')));
+    document.querySelectorAll('[data-dashboard-subscription-state]').forEach(el => el.textContent = planKey === 'checking' ? 'SYNCING' : (isPermanent ? 'PERMANENT' : String(subscription || 'inactive').toUpperCase()));
     document.querySelectorAll('[data-dashboard-provider]').forEach(el => el.textContent = provider);
     document.querySelectorAll('[data-dashboard-billing-interval]').forEach(el => el.textContent = interval);
     document.querySelectorAll('[data-dashboard-cancel-state]').forEach(el => el.textContent = isPermanent ? 'NO APLICA' : (membership?.cancel_at_period_end ? `PROGRAMADA · ${formatMembershipDate(cancelAt)}` : (isPremium ? 'NO SOLICITADA' : '—')));
     document.querySelectorAll('[data-dashboard-next-renewal]').forEach(el => el.textContent = isPermanent ? 'NO APLICA' : (membership?.auto_renew ? formatMembershipDate(membership?.next_renewal_at, {dateOnly:false}) : '—'));
     document.querySelectorAll('[data-dashboard-next-amount]').forEach(el => el.textContent = isPermanent ? 'NO APLICA' : formatMoney(membership?.next_renewal_amount_cents, membership?.billing_currency));
-    document.querySelectorAll('[data-dashboard-plan-copy]').forEach(el => el.textContent = planKey === 'checking' ? 'Comprobando el estado real de tu membresía Neith…' : (isPermanent ? 'Tu cuenta tiene PREMIUM permanente. El acceso no caduca y no requiere renovación automática.' : (isPremium ? 'Tu PREMIUM está activo y sincronizado con la membresía autoritativa de Neith Cloud.' : 'Tu cuenta está en FREE. Si compras PREMIUM, este panel reflejará el cambio automáticamente.')));
+    document.querySelectorAll('[data-dashboard-plan-copy]').forEach(el => el.textContent = planKey === 'checking' ? 'Checking your real Neith membership status…' : (isPermanent ? 'Your account has permanent PREMIUM. Access does not expire and no automatic renewal is required.' : (isPremium ? 'Your PREMIUM is active and synchronized with authoritative Neith Cloud membership.' : 'Your account is on FREE. If you get PREMIUM, this panel will update automatically.')));
     document.querySelectorAll('[data-dashboard-premium-access]').forEach(el => { el.classList.toggle('locked', !isPremium); el.classList.toggle('active', isPremium); });
-    document.querySelectorAll('[data-dashboard-premium-access-label]').forEach(el => el.textContent = planKey === 'checking' ? 'COMPROBANDO' : (isPremium ? 'HABILITADO' : 'NO ACTIVO'));
-    document.querySelectorAll('[data-dashboard-sync-badge]').forEach(el => { el.className='dash11-badge live'; el.innerHTML='<i></i> ' + (membership ? 'SINCRONIZADO' : 'SINCRONIZANDO'); });
+    document.querySelectorAll('[data-dashboard-premium-access-label]').forEach(el => el.textContent = planKey === 'checking' ? 'CHECKING' : (isPremium ? 'ENABLED' : 'INACTIVE'));
+    document.querySelectorAll('[data-dashboard-sync-badge]').forEach(el => { el.className='dash11-badge live'; el.innerHTML='<i></i> ' + (membership ? 'SINCRONIZADO' : 'SYNCING'); });
     document.querySelectorAll('[data-dashboard-sync-time]').forEach(el => el.textContent = state.membershipLastSync ? new Intl.DateTimeFormat(document.documentElement.lang==='en'?'en-GB':'es-ES',{hour:'2-digit',minute:'2-digit',second:'2-digit'}).format(new Date(state.membershipLastSync)) : 'EN VIVO');
     const shortId = user?.id ? `${String(user.id).slice(0,4).toUpperCase()}-${String(user.id).slice(-4).toUpperCase()}` : '••••••••';
     document.querySelectorAll('[data-dashboard-user-short]').forEach(el => el.textContent = shortId);
@@ -881,7 +919,7 @@
     const platform = navigator.userAgentData?.platform || navigator.platform || 'Windows';
     document.querySelectorAll('[data-dashboard-browser]').forEach(el => el.textContent = browser);
     document.querySelectorAll('[data-dashboard-platform]').forEach(el => el.textContent = platform || '—');
-    document.querySelectorAll('[data-dashboard-device]').forEach(el => el.textContent = /Windows/i.test(platform + ua) ? 'PC Windows actual' : 'Dispositivo actual');
+    document.querySelectorAll('[data-dashboard-device]').forEach(el => el.textContent = /Windows/i.test(platform + ua) ? 'PC Windows actual' : 'Current device');
   }
 
   async function requireDashboardSession() {
@@ -903,8 +941,8 @@
           const title = guard.querySelector('h1');
           const copy = guard.querySelector('p');
           if (kicker) kicker.textContent = window.NeithI18n?.t?.('MODO PRUEBA LOCAL') || 'MODO PRUEBA LOCAL';
-          if (title) title.textContent = window.NeithI18n?.t?.('VISTA PREVIA SIN SESIÓN LOCAL') || 'VISTA PREVIA SIN SESIÓN LOCAL';
-          if (copy) copy.textContent = window.NeithI18n?.t?.('Esta ruta se mantiene visible para que puedas probar el diseño sin publicar la web. Inicia sesión aquí si quieres cargar tus datos reales.') || 'Esta ruta se mantiene visible para que puedas probar el diseño sin publicar la web. Inicia sesión aquí si quieres cargar tus datos reales.';
+          if (title) title.textContent = window.NeithI18n?.t?.('LOCAL PREVIEW WITHOUT SESSION') || 'LOCAL PREVIEW WITHOUT SESSION';
+          if (copy) copy.textContent = 'This route remains visible so you can preview the design locally. Sign in to load your real account data.';
         }
         return;
       }
@@ -921,13 +959,13 @@
     const revealing = input.type === 'password';
     input.type = revealing ? 'text' : 'password';
     button.setAttribute('aria-pressed', String(revealing));
-    button.setAttribute('aria-label', revealing ? (window.NeithI18n?.t('Ocultar contraseña') || 'Ocultar contraseña') : (window.NeithI18n?.t('Mostrar contraseña') || 'Mostrar contraseña'));
+    button.setAttribute('aria-label', revealing ? 'Hide password' : 'Show password');
     button.classList.toggle('is-visible', revealing);
   }
 
   async function handleAuthForm(form) {
     if (!configured) {
-      setMessage('Configura Supabase para activar el registro y el inicio de sesión reales.', 'warning');
+      setMessage('Configure Supabase to enable real sign-up and sign-in.', 'warning');
       return;
     }
     const submit = form.querySelector('button[type="submit"]');
@@ -947,17 +985,17 @@
         const email = normalizeEmail(draft?.email || form.querySelector('input[name="register_email"]')?.value);
         const emailConfirm = normalizeEmail(draft?.emailConfirm || form.querySelector('input[name="register_email_confirm"]')?.value);
         const password = String(draft?.password || form.querySelector('input[name="register_password"]')?.value || '');
-        if (!displayNameValue) throw new Error(window.NeithI18n?.t?.('Introduce tu nombre de usuario.') || 'Introduce tu nombre de usuario.');
-        if (displayNameValue.length > 20) throw new Error(window.NeithI18n?.t?.('El nombre de usuario puede tener como máximo 20 caracteres.') || 'El nombre de usuario puede tener como máximo 20 caracteres.');
+        if (!displayNameValue) throw new Error(window.NeithI18n?.t?.('Enter your username.') || 'Enter your username.');
+        if (displayNameValue.length > 20) throw new Error(window.NeithI18n?.t?.('The username can have a maximum of 20 characters.') || 'The username can have a maximum of 20 characters.');
         // Validación local completa ANTES de cualquier llamada remota.
-        if (!isValidEmail(email)) throw new Error(window.NeithI18n?.t?.('Introduce un correo electrónico válido.') || 'Introduce un correo electrónico válido.');
-        if (email !== emailConfirm) throw new Error(window.NeithI18n?.t?.('Los correos no coinciden. Revisa la dirección antes de crear la cuenta.') || 'Los correos no coinciden. Revisa la dirección antes de crear la cuenta.');
-        if (password.length < 8) throw new Error(window.NeithI18n?.t?.('La contraseña debe tener al menos 8 caracteres.') || 'La contraseña debe tener al menos 8 caracteres.');
+        if (!isValidEmail(email)) throw new Error('Enter a valid email address.');
+        if (email !== emailConfirm) throw new Error(window.NeithI18n?.t?.('The email addresses do not match. Check them before creating the account.') || 'The email addresses do not match. Check them before creating the account.');
+        if (password.length < 8) throw new Error('The password must be at least 8 characters long.');
 
         // El precheck del nick no puede tumbar el registro si la Edge Function está caída/no publicada.
         try {
           const usernameCheck = await invokeIdentityAuth({ action: 'check_username', username: displayNameValue });
-          if (!usernameCheck.available) throw new Error(window.NeithI18n?.t?.('Este nombre de usuario ya está en uso.') || 'Este nombre de usuario ya está en uso.');
+          if (!usernameCheck.available) throw new Error(window.NeithI18n?.t?.('That username is already in use.') || 'That username is already in use.');
         } catch (usernameError) {
           if (usernameError?.code !== 'NEITH_IDENTITY_EDGE_ERROR') throw usernameError;
           console.warn('[NEITH AUTH] Precheck de username no disponible; continúa registro por email.', usernameError);
@@ -983,7 +1021,7 @@
         const returnedEmail = normalizeEmail(signupData?.user?.email || email);
         if (returnedEmail && returnedEmail !== email) {
           console.error('[NEITH AUTH] Inconsistencia de correo en respuesta Supabase', { requested: email, returned: returnedEmail });
-          throw new Error(window.NeithI18n?.t?.('Supabase devolvió un correo distinto al indicado. Registro detenido por seguridad.') || 'Supabase devolvió un correo distinto al indicado. Registro detenido por seguridad.');
+          throw new Error('Supabase returned a different email address. Registration was stopped for security.');
         }
         let createdSession = signupData?.session || null;
         if (!createdSession) {
@@ -993,7 +1031,7 @@
           createdSession = signedData?.session || null;
         }
         if (!createdSession?.user) {
-          throw new Error(window.NeithI18n?.t?.('La cuenta se creó, pero no se pudo iniciar la sesión automáticamente.') || 'La cuenta se creó, pero no se pudo iniciar la sesión automáticamente.');
+          throw new Error('The account was created, but automatic sign-in failed.');
         }
 
         // Solo después de confirmar que la nueva identidad es correcta, sustituimos
@@ -1005,7 +1043,7 @@
         if (adoptError) throw adoptError;
         createdSession = adoptedData?.session || createdSession;
         if (normalizeEmail(createdSession?.user?.email) !== email) {
-          throw new Error(window.NeithI18n?.t?.('La sesión creada no corresponde al correo indicado. Operación detenida por seguridad.') || 'La sesión creada no corresponde al correo indicado. Operación detenida por seguridad.');
+          throw new Error('The created session does not match the requested email. The operation was stopped for security.');
         }
 
         state.session = createdSession;
@@ -1032,11 +1070,11 @@
         const { error } = await state.client.auth.resetPasswordForEmail(data.email, { redirectTo });
         if (error) throw error;
         form.reset();
-        setMessage('Si existe una cuenta con ese correo, recibirás un enlace para crear una nueva contraseña.', 'success');
+        setMessage('If an account exists for that email, you will receive a secure password reset link.', 'success');
       } else {
         const remember = Boolean(form.querySelector('[data-auth-remember]')?.checked);
         const identifier = String(data.email || '').trim();
-        if (!identifier) throw new Error(window.NeithI18n?.t?.('Introduce tu correo electrónico o nombre de usuario.') || 'Introduce tu correo electrónico o nombre de usuario.');
+        if (!identifier) throw new Error('Enter your email address or username.');
         let signInData = null;
         if (identifier.includes('@')) {
           const email = normalizeEmail(identifier);
@@ -1050,7 +1088,7 @@
             if (result.error) throw result.error;
             signInData = result.data;
           } catch (_) {
-            throw new Error(window.NeithI18n?.t?.('Correo, nombre de usuario o contraseña incorrectos.') || 'Correo, nombre de usuario o contraseña incorrectos.');
+            throw new Error(window.NeithI18n?.t?.('Email, username or password is incorrect.') || 'Email, username or password is incorrect.');
           }
         }
         if (signInData?.session) {
@@ -1074,11 +1112,11 @@
 
   async function oauth(provider) {
     if (!configured) {
-      setMessage('Configura Supabase antes de activar Google o Discord.', 'warning');
+      setMessage('Configure Supabase before enabling Google or Discord.', 'warning');
       return;
     }
     if (!oauthEnabled || !['google', 'discord'].includes(provider)) {
-      setMessage('Este proveedor de acceso no está disponible.', 'warning');
+      setMessage('This sign-in provider is not available.', 'warning');
       return;
     }
 
@@ -1103,7 +1141,7 @@
       const { error } = await state.client.auth.signInWithOAuth({ provider, options });
       if (error) throw error;
     } catch (error) {
-      setMessage(error?.message || 'No se pudo iniciar el acceso social.', 'error');
+      setMessage(error?.message || 'Social sign-in could not be started.', 'error');
       if (button) {
         button.disabled = false;
         button.removeAttribute('aria-busy');

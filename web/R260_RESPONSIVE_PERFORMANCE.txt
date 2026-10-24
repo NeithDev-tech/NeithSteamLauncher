@@ -1,9 +1,0 @@
-R260
-- Responsive header layout: PREMIUM and DOWNLOAD LAUNCHER no longer collide on laptop widths.
-- Owner PREMIUM shortcut moved into nav-actions, before download, instead of competing inside navlinks.
-- New intermediate breakpoints before mobile navigation.
-- Offscreen sections use content-visibility where supported.
-- Lazy image decoding is viewport-aware instead of warming every image after load.
-- Below-fold images get lazy/low-priority hints where safe.
-- Home showcase screenshots converted to WebP quality 90 at original resolution, reducing transfer size substantially.
-- Existing VAC LIVE stable i18n fix and R259 gallery content preserved.

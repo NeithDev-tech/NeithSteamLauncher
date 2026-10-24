@@ -189,7 +189,7 @@ document.querySelectorAll('.product-shot,.shot').forEach(frame=>{
     }
   }
   if (sessions && !reduced) {
-    const states = () => [neithText('24/7 EN LÍNEA','24/7 ONLINE'),neithText('24/7 EN LÍNEA','24/7 ONLINE'),neithText('24/7 EN LÍNEA','24/7 ONLINE')];
+    const states = () => [neithText('24/7 ONLINE','24/7 ONLINE'),neithText('24/7 ONLINE','24/7 ONLINE'),neithText('24/7 ONLINE','24/7 ONLINE')];
     let i = 0;
     NeithVisibleTimers.every(() => {
       const liveStates=states(); sessions.textContent = liveStates[(++i) % liveStates.length];
@@ -236,8 +236,8 @@ document.querySelectorAll('.product-shot,.shot').forEach(frame=>{
   const count = page.querySelector('[data-faq-count]');
   const title = page.querySelector('[data-faq-category-title]');
   const empty = page.querySelector('[data-faq-empty]');
-  const labels = {core:()=>neithText('NÚCLEO','CORE'), subscriptions:()=>neithText('SUSCRIPCIONES','SUBSCRIPTIONS'), config:()=>neithText('CONFIGURACIÓN','SETTINGS')};
-  let active = 'core';
+  const labels = {general:()=> 'GENERAL', identity:()=> 'NEITH ID & ACCOUNTS', premium:()=> 'PREMIUM', features:()=> 'FEATURES', support:()=> 'DOWNLOAD & SUPPORT'};
+  let active = 'general';
   const normalize = value => (value || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
   const apply = () => {
     const q = normalize(search?.value);
@@ -249,7 +249,7 @@ document.querySelectorAll('.product-shot,.shot').forEach(frame=>{
       item.hidden = !match;
       if (match) visible++;
     });
-    if (title) title.textContent = q ? neithText('BÚSQUEDA GLOBAL','GLOBAL SEARCH') : labels[active]();
+    if (title) title.textContent = q ? neithText('GLOBAL SEARCH','GLOBAL SEARCH') : labels[active]();
     if (count) count.textContent = `${visible} ${visible === 1 ? neithText('REGISTRO','ENTRY') : neithText('REGISTROS','ENTRIES')}`;
     if (empty) empty.hidden = visible !== 0;
     consoleEl?.classList.remove('is-filtering');

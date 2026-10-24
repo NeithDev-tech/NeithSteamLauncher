@@ -2,7 +2,7 @@
   'use strict';
 
   const t = text => window.NeithI18n?.t?.(text) || text;
-  const normalizeMessage = error => error?.message || t('No se pudo cambiar la contraseña.');
+  const normalizeMessage = error => error?.message || 'The password could not be changed.';
 
   function setStatus(message = '', type = '') {
     const el = document.querySelector('[data-password-change-message]');
@@ -31,7 +31,7 @@
     const user = window.NeithAuth?.session?.user;
     if (!user) {
       setText('[data-security-email]', '—');
-      setText('[data-security-email-status]', t('SIN SESIÓN'));
+      setText('[data-security-email-status]', 'NO SESSION');
       setText('[data-security-provider]', '—');
       setText('[data-security-created]', '—');
       setText('[data-security-last-signin]', '—');
@@ -54,33 +54,33 @@
     input.type = reveal ? 'text' : 'password';
     button.classList.toggle('is-visible', reveal);
     button.setAttribute('aria-pressed', String(reveal));
-    button.setAttribute('aria-label', t(reveal ? 'Ocultar contraseña' : 'Mostrar contraseña'));
+    button.setAttribute('aria-label', (reveal ? 'Hide password' : 'Show password'));
   }
 
   async function changePassword(form) {
     const auth = window.NeithAuth;
     if (!auth?.configured || !auth.client) {
-      setStatus(t('Supabase no está configurado en esta copia.'), 'warning');
+      setStatus(t('Supabase is not configured in this copy.'), 'warning');
       return;
     }
     const user = auth.session?.user;
     if (!user?.email) {
-      setStatus(t('Debes iniciar sesión para cambiar la contraseña.'), 'error');
+      setStatus('You must sign in to change your password.', 'error');
       return;
     }
 
     const currentPassword = String(form.elements.current_password?.value || '');
     const newPassword = String(form.elements.new_password?.value || '');
     const confirmPassword = String(form.elements.confirm_password?.value || '');
-    if (currentPassword.length < 1) return setStatus(t('Introduce tu contraseña actual.'), 'error');
-    if (newPassword.length < 8) return setStatus(t('La nueva contraseña debe tener al menos 8 caracteres.'), 'error');
-    if (newPassword !== confirmPassword) return setStatus(t('Las nuevas contraseñas no coinciden.'), 'error');
-    if (currentPassword === newPassword) return setStatus(t('La nueva contraseña debe ser diferente de la actual.'), 'error');
+    if (currentPassword.length < 1) return setStatus('Enter your current password.', 'error');
+    if (newPassword.length < 8) return setStatus('The new password must be at least 8 characters long.', 'error');
+    if (newPassword !== confirmPassword) return setStatus('The new passwords do not match.', 'error');
+    if (currentPassword === newPassword) return setStatus('The new password must be different from the current password.', 'error');
 
     const submit = form.querySelector('button[type="submit"]');
     const original = submit?.innerHTML || '';
     if (submit) { submit.disabled = true; submit.setAttribute('aria-busy', 'true'); submit.innerHTML = `<span>${t('CAMBIANDO…')}</span>`; }
-    setStatus(t('Verificando tu contraseña actual…'), '');
+    setStatus('Verifying your current password…', '');
 
     try {
       // Supabase Secure Password Change can require the current password in the
@@ -93,7 +93,7 @@
       if (updateError) {
         const message = String(updateError.message || '').toLowerCase();
         if (message.includes('current password') || message.includes('invalid login credentials')) {
-          throw new Error(t('La contraseña actual no es correcta.'));
+          throw new Error('The current password is incorrect.');
         }
         throw updateError;
       }
@@ -104,7 +104,7 @@
         const input = btn.closest('.security-password-shell')?.querySelector('input');
         if (input) input.type = 'password';
       });
-      setStatus(t('Contraseña actualizada correctamente.'), 'success');
+      setStatus(t('Password updated successfully.'), 'success');
     } catch (error) {
       setStatus(normalizeMessage(error), 'error');
     } finally {

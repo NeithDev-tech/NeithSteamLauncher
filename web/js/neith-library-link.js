@@ -1,1 +1,0 @@
-document.addEventListener('DOMContentLoaded',()=>{const e=document.querySelector('[data-library-link]');if(!e)return;const go=()=>location.href=e.dataset.libraryLink;e.addEventListener('click',go);e.addEventListener('keydown',x=>{if(x.key==='Enter'||x.key===' '){x.preventDefault();go();}});});

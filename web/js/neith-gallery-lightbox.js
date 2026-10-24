@@ -27,7 +27,7 @@
       const trigger = triggers[index];
       if (!trigger) return;
       const src = resolveSrc(trigger);
-      const text = trigger.dataset.caption || trigger.querySelector('img')?.alt || 'Captura real de Neith';
+      const text = trigger.dataset.caption || trigger.querySelector('img')?.alt || 'Real Neith screenshot';
       image.classList.remove('is-zoomed');
       if (src) image.src = src;
       image.alt = text;
@@ -106,8 +106,8 @@
       lastFocus = document.activeElement;
       const src = trigger.dataset.zoomSrc ? new URL(trigger.dataset.zoomSrc, document.baseURI).href : '';
       if (src) image.src = src;
-      image.alt = trigger.getAttribute('aria-label') || 'Captura ampliada de Neith';
-      title.textContent = trigger.dataset.zoomTitle || 'CAPTURA REAL DEL LAUNCHER';
+      image.alt = trigger.getAttribute('aria-label') || 'Expanded Neith screenshot';
+      title.textContent = trigger.dataset.zoomTitle || 'REAL LAUNCHER SCREENSHOT';
       modal.classList.add('is-open');
       modal.setAttribute('aria-hidden','false');
       document.body.classList.add('accounts-lightbox-open');

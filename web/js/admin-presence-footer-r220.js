@@ -13,7 +13,7 @@
   const nicePage=p=>{if(!p||p==='/')return 'HOME';const s=p.split('?')[0].replace(/^\/+|\/+$/g,'');return (s||'HOME').replace(/-/g,' ').toUpperCase()};
   const setState=(text,ok=true)=>{e.state.textContent=text;root.dataset.live=ok?'1':'0'};
 
-  const getAuth=async()=>{try{if(typeof window.NeithLoadAuth==='function')return await window.NeithLoadAuth()}catch{}return null};
+  const getAuth=async()=>{try{if(typeof window.NeithLoadAuth==='function')return await window.NeithLoadAuth();if(window.NeithAuth?.client)return window.NeithAuth}catch{}return null};
   const getToken=async()=>{const t=await window.NeithSitePresence?.getAccessToken?.();return t&&t!==KEY?t:''};
 
   const render=d=>{
