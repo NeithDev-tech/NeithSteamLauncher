@@ -1706,3 +1706,66 @@ img[loading="lazy"]{content-visibility:auto}
   [data-neith-perf-zone]:not(.neith-zone-active) *{animation-play-state:paused!important}
   .neith-page-hidden *{animation-play-state:paused!important}
 }
+
+/* V46 — persistent responsive header */
+:root{--neith-topbar-height:0px}
+body{padding-top:var(--neith-topbar-height)!important}
+.topbar{
+  position:fixed!important;
+  inset-block-start:0!important;
+  inset-inline:0!important;
+  width:100%!important;
+  z-index:10000!important;
+  isolation:isolate;
+  background:rgba(2,7,13,.92)!important;
+  -webkit-backdrop-filter:blur(1rem) saturate(1.15);
+  backdrop-filter:blur(1rem) saturate(1.15);
+  border-bottom:1px solid rgba(92,217,255,.15)!important;
+  box-shadow:0 .55rem 1.6rem rgba(0,0,0,.2)
+}
+@media(max-width:1120px){
+  .topbar{max-height:100dvh;overflow-y:auto;overscroll-behavior:contain}
+}
+
+/* V47 — definitive fixed header stacking and offset */
+:root{--neith-topbar-height:0px;scroll-padding-top:calc(var(--neith-topbar-height) + .75rem)}
+html{scroll-padding-top:calc(var(--neith-topbar-height) + .75rem)!important}
+body{padding-top:var(--neith-topbar-height)!important}
+.topbar{
+  position:fixed!important;
+  top:0!important;
+  right:0!important;
+  bottom:auto!important;
+  left:0!important;
+  width:100%!important;
+  z-index:2147483000!important;
+  transform:translateZ(0);
+  isolation:isolate;
+  contain:layout style;
+}
+/* Interactive overlays must remain above the persistent header. */
+.neith-auth34-modal,
+.neith-lightbox-v15,
+.neith-commercial-modal,
+.neith-audit-delete-modal,
+.neith-announcement-delete-modal,
+.neith-account-menu,
+[role="dialog"][aria-modal="true"]{
+  z-index:2147483646!important;
+}
+/* Normal page content must never overtake the header. */
+main,main>*,section,.footer,#neith-v4-footer{position:relative;z-index:auto}
+@media(max-width:1120px){
+  .topbar{max-height:100dvh;overflow:visible!important}
+  .topbar .nav{position:relative;z-index:1}
+  .topbar .navlinks{z-index:2147483001!important}
+}
+
+/* V47 — definitive fixed header stacking and offset */
+:root{--neith-topbar-height:0px;scroll-padding-top:calc(var(--neith-topbar-height) + .75rem)}
+html{scroll-padding-top:calc(var(--neith-topbar-height) + .75rem)!important}
+body{padding-top:var(--neith-topbar-height)!important}
+.topbar{position:fixed!important;top:0!important;right:0!important;bottom:auto!important;left:0!important;width:100%!important;z-index:2147483000!important;transform:translateZ(0);isolation:isolate;contain:layout style}
+.neith-auth34-modal,.neith-lightbox-v15,.neith-commercial-modal,.neith-audit-delete-modal,.neith-announcement-delete-modal,.neith-account-menu,[role="dialog"][aria-modal="true"]{z-index:2147483646!important}
+main,main>*,section,.footer,#neith-v4-footer{position:relative;z-index:auto}
+@media(max-width:1120px){.topbar{max-height:100dvh;overflow:visible!important}.topbar .nav{position:relative;z-index:1}.topbar .navlinks{z-index:2147483001!important}}

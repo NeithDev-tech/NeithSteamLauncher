@@ -5,6 +5,7 @@
 
   function isContentImage(img){
     if(!(img instanceof HTMLImageElement)) return false;
+    if(img.closest('.neith-v50-carousel')) return false;
     if(img.closest('#neith-v4-header,#neith-v4-footer,.topbar,footer,.auth-modal')) return false;
     if(img.matches('.avatar,[data-no-lightbox]')) return false;
     var src=(img.currentSrc||img.src||'').toLowerCase();

@@ -15,8 +15,63 @@
     '<div class="n4-actions"><button class="n4-btn n4-menu-toggle" type="button" aria-label="Menu">☰</button><a class="n4-owner-link n4-admin-link" href="'+depth+'admin/" hidden>ADMIN</a><a class="n4-owner-link n4-premium-link" href="'+depth+'premium/" hidden>PREMIUM</a><button class="n4-btn n4-auth" type="button"><span class="n4-auth-led"></span><span class="n4-auth-label">SIGN IN</span></button><a class="n4-btn primary" href="'+depth+'descargar">DOWNLOAD FREE</a></div>'+
   '</div>';
   document.body.insertBefore(header,document.body.firstChild);
+
+  // V49: keep the visible header mounted when navigating inside HOME.
+  // Clicking the Neith logo while already on HOME scrolls to the top without a page reload.
+  function isHomeDocument(){
+    var path=(location.pathname||'/').replace(/\/+$/,'');
+    return path==='' || path==='/' || /\/index\.html$/i.test(path);
+  }
+  function scrollHomeTarget(hash){
+    var target=hash?document.querySelector(hash):null;
+    var top=target?Math.max(0,target.getBoundingClientRect().top+window.scrollY-(header.getBoundingClientRect().height||0)-12):0;
+    window.scrollTo({top:top,behavior:'smooth'});
+    if(hash){
+      try{history.replaceState(history.state,'',hash);}catch(_){}
+    }else{
+      try{history.replaceState(history.state,'',location.pathname+location.search);}catch(_){}
+    }
+  }
+  var liveBrand=header.querySelector('.n4-brand-master');
+  if(liveBrand){
+    liveBrand.addEventListener('click',function(e){
+      if(!isHomeDocument()) return;
+      e.preventDefault();
+      nav&&nav.classList.remove('open');
+      scrollHomeTarget('');
+    });
+  }
+  header.querySelectorAll('.n4-links a').forEach(function(link){
+    link.addEventListener('click',function(e){
+      if(!isHomeDocument()) return;
+      var u; try{u=new URL(link.href,location.href);}catch(_){return;}
+      if(u.origin!==location.origin) return;
+      var current=(location.pathname||'/').replace(/\/+$/,'');
+      var target=(u.pathname||'/').replace(/\/+$/,'');
+      var currentHome=current===''||current==='/'||/\/index\.html$/i.test(current);
+      var targetHome=target===''||target==='/'||/\/index\.html$/i.test(target);
+      if(!currentHome||!targetHome) return;
+      e.preventDefault();
+      nav&&nav.classList.remove('open');
+      scrollHomeTarget(u.hash||'');
+    });
+  });
+  // V48: the visible Neith header is fixed. Keep document offset synced to its real height.
+  function syncFixedHeaderHeight(){
+    try{
+      var h=Math.ceil(header.getBoundingClientRect().height||0);
+      if(h>0) document.documentElement.style.setProperty('--neith-v4-fixed-header-height',h+'px');
+    }catch(_){}
+  }
+  syncFixedHeaderHeight();
+  if('ResizeObserver' in window){
+    var headerSizeObserver=new ResizeObserver(syncFixedHeaderHeight);
+    headerSizeObserver.observe(header);
+  }
+  window.addEventListener('resize',syncFixedHeaderHeight,{passive:true});
+  requestAnimationFrame(syncFixedHeaderHeight);
   if(legacyHeader) legacyHeader.setAttribute('aria-hidden','true');
-  var nav=header.querySelector('.n4-nav'); header.querySelector('.n4-menu-toggle').addEventListener('click',function(){nav.classList.toggle('open')});
+  var nav=header.querySelector('.n4-nav'); header.querySelector('.n4-menu-toggle').addEventListener('click',function(){nav.classList.toggle('open');requestAnimationFrame(syncFixedHeaderHeight)});
   var auth=header.querySelector('.n4-auth'), label=header.querySelector('.n4-auth-label');
   function sync(){ if(legacyAuth){var t=legacyAuth.querySelector('[data-auth-nav-label]')||legacyAuth; var s=(t.textContent||'').trim(); if(s){ label.textContent=(/INICIAR\s*SESI[ÓO]N/i.test(s)?'SIGN IN':s); return; }} label.textContent='SIGN IN'; }
   sync(); if(legacyAuth){new MutationObserver(sync).observe(legacyAuth,{subtree:true,childList:true,characterData:true,attributes:true});}
@@ -65,8 +120,8 @@
     if(window.NeithAuth?.open) window.NeithAuth.open('login');
   },true);
   if(!document.querySelector('script[data-neith-visitor-counter]')){var vc=document.createElement('script');vc.defer=true;vc.dataset.neithVisitorCounter='1';vc.src=depth+'js/visitor-counter-r192.js?v=20261024-v6';document.body.appendChild(vc);}
-  if(!document.querySelector('script[data-neith-image-lightbox]')){var lb=document.createElement('script');lb.defer=true;lb.dataset.neithImageLightbox='1';lb.src=depth+'js/neith-image-lightbox-v15.js?v=20261024-v15';document.body.appendChild(lb);}
+  if(!document.querySelector('script[data-neith-image-lightbox]')){var lb=document.createElement('script');lb.defer=true;lb.dataset.neithImageLightbox='1';lb.src=depth+'js/neith-image-lightbox-v15.js?v=20261025-v53';document.body.appendChild(lb);}
 })();
 
 /* V29 global analytics bootstrap */
-(()=>{try{const current=document.currentScript?.src;if(!current)return;const base=new URL('./',current);for(const f of ['neith-site-analytics-v29.js','neith-owner-analytics-v29.js']){if(document.querySelector(`script[data-neith-v29="${f}"]`))continue;const s=document.createElement('script');s.src=new URL(f,base).href;s.defer=true;s.dataset.neithV29=f;document.head.appendChild(s)}}catch{}})();
+(()=>{try{const current=document.currentScript?.src;if(!current)return;const base=new URL('./',current);for(const f of ['neith-site-analytics-v29.js','neith-owner-analytics-v29.js']){if(document.querySelector(`script[data-neith-v29="${f}"]`))continue;const s=document.createElement('script');s.src=new URL(f+'?v=20261025-v45-live',base).href;s.defer=true;s.dataset.neithV29=f;document.head.appendChild(s)}}catch{}})();

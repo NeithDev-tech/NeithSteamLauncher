@@ -1,0 +1,194 @@
+/* Neith V60 — approved floating premium carousel arrows
+   No boxes, no borders, no visible button chrome. */
+:root{
+  --n60-arrow-rest:rgba(205,247,255,.78);
+  --n60-arrow-hot:#f2fdff;
+  --n60-arrow-glow:rgba(54,215,255,.74);
+  --n60-arrow-glow-soft:rgba(28,151,255,.28);
+}
+
+/* Invisible hit area. Only the chevron is visible. */
+.neith-v50-nav button,
+.vac232-nav,
+.home268-reviews-arrow,
+.neith-v50-lightbox-actions [data-v50-lb-prev],
+.neith-v50-lightbox-actions [data-v50-lb-next],
+.hourboost-lightbox-actions button:not(.hourboost-lightbox-close){
+  position:relative!important;
+  display:grid!important;
+  place-items:center!important;
+  flex:0 0 auto!important;
+  width:clamp(46px,4.2vw,58px)!important;
+  height:clamp(58px,5.2vw,72px)!important;
+  padding:0!important;
+  margin:0!important;
+  border:0!important;
+  outline:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  color:transparent!important;
+  font-size:0!important;
+  line-height:0!important;
+  clip-path:none!important;
+  overflow:visible!important;
+  cursor:pointer!important;
+  isolation:isolate!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  transform:none!important;
+  transition:opacity .18s ease,transform .18s cubic-bezier(.2,.8,.2,1),filter .18s ease!important;
+  opacity:.78;
+}
+
+/* Remove any old decorative layer. */
+.neith-v50-nav button::before,
+.vac232-nav::before,
+.home268-reviews-arrow::before,
+.neith-v50-lightbox-actions [data-v50-lb-prev]::before,
+.neith-v50-lightbox-actions [data-v50-lb-next]::before,
+.hourboost-lightbox-actions button:not(.hourboost-lightbox-close)::before{
+  content:none!important;
+}
+
+/* Floating luminous chevron. */
+.neith-v50-nav button::after,
+.vac232-nav::after,
+.home268-reviews-arrow::after,
+.neith-v50-lightbox-actions [data-v50-lb-prev]::after,
+.neith-v50-lightbox-actions [data-v50-lb-next]::after,
+.hourboost-lightbox-actions button:not(.hourboost-lightbox-close)::after{
+  content:""!important;
+  display:block!important;
+  width:clamp(13px,1.15vw,17px)!important;
+  height:clamp(13px,1.15vw,17px)!important;
+  border-top:clamp(2px,.18vw,3px) solid var(--n60-arrow-rest)!important;
+  border-right:clamp(2px,.18vw,3px) solid var(--n60-arrow-rest)!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  filter:
+    drop-shadow(0 0 3px rgba(255,255,255,.30))
+    drop-shadow(0 0 8px var(--n60-arrow-glow))
+    drop-shadow(0 0 20px var(--n60-arrow-glow-soft))!important;
+  transition:border-color .18s ease,transform .18s cubic-bezier(.2,.8,.2,1),filter .18s ease!important;
+  pointer-events:none!important;
+}
+
+/* Direction. */
+.neith-v50-nav [data-v50-prev]::after,
+.vac232-prev::after,
+.home268-reviews-arrow[data-reviews-prev]::after,
+.neith-v50-lightbox-actions [data-v50-lb-prev]::after,
+.hourboost-lightbox-actions button:first-child:not(.hourboost-lightbox-close)::after{
+  transform:rotate(-135deg)!important;
+}
+.neith-v50-nav [data-v50-next]::after,
+.vac232-next::after,
+.home268-reviews-arrow[data-reviews-next]::after,
+.neith-v50-lightbox-actions [data-v50-lb-next]::after,
+.hourboost-lightbox-actions button:nth-child(2):not(.hourboost-lightbox-close)::after{
+  transform:rotate(45deg)!important;
+}
+
+/* Premium hover: brighter arrow, no container appears. */
+.neith-v50-nav button:hover,
+.vac232-nav:hover,
+.home268-reviews-arrow:hover:not(:disabled),
+.neith-v50-lightbox-actions [data-v50-lb-prev]:hover,
+.neith-v50-lightbox-actions [data-v50-lb-next]:hover,
+.hourboost-lightbox-actions button:not(.hourboost-lightbox-close):hover{
+  border:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  opacity:1!important;
+  filter:none!important;
+}
+.neith-v50-nav [data-v50-prev]:hover,
+.vac232-prev:hover,
+.home268-reviews-arrow[data-reviews-prev]:hover,
+.neith-v50-lightbox-actions [data-v50-lb-prev]:hover{
+  transform:translateX(-4px)!important;
+}
+.neith-v50-nav [data-v50-next]:hover,
+.vac232-next:hover,
+.home268-reviews-arrow[data-reviews-next]:hover,
+.neith-v50-lightbox-actions [data-v50-lb-next]:hover{
+  transform:translateX(4px)!important;
+}
+.neith-v50-nav button:hover::after,
+.vac232-nav:hover::after,
+.home268-reviews-arrow:hover::after,
+.neith-v50-lightbox-actions [data-v50-lb-prev]:hover::after,
+.neith-v50-lightbox-actions [data-v50-lb-next]:hover::after,
+.hourboost-lightbox-actions button:not(.hourboost-lightbox-close):hover::after{
+  border-color:var(--n60-arrow-hot)!important;
+  filter:
+    drop-shadow(0 0 4px rgba(255,255,255,.55))
+    drop-shadow(0 0 10px rgba(74,226,255,.95))
+    drop-shadow(0 0 26px rgba(38,166,255,.52))!important;
+}
+
+/* Tactile press, still no box. */
+.neith-v50-nav button:active,
+.vac232-nav:active,
+.home268-reviews-arrow:active,
+.neith-v50-lightbox-actions [data-v50-lb-prev]:active,
+.neith-v50-lightbox-actions [data-v50-lb-next]:active,
+.hourboost-lightbox-actions button:not(.hourboost-lightbox-close):active{
+  scale:.90!important;
+}
+
+.home268-reviews-arrow:disabled{
+  opacity:.20!important;
+  cursor:default!important;
+  transform:none!important;
+  filter:none!important;
+}
+
+/* Lightboxes: same approved language, slightly smaller chevrons. */
+.neith-v50-lightbox-actions [data-v50-lb-prev],
+.neith-v50-lightbox-actions [data-v50-lb-next],
+.hourboost-lightbox-actions button:not(.hourboost-lightbox-close){
+  width:40px!important;
+  height:42px!important;
+}
+.neith-v50-lightbox-actions [data-v50-lb-prev]::after,
+.neith-v50-lightbox-actions [data-v50-lb-next]::after,
+.hourboost-lightbox-actions button:not(.hourboost-lightbox-close)::after{
+  width:10px!important;
+  height:10px!important;
+  border-width:2px!important;
+}
+
+/* Close button remains a separate control. */
+.neith-v50-lightbox-actions [data-v50-lb-close],
+.hourboost-lightbox-actions .hourboost-lightbox-close{
+  clip-path:none!important;
+}
+
+/* VAC LIVE: keep arrows near the edges of the image, never covering the center. */
+.hook-media--vac-carousel .neith-v50-nav{
+  padding:0 .15rem!important;
+  pointer-events:none;
+}
+.hook-media--vac-carousel .neith-v50-nav button{
+  pointer-events:auto;
+  width:44px!important;
+  height:58px!important;
+  background:transparent!important;
+}
+
+@media(max-width:680px){
+  .neith-v50-nav button,.vac232-nav{width:44px!important;height:56px!important}
+  .neith-v50-nav button::after,.vac232-nav::after{width:11px!important;height:11px!important;border-width:2px!important}
+  .home268-reviews-arrow{width:40px!important;height:50px!important}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .neith-v50-nav button,.vac232-nav,.home268-reviews-arrow,
+  .neith-v50-lightbox-actions [data-v50-lb-prev],.neith-v50-lightbox-actions [data-v50-lb-next],
+  .hourboost-lightbox-actions button:not(.hourboost-lightbox-close),
+  .neith-v50-nav button::after,.vac232-nav::after,.home268-reviews-arrow::after{
+    transition:none!important;
+  }
+}

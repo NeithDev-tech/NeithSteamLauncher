@@ -428,3 +428,90 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once:true });
   else boot();
 })();
+
+/* V46 — keep the responsive header fixed without covering page content. */
+(()=>{
+  'use strict';
+  const sync=()=>{
+    const bar=document.querySelector('.topbar');
+    if(!bar)return;
+    const h=Math.max(0,Math.ceil(bar.getBoundingClientRect().height));
+    document.documentElement.style.setProperty('--neith-topbar-height',`${h}px`);
+  };
+  const start=()=>{
+    const bar=document.querySelector('.topbar');
+    if(!bar)return;
+    sync();
+    if('ResizeObserver'in window){
+      const ro=new ResizeObserver(sync);ro.observe(bar);
+      window.addEventListener('pagehide',()=>ro.disconnect(),{once:true});
+    }
+    window.addEventListener('resize',sync,{passive:true});
+    window.addEventListener('orientationchange',sync,{passive:true});
+    document.addEventListener('click',(e)=>{if(e.target.closest('.menu,.navlinks,[data-auth-nav]'))requestAnimationFrame(sync)},{passive:true});
+  };
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
+})();
+
+/* V47 — authoritative header offset sync. */
+(()=>{
+  'use strict';
+  let raf=0;
+  const sync=()=>{
+    cancelAnimationFrame(raf);
+    raf=requestAnimationFrame(()=>{
+      const bar=document.querySelector('.topbar');
+      if(!bar)return;
+      const rect=bar.getBoundingClientRect();
+      const h=Math.max(0,Math.ceil(rect.height));
+      document.documentElement.style.setProperty('--neith-topbar-height',`${h}px`);
+      document.body?.style.setProperty('padding-top',`${h}px`,'important');
+    });
+  };
+  const start=()=>{
+    sync();
+    const bar=document.querySelector('.topbar');
+    if(!bar)return;
+    const ro='ResizeObserver'in window?new ResizeObserver(sync):null;
+    ro?.observe(bar);
+    const mo=new MutationObserver(sync);
+    mo.observe(bar,{subtree:true,attributes:true,childList:true,attributeFilter:['class','style','aria-expanded']});
+    window.addEventListener('resize',sync,{passive:true});
+    window.addEventListener('orientationchange',sync,{passive:true});
+    window.addEventListener('load',sync,{once:true});
+    document.addEventListener('click',()=>setTimeout(sync,0),{passive:true});
+    window.addEventListener('pagehide',()=>{ro?.disconnect();mo.disconnect();cancelAnimationFrame(raf)},{once:true});
+  };
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
+})();
+
+/* V47 — authoritative header offset sync. */
+(()=>{
+  'use strict';
+  let raf=0;
+  const sync=()=>{
+    cancelAnimationFrame(raf);
+    raf=requestAnimationFrame(()=>{
+      const bar=document.querySelector('.topbar');
+      if(!bar)return;
+      const h=Math.max(0,Math.ceil(bar.getBoundingClientRect().height));
+      document.documentElement.style.setProperty('--neith-topbar-height',`${h}px`);
+      if(document.body)document.body.style.setProperty('padding-top',`${h}px`,'important');
+    });
+  };
+  const start=()=>{
+    sync();
+    const bar=document.querySelector('.topbar');
+    if(!bar)return;
+    const ro='ResizeObserver'in window?new ResizeObserver(sync):null;
+    if(ro)ro.observe(bar);
+    const mo=new MutationObserver(sync);
+    mo.observe(bar,{subtree:true,attributes:true,childList:true,attributeFilter:['class','style','aria-expanded']});
+    window.addEventListener('resize',sync,{passive:true});
+    window.addEventListener('orientationchange',sync,{passive:true});
+    window.addEventListener('load',sync,{once:true});
+    document.addEventListener('click',()=>setTimeout(sync,0),{passive:true});
+    window.addEventListener('pagehide',()=>{if(ro)ro.disconnect();mo.disconnect();cancelAnimationFrame(raf)},{once:true});
+  };
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
+})();

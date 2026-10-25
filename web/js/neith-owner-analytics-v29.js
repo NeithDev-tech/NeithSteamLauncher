@@ -27,7 +27,7 @@
     const link = document.createElement('link');
     link.rel = 'stylesheet';
     link.dataset.neithOwnerAnalyticsV29 = '1';
-    link.href = new URL('../css/neith-owner-analytics-v29.css', here).href;
+    link.href = new URL('../css/neith-owner-analytics-v29.css?v=20261025-v45-live', here).href;
     document.head.appendChild(link);
   }
 

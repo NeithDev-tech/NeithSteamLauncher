@@ -128,3 +128,45 @@ body:has(.admin32-page) #neith-v4-header .n4-nav,body:has(.premium222-page) #nei
 
 html:not(.neith-authenticated) [data-neith-contact-open]{display:none!important}
 html:not(.neith-authenticated) footer a[href*='mi-cuenta']{display:none!important}
+
+/* V48 — REAL visible header: permanently fixed on every viewport */
+:root{
+  --neith-v4-fixed-header-height:4.625rem;
+  scroll-padding-top:calc(var(--neith-v4-fixed-header-height) + .75rem);
+}
+html{
+  scroll-padding-top:calc(var(--neith-v4-fixed-header-height) + .75rem)!important;
+}
+body{
+  padding-top:var(--neith-v4-fixed-header-height)!important;
+}
+#neith-v4-header{
+  position:fixed!important;
+  inset-block-start:0!important;
+  inset-inline:0!important;
+  width:100%!important;
+  z-index:2147483000!important;
+  margin:0!important;
+  transform:translateZ(0);
+  isolation:isolate;
+  background:rgba(2,7,13,.94)!important;
+  -webkit-backdrop-filter:blur(1.125rem) saturate(1.12);
+  backdrop-filter:blur(1.125rem) saturate(1.12);
+  border-bottom:1px solid rgba(84,230,255,.15)!important;
+  box-shadow:0 .45rem 1.5rem rgba(0,0,0,.24);
+}
+#neith-v4-header .n4-nav{
+  position:relative;
+  z-index:1;
+}
+#neith-v4-header .n4-links,
+#neith-v4-header .n4-actions{
+  position:relative;
+  z-index:2;
+}
+@media(max-width:980px){
+  #neith-v4-header{
+    max-height:100dvh;
+    overflow:visible!important;
+  }
+}
