@@ -5,7 +5,7 @@
   const URL='https://nsqhfbyxqcmdthvptuzp.supabase.co';
   const KEY='sb_publishable_bRJYGXCPI6M9I4o_egb5WA_n7ZIEASg';
   const VISITOR_KEY='neith_site_presence_visitor_v1';
-  const HEARTBEAT_MS=12000;
+  const HEARTBEAT_MS=5000;
   const TOKEN_TTL=20000;
   let busy=false, leaving=false, tokenCache='', tokenAt=0;
 

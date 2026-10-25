@@ -1695,3 +1695,14 @@ img[loading="lazy"]{content-visibility:auto}
   .topbar .nav-actions>[data-auth-nav]{min-width:0!important;max-width:none!important}
   .topbar .nav-actions .neith-owner-premium-shortcut{display:inline-flex!important;min-width:2.85rem!important;min-height:34px!important;padding-inline:.44rem!important;font-size:.52rem!important;border-radius:10px!important}
 }
+
+/* V44 ULTRA PERFORMANCE: render work only near viewport; preserve layout and visuals. */
+@supports(content-visibility:auto){
+  main>section:nth-of-type(n+2), footer.footer, #neith-v4-footer{content-visibility:auto;contain-intrinsic-size:auto 760px}
+}
+img{height:auto;max-width:100%}
+img[loading="lazy"]{content-visibility:auto}
+@media(max-width:760px){
+  [data-neith-perf-zone]:not(.neith-zone-active) *{animation-play-state:paused!important}
+  .neith-page-hidden *{animation-play-state:paused!important}
+}

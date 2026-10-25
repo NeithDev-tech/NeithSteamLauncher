@@ -197,12 +197,30 @@
   async function syncAdminMenuLink() {
     const nav = document.querySelector('#neith-account-menu .account-menu-links');
     if (!nav) return;
-    const existing = nav.querySelector('[data-admin-menu-link]');
-    if (!state.session?.user) { existing?.remove(); return; }
+
+    const removeOwnerLinks = () => {
+      nav.querySelector('[data-premium-menu-link]')?.remove();
+      nav.querySelector('[data-admin-menu-link]')?.remove();
+    };
+
+    if (!state.session?.user) {
+      removeOwnerLinks();
+      return;
+    }
+
     const isOwner = await loadOwnerAccess();
-    if (!isOwner) { existing?.remove(); return; }
-    if (existing) return;
-    nav.insertAdjacentHTML('beforeend', `<a href="${siteUrl('admin/')}" role="menuitem" data-admin-menu-link data-owner-only="true"><span class="account-menu-icon">◆</span><span><b>ADMIN CENTER</b><small>Neith control center</small></span><em>›</em></a>`);
+    if (!isOwner) {
+      removeOwnerLinks();
+      return;
+    }
+
+    if (!nav.querySelector('[data-premium-menu-link]')) {
+      nav.insertAdjacentHTML('beforeend', `<a href="${siteUrl('premium/')}" role="menuitem" data-premium-menu-link data-owner-only="true"><span class="account-menu-icon">★</span><span><b>PREMIUM CONTROL</b><small>Manage Neith Premium</small></span><em>›</em></a>`);
+    }
+
+    if (!nav.querySelector('[data-admin-menu-link]')) {
+      nav.insertAdjacentHTML('beforeend', `<a href="${siteUrl('admin/')}" role="menuitem" data-admin-menu-link data-owner-only="true"><span class="account-menu-icon">◆</span><span><b>ADMIN CENTER</b><small>Neith control center</small></span><em>›</em></a>`);
+    }
   }
 
 

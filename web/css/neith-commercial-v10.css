@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@500;600;700;800&display=swap');
 /* V9 commercial polish — header, hero, community placement and footer */
 :root{--n9-max:1420px}
 
@@ -130,7 +129,6 @@
 @media(max-width:1050px){.n4-footer-top{grid-template-columns:1fr 1fr!important}.n4-footer-community{grid-column:1/-1!important;max-width:660px!important}.n4-footer-wrap{width:calc(100% - 34px)!important}}
 @media(max-width:700px){.hero h1 .hero-line-primary{font-size:clamp(2.65rem,13vw,4.3rem)!important}.hero h1 .hero-line-accent{font-size:clamp(2.35rem,11.5vw,3.85rem)!important}.n4-footer-top{grid-template-columns:1fr!important}.n4-footer-community{grid-column:auto!important;max-width:none!important}.n4-footer-links{gap:26px!important}.n4-discord{grid-template-columns:50px 1fr!important}.n4-discord-icon{width:50px!important;height:50px!important}.n4-discord em{grid-column:2!important;justify-self:start!important;margin-top:-2px!important}.n4-footer-bottom{flex-direction:column!important;gap:8px!important}.n4-footer-master img{width:205px!important}}
 
-@import url('https://fonts.googleapis.com/css2?family=Michroma&display=swap');
 /* V11: hero + footer rebuild + english-first polish */
 .language-switcher,.lang-flag--es{display:none!important}
 .hero{padding-top:clamp(5.8rem,8vw,8rem)!important}
