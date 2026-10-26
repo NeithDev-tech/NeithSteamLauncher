@@ -170,52 +170,33 @@ body{
     overflow:visible!important;
   }
 }
-\n\n/* === V81: mobile navigation drawer — isolated, viewport-safe and touch-safe === */
-.n4-mobile-backdrop{display:none;position:fixed;inset:0;z-index:2147482990;border:0;padding:0;margin:0;background:rgba(0,5,10,.72);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
-.n4-mobile-owner-link{display:none!important}
+
+
+/* === V83: mobile navigation drawer — clean, centered, safe-area aware === */
+.n4-mobile-backdrop{display:none;position:fixed;inset:0;z-index:2147482990;border:0;padding:0;margin:0;background:rgba(0,5,10,.78);-webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px)}
+.n4-mobile-owner-link,.n4-mobile-auth,.n4-mobile-download{display:none!important}
 @media(max-width:980px){
-  html.n4-mobile-menu-open,body.n4-mobile-menu-open{overflow:hidden!important;overscroll-behavior:none}
-  .n4-mobile-backdrop:not([hidden]){display:block}
-  #neith-v4-header .n4-nav{position:relative!important;overflow:visible!important}
+  html.n4-mobile-menu-open,body.n4-mobile-menu-open{overflow:hidden!important;overscroll-behavior:none!important}
+  .n4-mobile-backdrop:not([hidden]){display:block!important}
+  #neith-v4-header{z-index:2147483000!important;overflow:visible!important}
+  #neith-v4-header .n4-nav{position:relative!important;display:flex!important;align-items:center!important;min-height:64px!important;height:64px!important;padding:0 max(10px,env(safe-area-inset-right)) 0 max(10px,env(safe-area-inset-left))!important;gap:8px!important;overflow:visible!important}
+  #neith-v4-header .n4-brand-master{flex:1 1 auto!important;min-width:0!important;max-width:170px!important}
+  #neith-v4-header .n4-brand-master img{display:block!important;width:min(164px,45vw)!important;max-width:100%!important;height:auto!important;object-fit:contain!important}
+  #neith-v4-header .n4-actions{margin-left:auto!important;display:flex!important;align-items:center!important;gap:0!important;min-width:44px!important}
+  #neith-v4-header .n4-actions>.n4-owner-link,#neith-v4-header .n4-actions>.n4-auth,#neith-v4-header .n4-actions>a.primary{display:none!important}
+  #neith-v4-header .n4-menu-toggle{display:grid!important;place-items:center!important;width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;padding:0!important;border:1px solid rgba(84,230,255,.27)!important;border-radius:12px!important;background:linear-gradient(180deg,rgba(8,31,48,.98),rgba(3,17,29,.99))!important;color:#dffbff!important;font-size:0!important;position:relative!important;z-index:2147483020!important}
+  #neith-v4-header .n4-menu-toggle:before,#neith-v4-header .n4-menu-toggle:after{content:"";position:absolute;width:19px;height:2px;border-radius:99px;background:#bdf7ff;box-shadow:0 0 8px rgba(84,230,255,.36);transition:transform .18s ease,box-shadow .18s ease}
+  #neith-v4-header .n4-menu-toggle:before{transform:translateY(-4px)}#neith-v4-header .n4-menu-toggle:after{transform:translateY(4px)}
+  #neith-v4-header .n4-menu-toggle[aria-expanded="true"]:before{transform:rotate(45deg)}#neith-v4-header .n4-menu-toggle[aria-expanded="true"]:after{transform:rotate(-45deg)}
   #neith-v4-header .n4-links{display:none!important}
-  #neith-v4-header .n4-nav.open .n4-links{
-    display:flex!important;position:fixed!important;
-    top:calc(var(--neith-v4-fixed-header-height,78px) + 8px)!important;
-    left:max(8px,env(safe-area-inset-left))!important;right:max(8px,env(safe-area-inset-right))!important;
-    width:auto!important;max-height:calc(100dvh - var(--neith-v4-fixed-header-height,78px) - 20px)!important;
-    margin:0!important;padding:10px!important;gap:5px!important;overflow-y:auto!important;overscroll-behavior:contain;
-    flex-direction:column!important;align-items:stretch!important;
-    border:1px solid rgba(84,230,255,.23)!important;border-radius:16px!important;
-    background:linear-gradient(180deg,rgba(5,18,29,.995),rgba(2,9,16,.995))!important;
-    -webkit-backdrop-filter:blur(24px) saturate(1.12)!important;backdrop-filter:blur(24px) saturate(1.12)!important;
-    box-shadow:0 26px 80px rgba(0,0,0,.72),inset 0 1px rgba(255,255,255,.035)!important;
-    z-index:2147483005!important;
-  }
-  #neith-v4-header .n4-nav.open .n4-links>a{
-    min-height:48px!important;width:100%!important;display:flex!important;align-items:center!important;
-    padding:0 15px!important;border:1px solid transparent!important;border-radius:11px!important;
-    background:rgba(7,24,38,.56)!important;color:#d9f5ff!important;font-size:12px!important;letter-spacing:.055em!important;
-    box-sizing:border-box!important;white-space:normal!important;
-  }
-  #neith-v4-header .n4-nav.open .n4-links>a:hover,#neith-v4-header .n4-nav.open .n4-links>a:focus-visible{
-    border-color:rgba(84,230,255,.24)!important;background:rgba(21,168,222,.13)!important;color:#fff!important;outline:none!important;
-  }
-  #neith-v4-header .n4-nav.open .n4-mobile-owner-link:not([hidden]){display:flex!important;color:#a8efff!important;border-color:rgba(84,230,255,.14)!important}
-  .n4-menu-toggle{position:relative;z-index:3;min-width:42px!important;padding:0 12px!important;font-size:20px!important}
-}
-@media(max-width:760px){
-  #neith-v4-header .n4-actions .n4-owner-link{display:none!important}
-  #neith-v4-header .n4-nav{gap:8px!important}
-  #neith-v4-header .n4-brand-master{flex:0 1 132px!important;min-width:0!important}
-  #neith-v4-header .n4-brand-master img{width:min(128px,34vw)!important;max-width:100%!important;height:auto!important}
-  #neith-v4-header .n4-actions{margin-left:auto!important;gap:5px!important;min-width:0!important}
-  #neith-v4-header .n4-auth{max-width:92px!important;padding-inline:9px!important;min-width:0!important}
-  #neith-v4-header .n4-auth-label{overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+  #neith-v4-header .n4-nav.open .n4-links{display:flex!important;position:fixed!important;top:calc(env(safe-area-inset-top) + 72px)!important;left:max(10px,env(safe-area-inset-left))!important;right:max(10px,env(safe-area-inset-right))!important;width:auto!important;max-height:calc(100dvh - env(safe-area-inset-top) - 84px)!important;margin:0!important;padding:12px!important;gap:6px!important;overflow:auto!important;overscroll-behavior:contain!important;flex-direction:column!important;align-items:stretch!important;border:1px solid rgba(84,230,255,.24)!important;border-radius:18px!important;background:linear-gradient(180deg,rgba(5,20,33,.998),rgba(2,10,18,.998))!important;-webkit-backdrop-filter:blur(24px) saturate(1.12)!important;backdrop-filter:blur(24px) saturate(1.12)!important;box-shadow:0 28px 90px rgba(0,0,0,.76),inset 0 1px rgba(255,255,255,.035)!important;z-index:2147483015!important}
+  #neith-v4-header .n4-nav.open .n4-links>a,#neith-v4-header .n4-nav.open .n4-links>button{display:flex!important;align-items:center!important;justify-content:space-between!important;width:100%!important;min-height:48px!important;padding:0 14px!important;margin:0!important;border:1px solid rgba(84,230,255,.10)!important;border-radius:12px!important;background:rgba(7,26,41,.72)!important;color:#dff9ff!important;font:800 12px/1.2 Inter,sans-serif!important;letter-spacing:.04em!important;text-align:left!important;box-sizing:border-box!important;white-space:normal!important}
+  #neith-v4-header .n4-nav.open .n4-links>a:not(.n4-mobile-download):after{content:"›";font-size:20px;color:#57e7ff;margin-left:12px}
+  #neith-v4-header .n4-nav.open .n4-mobile-owner-link:not([hidden]){display:flex!important;color:#c6b3ff!important;border-color:rgba(164,115,255,.23)!important}
+  #neith-v4-header .n4-nav.open .n4-mobile-auth{display:flex!important;justify-content:center!important;color:#9ff4ff!important;margin-top:4px!important;border-color:rgba(84,230,255,.18)!important}
+  #neith-v4-header .n4-nav.open .n4-mobile-download{display:flex!important;justify-content:center!important;background:linear-gradient(135deg,#0da8dc,#1764ff)!important;border-color:#61e9ff!important;color:#fff!important;box-shadow:0 0 24px rgba(33,174,255,.16)!important}
 }
 @media(max-width:420px){
-  #neith-v4-header .n4-nav{padding-inline:8px!important}
-  #neith-v4-header .n4-brand-master{flex-basis:112px!important}
-  #neith-v4-header .n4-brand-master img{width:min(108px,30vw)!important}
-  #neith-v4-header .n4-auth{max-width:74px!important;padding-inline:7px!important;font-size:9px!important}
-  #neith-v4-header .n4-auth-led{width:6px!important;height:6px!important;margin-right:5px!important}
+  #neith-v4-header .n4-nav{padding-inline:8px!important}#neith-v4-header .n4-brand-master{max-width:145px!important}#neith-v4-header .n4-brand-master img{width:min(140px,43vw)!important}#neith-v4-header .n4-nav.open .n4-links{left:8px!important;right:8px!important;padding:10px!important;border-radius:15px!important}
 }
+

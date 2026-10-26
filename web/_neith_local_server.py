@@ -14,6 +14,7 @@ import threading
 import time
 import urllib.parse
 import urllib.request
+import uuid
 import webbrowser
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -123,7 +124,8 @@ class Handler(BaseHTTPRequestHandler):
 
     def _handle(self, head_only: bool):
         started = time.perf_counter()
-        target = urllib.parse.urlsplit(self.path).path or "/"
+        parsed_url = urllib.parse.urlsplit(self.path)
+        target = parsed_url.path or "/"
 
         if target == "/__neith_health":
             body = json.dumps({"ok": True, "build": BUILD, "server": "python-threading-http11"}, separators=(",", ":")).encode("utf-8")
@@ -150,6 +152,27 @@ class Handler(BaseHTTPRequestHandler):
             return
 
         if target.rstrip("/") == "/descargar":
+            try:
+                qs = urllib.parse.parse_qs(parsed_url.query)
+                def _uuid_or_new(name):
+                    raw=(qs.get(name) or [""])[0]
+                    try: return str(uuid.UUID(raw))
+                    except Exception: return str(uuid.uuid4())
+                payload = json.dumps({
+                    "p_event_type": "launcher_download",
+                    "p_visitor_id": _uuid_or_new("vid"),
+                    "p_session_id": _uuid_or_new("sid"),
+                    "p_page_path": "/descargar",
+                    "p_metadata": {"source": "local_server_download_redirect", "device": "desktop"},
+                }).encode("utf-8")
+                req = urllib.request.Request(
+                    "https://nsqhfbyxqcmdthvptuzp.supabase.co/rest/v1/rpc/neith_track_site_event",
+                    data=payload, method="POST",
+                    headers={"apikey":"sb_publishable_bRJYGXCPI6M9I4o_egb5WA_n7ZIEASg","Content-Type":"application/json"},
+                )
+                urllib.request.urlopen(req, timeout=2).read()
+            except Exception:
+                pass
             self._write_bytes(
                 302,
                 b"",

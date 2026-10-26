@@ -1,4 +1,4 @@
-/* Neith V80 — OWNER-only Site Intelligence with realtime presence + live business metrics. */
+/* Neith V83 — OWNER-only Site Intelligence; stable presence + reliable tracked actions. */
 (() => {
   'use strict';
 
@@ -44,7 +44,7 @@
     if(document.querySelector('link[data-neith-owner-analytics-v29]'))return;
     const here=document.currentScript?.src||Array.from(document.scripts).find((s)=>/neith-owner-analytics-v29\.js/.test(s.src))?.src;
     if(!here)return; const link=document.createElement('link'); link.rel='stylesheet'; link.dataset.neithOwnerAnalyticsV29='1';
-    link.href=new URL('../css/neith-owner-analytics-v29.css?v=20261026-v80-realtime',here).href; document.head.appendChild(link);
+    link.href=new URL('../css/neith-owner-analytics-v29.css?v=20261026-v83-tracking',here).href; document.head.appendChild(link);
   }
 
   function shell(){
@@ -128,20 +128,30 @@
     const countries=normalizeCountries(data.countries_today||[]);
     const pages=(Array.isArray(data.top_pages_today)&&data.top_pages_today.length?data.top_pages_today:data.top_pages_7d)||[];
     const regs=Array.isArray(data.recent_registrations)?data.recent_registrations:[];
-    const members=Array.isArray(live.members_list)?live.members_list:[];
-    const guests=Array.isArray(live.guests_list)?live.guests_list:[];
+    const membersRaw=Array.isArray(live.members_list)?live.members_list:[];
+    const guestsRaw=Array.isArray(live.guests_list)?live.guests_list:[];
+    const memberMap=new Map();
+    for(const x of membersRaw){const key=String(x.user_id||x.name||'').trim().toLowerCase();if(!key)continue;const prev=memberMap.get(key);if(!prev||new Date(x.last_seen||0)>new Date(prev.last_seen||0))memberMap.set(key,x)}
+    const guestMap=new Map();
+    for(const x of guestsRaw){const key=String(x.visitor_id||x.name||'').trim().toLowerCase();if(!key)continue;const prev=guestMap.get(key);if(!prev||new Date(x.last_seen||0)>new Date(prev.last_seen||0))guestMap.set(key,x)}
+    const stableSort=(a,b)=>String(a.name||'').localeCompare(String(b.name||''),'en',{sensitivity:'base'})||String(a.user_id||a.visitor_id||'').localeCompare(String(b.user_id||b.visitor_id||''));
+    const members=[...memberMap.values()].sort(stableSort), guests=[...guestMap.values()].sort(stableSort);
     const liveRows=[...members.map(x=>({...x,type:'member'})),...guests.map(x=>({...x,type:'guest'}))].slice(0,6);
     const liveNow=Number(live.visitors||0), uniqueToday=Number(today.unique_visitors||0), regsToday=Number(today.registrations||0), downloads=Number(today.downloads||0);
     const conv=Number(conversion.download_today_pct||0);
     const uniqueSeries=daily.map(x=>Number(x.unique_visitors||0));
 
+    const lastDownload=data.business?.latest_download||{};
+    const lastCommunity=data.business?.latest_community_click||{};
+    const downloadSub=lastDownload?.name?`last: ${lastDownload.name}`:'download clicks';
+    const communitySub=lastCommunity?.name?`last: ${lastCommunity.name} · ${String(lastCommunity.target||'community')}`:'clics a Discord/Redes hoy';
     root.querySelector('[data-na74-kpis]').innerHTML=[
-      kpi('users','ONLINE',nf(liveNow),liveNow===1?'active now':'active now'),
+      kpi('users','ONLINE',nf(liveNow),'active now'),
       kpi('earth','UNIQUE TODAY',nf(uniqueToday),'deduplicated visitors',sparkline(uniqueSeries)),
       kpi('user-plus','REGISTRATIONS',nf(regsToday),'accounts created today'),
-      kpi('download','LAUNCHER DOWNLOADS',nf(downloads),'download clicks',`<span class="na74-badge">${conv.toFixed(1)}%</span>`),
+      kpi('download','LAUNCHER DOWNLOADS',nf(downloads),downloadSub,`<span class="na74-badge">${conv.toFixed(1)}%</span>`),
       kpi('crown','PREMIUM ACCOUNTS',nf(Number(data.business?.premium_accounts||0)),`${nf(Number(data.business?.real_accounts||0))} cuentas reales · PREMIUM vigente`),
-      kpi('messages-square','COMMUNITY CLICKS',nf(Number(data.business?.community_clicks_today||0)),'clics a Discord/Redes hoy')
+      kpi('messages-square','COMMUNITY CLICKS',nf(Number(data.business?.community_clicks_today||0)),communitySub)
     ].join('');
 
     root.querySelector('[data-na74-updated]').textContent=`${fmtTime(data.generated_at||Date.now())}`;
@@ -182,7 +192,7 @@
   function setupPresenceRealtime(){
     if(presenceChannel||!client?.channel)return;
     presenceChannel=client
-      .channel('neith-site-intelligence-presence-v80')
+      .channel('neith-site-intelligence-presence-v83')
       .on('postgres_changes',{event:'INSERT',schema:'public',table:'neith_site_presence_live'},()=>queueRealtimeRefresh(60))
       .on('postgres_changes',{event:'UPDATE',schema:'public',table:'neith_site_presence_live'},()=>queueRealtimeRefresh(60))
       .on('postgres_changes',{event:'DELETE',schema:'public',table:'neith_site_presence_live'},()=>queueRealtimeRefresh(60))

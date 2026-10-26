@@ -12,6 +12,7 @@
     '<nav class="n4-links" aria-label="Main">'+
       '<a href="'+home+'#neith-id">NEITH ID</a><a href="'+home+'#power">FEATURES</a><a href="'+home+'#compare">WHY NEITH</a><a href="'+home+'#premium">PREMIUM</a><a href="'+home+'#download">DOWNLOAD</a>'+
       '<a class="n4-mobile-owner-link n4-mobile-admin-link" href="'+depth+'admin/" hidden>ADMIN</a><a class="n4-mobile-owner-link n4-mobile-premium-link" href="'+depth+'premium/" hidden>PREMIUM</a>'+
+      '<button class="n4-mobile-auth" type="button">NEITH ID / ACCOUNT</button><a class="n4-mobile-download" href="'+depth+'descargar">DOWNLOAD NEITH FREE</a>'+
     '</nav>'+
     '<div class="n4-actions"><button class="n4-btn n4-menu-toggle" type="button" aria-label="Menu">☰</button><a class="n4-owner-link n4-admin-link" href="'+depth+'admin/" hidden>ADMIN</a><a class="n4-owner-link n4-premium-link" href="'+depth+'premium/" hidden>PREMIUM</a><button class="n4-btn n4-auth" type="button"><span class="n4-auth-led"></span><span class="n4-auth-label">SIGN IN</span></button><a class="n4-btn primary" href="'+depth+'descargar">DOWNLOAD FREE</a></div>'+
   '</div>';
@@ -97,6 +98,8 @@
   function sync(){ if(legacyAuth){var t=legacyAuth.querySelector('[data-auth-nav-label]')||legacyAuth; var s=(t.textContent||'').trim(); if(s){ label.textContent=(/INICIAR\s*SESI[ÓO]N/i.test(s)?'SIGN IN':s); return; }} label.textContent='SIGN IN'; }
   sync(); if(legacyAuth){new MutationObserver(sync).observe(legacyAuth,{subtree:true,childList:true,characterData:true,attributes:true});}
   auth.addEventListener('click',function(e){e.preventDefault(); if(window.NeithAuth&&typeof window.NeithAuth.handleHeaderTrigger==='function') return window.NeithAuth.handleHeaderTrigger(auth); if(window.NeithAuth&&typeof window.NeithAuth.open==='function') return window.NeithAuth.open('login'); if(legacyAuth) legacyAuth.click(); else location.href=home+'#neith-id';});
+  var mobileAuth=header.querySelector('.n4-mobile-auth');
+  if(mobileAuth) mobileAuth.addEventListener('click',function(e){e.preventDefault();closeMobileMenu();auth.click();});
   document.addEventListener('neith:authchange',sync);
   var ownerCheckSeq=0, ownerConfirmed=false;
   async function syncOwnerTools(){
@@ -146,4 +149,4 @@
 })();
 
 /* V29 global analytics bootstrap */
-(()=>{try{const current=document.currentScript?.src;if(!current)return;const base=new URL('./',current);for(const f of ['neith-site-analytics-v29.js','neith-owner-analytics-v29.js']){if(document.querySelector(`script[data-neith-v29="${f}"]`))continue;const s=document.createElement('script');s.src=new URL(f+'?v=20261026-v80-realtime',base).href;s.defer=true;s.dataset.neithV29=f;document.head.appendChild(s)}}catch{}})();
+(()=>{try{const current=document.currentScript?.src;if(!current)return;const base=new URL('./',current);for(const f of ['neith-site-analytics-v29.js','neith-owner-analytics-v29.js']){if(document.querySelector(`script[data-neith-v29="${f}"]`))continue;const s=document.createElement('script');s.src=new URL(f+'?v=20261026-v83-tracking',base).href;s.defer=true;s.dataset.neithV29=f;document.head.appendChild(s)}}catch{}})();

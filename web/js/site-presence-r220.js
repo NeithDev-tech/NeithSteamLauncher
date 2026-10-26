@@ -1,4 +1,4 @@
-/* Neith V80 — realtime-safe site presence heartbeat.
+/* Neith V82 — realtime-safe visible-presence heartbeat.
    Stable visitor id + per-tab session. Authenticated users send JWT; guests use publishable key only. */
 (() => {
   'use strict';
@@ -68,13 +68,13 @@
   window.NeithSitePresence=Object.freeze({getAccessToken,getVisitorId:()=>visitorId,getSessionId:()=>sessionId,ping,setEnabled,isEnabled});
 
   const armTimer=()=>{clearInterval(timer);timer=setInterval(()=>{if(isEnabled()&&!leaving)ping()},HEARTBEAT_MS)};
-  const resume=()=>{if(!isEnabled())return;leaving=false;armTimer();ping()};
+  const resume=()=>{if(!isEnabled()||document.visibilityState==='hidden')return;leaving=false;armTimer();ping()};
   const start=()=>{
     resume();
     window.addEventListener('focus',resume,{passive:true});
     window.addEventListener('online',resume,{passive:true});
     window.addEventListener('pageshow',resume,{passive:true});
-    document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')resume()},{passive:true});
+    document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){resume()}else{clearInterval(timer);leave()}},{passive:true});
     window.addEventListener('pagehide',(e)=>{clearInterval(timer);if(e.persisted){leaving=false;return}leave()});
   };
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
