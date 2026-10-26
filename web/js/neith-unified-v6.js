@@ -11,6 +11,7 @@
     '<a class="n4-brand n4-brand-master" href="'+home+'"><img src="'+depth+'img/neith-master-logo-premium-transparent.webp" alt="Neith Steam Launcher PRO"></a>'+
     '<nav class="n4-links" aria-label="Main">'+
       '<a href="'+home+'#neith-id">NEITH ID</a><a href="'+home+'#power">FEATURES</a><a href="'+home+'#compare">WHY NEITH</a><a href="'+home+'#premium">PREMIUM</a><a href="'+home+'#download">DOWNLOAD</a>'+
+      '<a class="n4-mobile-owner-link n4-mobile-admin-link" href="'+depth+'admin/" hidden>ADMIN</a><a class="n4-mobile-owner-link n4-mobile-premium-link" href="'+depth+'premium/" hidden>PREMIUM</a>'+
     '</nav>'+
     '<div class="n4-actions"><button class="n4-btn n4-menu-toggle" type="button" aria-label="Menu">☰</button><a class="n4-owner-link n4-admin-link" href="'+depth+'admin/" hidden>ADMIN</a><a class="n4-owner-link n4-premium-link" href="'+depth+'premium/" hidden>PREMIUM</a><button class="n4-btn n4-auth" type="button"><span class="n4-auth-led"></span><span class="n4-auth-label">SIGN IN</span></button><a class="n4-btn primary" href="'+depth+'descargar">DOWNLOAD FREE</a></div>'+
   '</div>';
@@ -37,7 +38,7 @@
     liveBrand.addEventListener('click',function(e){
       if(!isHomeDocument()) return;
       e.preventDefault();
-      nav&&nav.classList.remove('open');
+      closeMobileMenu();
       scrollHomeTarget('');
     });
   }
@@ -52,7 +53,7 @@
       var targetHome=target===''||target==='/'||/\/index\.html$/i.test(target);
       if(!currentHome||!targetHome) return;
       e.preventDefault();
-      nav&&nav.classList.remove('open');
+      closeMobileMenu();
       scrollHomeTarget(u.hash||'');
     });
   });
@@ -71,7 +72,27 @@
   window.addEventListener('resize',syncFixedHeaderHeight,{passive:true});
   requestAnimationFrame(syncFixedHeaderHeight);
   if(legacyHeader) legacyHeader.setAttribute('aria-hidden','true');
-  var nav=header.querySelector('.n4-nav'); header.querySelector('.n4-menu-toggle').addEventListener('click',function(){nav.classList.toggle('open');requestAnimationFrame(syncFixedHeaderHeight)});
+  var nav=header.querySelector('.n4-nav'), menuToggle=header.querySelector('.n4-menu-toggle');
+  var mobileBackdrop=document.createElement('button');
+  mobileBackdrop.type='button'; mobileBackdrop.className='n4-mobile-backdrop'; mobileBackdrop.setAttribute('aria-label','Close menu'); mobileBackdrop.hidden=true;
+  document.body.insertBefore(mobileBackdrop,header.nextSibling);
+  function setMobileMenu(open){
+    open=!!open && window.matchMedia('(max-width:980px)').matches;
+    nav.classList.toggle('open',open);
+    menuToggle.setAttribute('aria-expanded',open?'true':'false');
+    menuToggle.setAttribute('aria-label',open?'Close menu':'Open menu');
+    mobileBackdrop.hidden=!open;
+    document.documentElement.classList.toggle('n4-mobile-menu-open',open);
+    document.body.classList.toggle('n4-mobile-menu-open',open);
+    requestAnimationFrame(syncFixedHeaderHeight);
+  }
+  function closeMobileMenu(){setMobileMenu(false)}
+  menuToggle.setAttribute('aria-expanded','false');
+  menuToggle.addEventListener('click',function(){setMobileMenu(!nav.classList.contains('open'))});
+  mobileBackdrop.addEventListener('click',closeMobileMenu);
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeMobileMenu()});
+  window.addEventListener('resize',function(){if(window.innerWidth>980)closeMobileMenu()},{passive:true});
+  nav.querySelectorAll('.n4-links a').forEach(function(a){a.addEventListener('click',closeMobileMenu)});
   var auth=header.querySelector('.n4-auth'), label=header.querySelector('.n4-auth-label');
   function sync(){ if(legacyAuth){var t=legacyAuth.querySelector('[data-auth-nav-label]')||legacyAuth; var s=(t.textContent||'').trim(); if(s){ label.textContent=(/INICIAR\s*SESI[ÓO]N/i.test(s)?'SIGN IN':s); return; }} label.textContent='SIGN IN'; }
   sync(); if(legacyAuth){new MutationObserver(sync).observe(legacyAuth,{subtree:true,childList:true,characterData:true,attributes:true});}
@@ -79,22 +100,23 @@
   document.addEventListener('neith:authchange',sync);
   var ownerCheckSeq=0, ownerConfirmed=false;
   async function syncOwnerTools(){
-    var adminLink=header.querySelector('.n4-admin-link'), premiumLink=header.querySelector('.n4-premium-link');
-    if(!adminLink||!premiumLink)return;
+    var adminLinks=[...header.querySelectorAll('.n4-admin-link,.n4-mobile-admin-link')], premiumLinks=[...header.querySelectorAll('.n4-premium-link,.n4-mobile-premium-link')];
+    if(!adminLinks.length||!premiumLinks.length)return;
+    var setOwnerLinks=function(show){adminLinks.forEach(function(x){x.hidden=!show});premiumLinks.forEach(function(x){x.hidden=!show})};
     var seq=++ownerCheckSeq;
     try{
       var a=window.NeithAuth;
       if(!a?.session?.user||!a?.client){
-        ownerConfirmed=false; adminLink.hidden=true; premiumLink.hidden=true; return;
+        ownerConfirmed=false; setOwnerLinks(false); return;
       }
       var r=await a.client.rpc('neith_is_owner');
       if(seq!==ownerCheckSeq)return;
       if(!r?.error && r?.data===true){
-        ownerConfirmed=true; adminLink.hidden=false; premiumLink.hidden=false; return;
+        ownerConfirmed=true; setOwnerLinks(true); return;
       }
-      ownerConfirmed=false; adminLink.hidden=true; premiumLink.hidden=true;
+      ownerConfirmed=false; setOwnerLinks(false);
     }catch(_){
-      if(!ownerConfirmed){adminLink.hidden=true; premiumLink.hidden=true;}
+      if(!ownerConfirmed)setOwnerLinks(false);
     }
   }
   function queueOwnerSync(){setTimeout(syncOwnerTools,120);setTimeout(syncOwnerTools,900)}
@@ -124,4 +146,4 @@
 })();
 
 /* V29 global analytics bootstrap */
-(()=>{try{const current=document.currentScript?.src;if(!current)return;const base=new URL('./',current);for(const f of ['neith-site-analytics-v29.js','neith-owner-analytics-v29.js']){if(document.querySelector(`script[data-neith-v29="${f}"]`))continue;const s=document.createElement('script');s.src=new URL(f+'?v=20261025-v45-live',base).href;s.defer=true;s.dataset.neithV29=f;document.head.appendChild(s)}}catch{}})();
+(()=>{try{const current=document.currentScript?.src;if(!current)return;const base=new URL('./',current);for(const f of ['neith-site-analytics-v29.js','neith-owner-analytics-v29.js']){if(document.querySelector(`script[data-neith-v29="${f}"]`))continue;const s=document.createElement('script');s.src=new URL(f+'?v=20261026-v80-realtime',base).href;s.defer=true;s.dataset.neithV29=f;document.head.appendChild(s)}}catch{}})();

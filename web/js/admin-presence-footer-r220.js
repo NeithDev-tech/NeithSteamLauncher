@@ -60,15 +60,16 @@
     if(channel)return;
     const auth=await getAuth();const client=auth?.client;if(!client?.channel)return;
     channel=client.channel('neith-owner-live-r220',{config:{broadcast:{self:false}}})
-      .on('postgres_changes',{event:'INSERT',schema:'public',table:'neith_site_presence_live'},()=>queueRefresh(80))
-      .on('postgres_changes',{event:'DELETE',schema:'public',table:'neith_site_presence_live'},()=>queueRefresh(80))
+      .on('postgres_changes',{event:'INSERT',schema:'public',table:'neith_site_presence_live'},()=>queueRefresh(60))
+      .on('postgres_changes',{event:'UPDATE',schema:'public',table:'neith_site_presence_live'},()=>queueRefresh(60))
+      .on('postgres_changes',{event:'DELETE',schema:'public',table:'neith_site_presence_live'},()=>queueRefresh(60))
       .subscribe(status=>{if(status==='SUBSCRIBED')setState('REALTIME',true);else if(owner&&['CHANNEL_ERROR','TIMED_OUT','CLOSED'].includes(status))setState('SYNCING',false)});
   };
 
   const start=()=>{
     // Do not block the first snapshot on a heartbeat; run both in parallel.
     window.NeithSitePresence?.ping?.();refresh('startup');
-    safetyTimer=setInterval(()=>{if(document.visibilityState==='visible')refresh('safety')},5000);
+    safetyTimer=setInterval(()=>{if(document.visibilityState==='visible')refresh('safety')},3000);
     window.addEventListener('focus',()=>refresh('focus'),{passive:true});
     document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')refresh('visible')},{passive:true});
     window.addEventListener('storage',()=>refresh('auth-storage'),{passive:true});

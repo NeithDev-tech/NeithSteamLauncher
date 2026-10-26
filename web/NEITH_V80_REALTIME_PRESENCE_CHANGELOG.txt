@@ -1,0 +1,9 @@
+Neith Web V80 — Realtime Presence
+
+- Heartbeat every 5 seconds.
+- ACTIVE VISITORS / ONLINE receive Supabase Realtime INSERT/UPDATE/DELETE events.
+- 3-second safety polling fallback for the owner panel.
+- Active cutoff reduced from 30s to 20s.
+- All HTML pages load the same V80 heartbeat cache key.
+- Real account/Premium metrics from V79 preserved.
+- IMPORTANT: mobile/public visitors are only visible after this V80 is deployed to the public website.

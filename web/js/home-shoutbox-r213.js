@@ -17,7 +17,6 @@
   };
 
   const MAX = 50;
-  const TTL_MS = 24 * 60 * 60 * 1000;
   const POLL_MS = 3000;
   const SEND_COOLDOWN_MS = 3000;
 
@@ -55,15 +54,10 @@
     ui.status.parentElement.className = `home209-shoutbox-status ${cls}`.trim();
   }
 
-  function isFresh(message) {
-    const stamp = new Date(message?.created_at || 0).getTime();
-    return Number.isFinite(stamp) && (Date.now() - stamp) <= TTL_MS;
-  }
-
   function normalizeMessages(messages) {
     const map = new Map();
     for (const message of messages || []) {
-      if (!message || !isFresh(message)) continue;
+      if (!message) continue;
       map.set(String(message.id), message);
     }
     return [...map.values()]
@@ -178,7 +172,7 @@
       ui.guest.hidden = false;
       ui.inputRow.hidden = true;
       setInputEnabled(false);
-      ui.guest.querySelector('span').textContent = tx('Visible to everyone · only registered website users can write · messages auto-clean after 24 hours.');
+      ui.guest.querySelector('span').textContent = tx('Visible to everyone · only registered website users can write · the chat keeps the latest 50 messages.');
       ui.meta.textContent = tx('Live for everyone · posting only for registered users · last 50 messages');
       ui.meta.className = 'home209-shoutbox-meta';
       return;
@@ -197,7 +191,7 @@
     }
 
     ui.input.placeholder = tx('Type your message...');
-    ui.meta.textContent = `${tx('Posting as')} ${displayName()} · ${tx('3 second send delay')} · ${tx('Last 50 messages · auto-clean after 24h')}`;
+    ui.meta.textContent = `${tx('Posting as')} ${displayName()} · ${tx('3 second send delay')} · ${tx('Last 50 messages · oldest message is removed when message 51 arrives')}`;
     ui.meta.className = 'home209-shoutbox-meta home209-shoutbox-ok';
   }
 
@@ -276,7 +270,7 @@
   }
 
   function upsert(message) {
-    if (!message || !isFresh(message)) return;
+    if (!message) return;
     const id = String(message.id);
     const index = state.messages.findIndex(item => String(item.id) === id);
     if (index >= 0) state.messages[index] = message;
