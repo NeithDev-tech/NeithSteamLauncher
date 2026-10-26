@@ -1,6 +1,6 @@
 const SUPABASE_URL='https://nsqhfbyxqcmdthvptuzp.supabase.co';
 const KEY='sb_publishable_bRJYGXCPI6M9I4o_egb5WA_n7ZIEASg';
-const DOWNLOAD_URL='https://github.com/NeithDev-tech/NeithSteamLauncher/releases/latest/download/NeithSetup.exe';
+const DOWNLOAD_URL='https://github.com/NeithDev-tech/NeithSteamLauncher/releases/download/v1.0.1/NeithSetup.exe';
 const UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const hex=b=>[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');
 const hash=async v=>hex(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(v))).slice(0,40);
