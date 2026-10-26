@@ -1,6 +1,0 @@
-NEITH WEB V83
-- Unified mobile navigation drawer for homepage and internal pages.
-- All /descargar links tracked with the same visitor/session identity.
-- Client-side authenticated download click + server redirect fallback, deduplicated.
-- Community clicks use fast keepalive tracking and preserve authenticated user attribution.
-- Mobile drawer is viewport/safe-area aware and hides conflicting header actions.

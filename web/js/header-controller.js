@@ -285,7 +285,8 @@
       status.className = 'neith-support-status';
       const auth = window.NeithAuth;
       const user = auth?.session?.user;
-      userLabel.textContent = user?.email || auth?.profile?.display_name || 'SIGN IN TO SEND';
+      userLabel.textContent = user?.email || auth?.profile?.display_name || 'SIGN IN REQUIRED TO SEND';
+      send.textContent = user ? 'SEND TO NEITH' : 'SIGN IN TO SEND';
       modal.classList.add('is-open'); modal.setAttribute('aria-hidden','false'); document.body.classList.add('neith-support-open');
       setTimeout(()=>form.elements.subject.focus(),30);
     };
@@ -308,7 +309,8 @@
       const message = String(form.elements.message.value || '').trim();
       if (!auth?.client || !auth?.session?.user) {
         status.className='neith-support-status error';
-        status.textContent = 'Sign in with your Neith account to send the message.';
+        status.textContent = 'Sign in with your Neith account to send this support message securely.';
+        if (auth?.open) auth.open('login');
         return;
       }
       if (subject.length < 3 || message.length < 3) return;

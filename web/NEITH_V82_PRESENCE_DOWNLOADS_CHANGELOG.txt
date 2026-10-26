@@ -1,8 +1,0 @@
-NEITH WEB V82
-- Active users deduplicated by authenticated user_id (same account on two PCs = one row / one ONLINE).
-- Guests deduplicated by visitor_id.
-- Stable alphabetical ordering; heartbeat no longer shuffles rows.
-- Visible-presence semantics: hidden/closed mobile pages send leave immediately; visible pages resume heartbeat every 5s.
-- Backend active window reduced to 15 seconds as safety expiry.
-- Production launcher downloads are counted server-side by Netlify before redirecting to GitHub.
-- Local PROBAR /descargar also records a download server-side.

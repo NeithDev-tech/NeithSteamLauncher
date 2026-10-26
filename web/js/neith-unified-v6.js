@@ -7,11 +7,12 @@
   // Local preview often serves /section/ as expected. Absolute-ish relative URLs keep GitHub/Netlify compatibility.
   var home=depth+'index.html';
   var DOWNLOAD_URL='https://github.com/NeithDev-tech/NeithSteamLauncher/releases/download/v1.0.1/NeithSetup.exe';
+  var GITHUB_URL='https://github.com/NeithDev-tech/NeithSteamLauncher/releases/tag/v1.0.1';
   var header=document.createElement('header'); header.id='neith-v4-header';
   header.innerHTML='<div class="n4-shell n4-nav">'+
     '<a class="n4-brand n4-brand-master" href="'+home+'"><img src="'+depth+'img/neith-master-logo-premium-transparent.webp" alt="Neith Steam Launcher PRO"></a>'+
     '<nav class="n4-links" aria-label="Main">'+
-      '<a href="'+home+'#neith-id">NEITH ID</a><a href="'+home+'#power">FEATURES</a><a href="'+home+'#compare">WHY NEITH</a><a href="'+home+'#premium">PREMIUM</a><a href="'+home+'#download">DOWNLOAD</a>'+
+      '<a class="n4-section-link" href="'+home+'#neith-id">NEITH ID</a><a class="n4-section-link" href="'+home+'#power">FEATURES</a><a class="n4-section-link" href="'+home+'#why-neith">WHY NEITH</a><a class="n4-section-link" href="'+home+'#premium">PREMIUM</a><a class="n4-github-link" href="'+GITHUB_URL+'" target="_blank" rel="noopener">GITHUB</a><a class="n4-section-link" href="'+home+'#download">DOWNLOAD</a>'+
       '<a class="n4-mobile-owner-link n4-mobile-admin-link" href="'+depth+'admin/" hidden>ADMIN</a><a class="n4-mobile-owner-link n4-mobile-premium-link" href="'+depth+'premium/" hidden>PREMIUM</a>'+
       '<button class="n4-mobile-auth" type="button">NEITH ID / ACCOUNT</button><a class="n4-mobile-download" href="'+DOWNLOAD_URL+'" data-neith-download="1">DOWNLOAD NEITH FREE</a>'+
     '</nav>'+
@@ -59,6 +60,57 @@
       scrollHomeTarget(u.hash||'');
     });
   });
+
+  // V89: scroll-aware HOME navigation. Reuses the existing header only; no polling/timers.
+  function initHomeScrollSpy(){
+    if(!isHomeDocument()) return;
+    var links={};
+    header.querySelectorAll('.n4-section-link').forEach(function(a){
+      var u; try{u=new URL(a.href,location.href);}catch(_){return;}
+      if(u.hash) links[u.hash.slice(1)]=a;
+    });
+    var groups=[
+      {id:'neith-id',key:'neith-id'},
+      {id:'power',key:'power'},
+      {id:'hourboost-advanced',key:'power'},
+      {id:'why-neith',key:'why-neith'},
+      {id:'plans',key:'premium'},
+      {id:'premium',key:'premium'},
+      {id:'support',key:'download'},
+      {id:'download',key:'download'}
+    ].map(function(item){item.el=document.getElementById(item.id);return item;}).filter(function(item){return !!item.el;});
+    var active='';
+    function setActive(key){
+      if(active===key) return;
+      active=key||'';
+      Object.keys(links).forEach(function(k){
+        var on=k===active;
+        links[k].classList.toggle('is-active',on);
+        if(on) links[k].setAttribute('aria-current','location');
+        else links[k].removeAttribute('aria-current');
+      });
+    }
+    var ticking=false;
+    function update(){
+      ticking=false;
+      var headerH=Math.ceil(header.getBoundingClientRect().height||0);
+      var probe=window.scrollY+headerH+Math.min(180,Math.max(72,window.innerHeight*.24));
+      var chosen='';
+      for(var i=0;i<groups.length;i++){
+        var top=groups[i].el.getBoundingClientRect().top+window.scrollY;
+        if(top<=probe) chosen=groups[i].key; else break;
+      }
+      // Before the first mapped section, keep the menu neutral rather than highlighting a false section.
+      setActive(chosen);
+    }
+    function requestUpdate(){if(ticking)return;ticking=true;requestAnimationFrame(update);}
+    window.addEventListener('scroll',requestUpdate,{passive:true});
+    window.addEventListener('resize',requestUpdate,{passive:true});
+    window.addEventListener('hashchange',requestUpdate);
+    header.querySelectorAll('.n4-section-link').forEach(function(a){a.addEventListener('click',function(){var h=(new URL(a.href,location.href)).hash.slice(1);if(h)setActive(h);});});
+    requestUpdate();
+  }
+  initHomeScrollSpy();
   // V48: the visible Neith header is fixed. Keep document offset synced to its real height.
   function syncFixedHeaderHeight(){
     try{
@@ -128,23 +180,16 @@
   window.addEventListener('neith:authchange',queueOwnerSync);
 
   var oldFoot=document.querySelector('body > footer,.footer'); if(oldFoot) oldFoot.setAttribute('aria-hidden','true');
-  var footer=document.createElement('footer'); footer.id='neith-v4-footer'; footer.innerHTML='<div class="n12-footer"><div class="n12-footer-main"><section class="n12-brand"><a class="n12-logo" href="'+home+'"><img src="'+depth+'img/neith-master-logo-premium-transparent.webp" alt="Neith Steam Launcher PRO"></a><p>VAC Live, Hour Boost, Steam accounts, free games, achievements and PC tools — unified in one premium Windows launcher.</p><div class="n12-status"><span><i></i>SYSTEM ONLINE</span><span data-unique-visitors hidden>V: <b data-unique-visitors-value>—</b></span></div></section><section class="n12-nav"><div><b>PRODUCT</b><a href="'+home+'#neith-id">Neith ID</a><a href="'+home+'#power">Features</a><a href="'+home+'#premium">Premium</a><a href="'+DOWNLOAD_URL+'" data-neith-download="1">Download</a></div><div><b>SUPPORT</b><a class="home228-contact n12-auth-only" href="#neith-contact" data-neith-contact-open hidden>Contact by email</a><a href="'+depth+'faq/">FAQ</a><a class="n12-auth-only" href="'+depth+'mi-cuenta/" hidden>My account</a></div></section><section class="n12-community"><div class="n12-community-head"><span>NEITH COMMUNITY</span><strong>Stay connected with Neith.</strong><p>Get support, release updates and talk with other users in the official Discord server.</p></div><a class="n12-discord" href="https://discord.gg/Dgkc6wv79F" target="_blank" rel="noopener"><span class="n12-discord-icon"><svg viewBox="0 0 256 199" aria-hidden="true"><path fill="currentColor" d="M216.856 16.597A208.502 208.502 0 0 0 164.041 0a161.06 161.06 0 0 0-6.404 13.328 193.57 193.57 0 0 0-58.505 0A160.41 160.41 0 0 0 92.728 0 207.809 207.809 0 0 0 39.872 16.638C6.818 66.146-2.184 114.595 2.321 162.348a210.95 210.95 0 0 0 64.183 32.149 158.46 158.46 0 0 0 13.824-22.256 136.413 136.413 0 0 1-21.846-10.632 103.38 103.38 0 0 0 5.489-4.169 149.325 149.325 0 0 0 128.06 0 133.02 133.02 0 0 0 5.489 4.169 136.7 136.7 0 0 1-21.887 10.652 157.04 157.04 0 0 0 13.824 22.236 210.88 210.88 0 0 0 64.183-32.129c5.29-55.684-9.04-103.695-36.39-145.77ZM85.474 132.105c-12.496 0-22.804-11.474-22.804-25.534 0-14.06 10.022-25.534 22.804-25.534 12.823 0 23.09 11.515 22.804 25.534 0 14.06-10.022 25.534-22.804 25.534Zm85.051 0c-12.496 0-22.804-11.474-22.804-25.534 0-14.06 10.022-25.534 22.804-25.534 12.823 0 23.09 11.515 22.804 25.534 0 14.06-9.981 25.534-22.804 25.534Z"/></svg></span><span class="n12-discord-copy"><b>OFFICIAL DISCORD</b><strong>Join the Neith community</strong><small>Support · updates · feedback</small></span><span class="n12-discord-cta">JOIN DISCORD <b>↗</b></span></a></section></div><div class="n12-footer-bottom"><span>© 2026 NEITH STEAM LAUNCHER PRO</span><span>INDEPENDENT PROJECT · NOT AFFILIATED WITH VALVE</span></div></div>'; document.body.appendChild(footer);
+  var footer=document.createElement('footer'); footer.id='neith-v4-footer'; footer.innerHTML='<div class="n12-footer"><div class="n12-footer-main"><section class="n12-brand"><a class="n12-logo" href="'+home+'"><img src="'+depth+'img/neith-master-logo-premium-transparent.webp" alt="Neith Steam Launcher PRO"></a><p>VAC Live, Hour Boost, Steam accounts, free games, achievements and PC tools — unified in one premium Windows launcher.</p><div class="n12-status"><span><i></i>SYSTEM ONLINE</span><span data-unique-visitors hidden>V: <b data-unique-visitors-value>—</b></span></div></section><section class="n12-nav"><div><b>PRODUCT</b><a href="'+home+'#neith-id">Neith ID</a><a href="'+home+'#power">Features</a><a href="'+home+'#premium">Premium</a><a href="'+GITHUB_URL+'" target="_blank" rel="noopener">GitHub</a><a href="'+DOWNLOAD_URL+'" data-neith-download="1">Download</a></div><div><b>SUPPORT</b><a class="home228-contact" href="#neith-contact" data-neith-contact-open>Contact by email</a><a href="'+depth+'faq/">FAQ</a><a class="n12-auth-only" href="'+depth+'mi-cuenta/" hidden>My account</a></div></section><section class="n12-community"><div class="n12-community-head"><span>NEITH COMMUNITY</span><strong>Stay connected with Neith.</strong><p>Get support, release updates and talk with other users in the official Discord server.</p></div><a class="n12-discord" href="https://discord.gg/Dgkc6wv79F" target="_blank" rel="noopener"><span class="n12-discord-icon"><svg viewBox="0 0 256 199" aria-hidden="true"><path fill="currentColor" d="M216.856 16.597A208.502 208.502 0 0 0 164.041 0a161.06 161.06 0 0 0-6.404 13.328 193.57 193.57 0 0 0-58.505 0A160.41 160.41 0 0 0 92.728 0 207.809 207.809 0 0 0 39.872 16.638C6.818 66.146-2.184 114.595 2.321 162.348a210.95 210.95 0 0 0 64.183 32.149 158.46 158.46 0 0 0 13.824-22.256 136.413 136.413 0 0 1-21.846-10.632 103.38 103.38 0 0 0 5.489-4.169 149.325 149.325 0 0 0 128.06 0 133.02 133.02 0 0 0 5.489 4.169 136.7 136.7 0 0 1-21.887 10.652 157.04 157.04 0 0 0 13.824 22.236 210.88 210.88 0 0 0 64.183-32.129c5.29-55.684-9.04-103.695-36.39-145.77ZM85.474 132.105c-12.496 0-22.804-11.474-22.804-25.534 0-14.06 10.022-25.534 22.804-25.534 12.823 0 23.09 11.515 22.804 25.534 0 14.06-10.022 25.534-22.804 25.534Zm85.051 0c-12.496 0-22.804-11.474-22.804-25.534 0-14.06 10.022-25.534 22.804-25.534 12.823 0 23.09 11.515 22.804 25.534 0 14.06-9.981 25.534-22.804 25.534Z"/></svg></span><span class="n12-discord-copy"><b>OFFICIAL DISCORD</b><strong>Join the Neith community</strong><small>Support · updates · feedback</small></span><span class="n12-discord-cta">JOIN DISCORD <b>↗</b></span></a></section></div><div class="n12-footer-bottom"><span>© 2026 NEITH STEAM LAUNCHER PRO</span><span>INDEPENDENT PROJECT · NOT AFFILIATED WITH VALVE</span></div></div>'; document.body.appendChild(footer);
   function syncAuthOnly(){
     var signedIn=!!window.NeithAuth?.session?.user;
     document.documentElement.classList.toggle('neith-authenticated',signedIn);
     footer.querySelectorAll('.n12-auth-only').forEach(function(el){el.hidden=!signedIn;});
-    document.querySelectorAll('[data-neith-contact-open]').forEach(function(el){el.hidden=!signedIn;});
+    document.querySelectorAll('[data-neith-contact-open]').forEach(function(el){el.hidden=false;});
   }
   syncAuthOnly();
   window.addEventListener('neith:authchange',syncAuthOnly);
   setTimeout(syncAuthOnly,250); setTimeout(syncAuthOnly,1200);
-  document.addEventListener('click',function(e){
-    var contact=e.target.closest?.('[data-neith-contact-open]');
-    if(!contact) return;
-    if(window.NeithAuth?.session?.user) return;
-    e.preventDefault(); e.stopImmediatePropagation();
-    if(window.NeithAuth?.open) window.NeithAuth.open('login');
-  },true);
   if(!document.querySelector('script[data-neith-visitor-counter]')){var vc=document.createElement('script');vc.defer=true;vc.dataset.neithVisitorCounter='1';vc.src=depth+'js/visitor-counter-r192.js?v=20261024-v6';document.body.appendChild(vc);}
   if(!document.querySelector('script[data-neith-image-lightbox]')){var lb=document.createElement('script');lb.defer=true;lb.dataset.neithImageLightbox='1';lb.src=depth+'js/neith-image-lightbox-v15.js?v=20261025-v53';document.body.appendChild(lb);}
 })();

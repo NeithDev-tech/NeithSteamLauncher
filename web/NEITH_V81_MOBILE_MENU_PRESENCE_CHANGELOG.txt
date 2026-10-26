@@ -1,7 +1,0 @@
-Neith Web V81
-- Mobile menu rebuilt as fixed viewport drawer with backdrop, safe-area support and scroll lock.
-- Admin/Premium owner links move into the mobile drawer to avoid header overflow.
-- Mobile menu closes on link, backdrop, Escape and desktop resize.
-- Presence heartbeat no longer stops merely because a tab is hidden.
-- BFCache/pageshow recovery re-arms heartbeat automatically on mobile browsers.
-- Cache tokens bumped across every HTML page.

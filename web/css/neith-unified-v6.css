@@ -200,3 +200,65 @@ body{
   #neith-v4-header .n4-nav{padding-inline:8px!important}#neith-v4-header .n4-brand-master{max-width:145px!important}#neith-v4-header .n4-brand-master img{width:min(140px,43vw)!important}#neith-v4-header .n4-nav.open .n4-links{left:8px!important;right:8px!important;padding:10px!important;border-radius:15px!important}
 }
 
+
+
+/* === V89: professional scroll-aware navigation === */
+#neith-v4-header .n4-links>a{
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:38px;
+  padding:0 10px;
+  border:1px solid transparent;
+  border-radius:10px;
+  transition:color .18s ease,background-color .18s ease,border-color .18s ease,box-shadow .18s ease,transform .18s ease;
+}
+#neith-v4-header .n4-links>a:hover{
+  color:#eafcff!important;
+  background:rgba(84,230,255,.055);
+  border-color:rgba(84,230,255,.10);
+}
+#neith-v4-header .n4-links>a.n4-section-link.is-active,
+#neith-v4-header .n4-links>a.n4-section-link[aria-current="location"]{
+  color:#f6fdff!important;
+  background:linear-gradient(180deg,rgba(48,205,255,.115),rgba(18,100,150,.055));
+  border-color:rgba(84,230,255,.19);
+  box-shadow:inset 0 1px rgba(255,255,255,.035),0 8px 24px rgba(0,148,220,.07);
+  text-shadow:0 0 14px rgba(84,230,255,.25);
+}
+#neith-v4-header .n4-links>a.n4-github-link{
+  color:#b9f4ff!important;
+  border-color:rgba(84,230,255,.10);
+  background:rgba(4,24,38,.38);
+}
+#neith-v4-header .n4-links>a.n4-github-link:hover{
+  border-color:rgba(84,230,255,.27);
+  background:rgba(22,108,151,.13);
+}
+@media(min-width:981px){
+  #neith-v4-header .n4-links>a.n4-section-link::after{
+    content:"";
+    position:absolute;
+    left:50%;
+    bottom:3px;
+    width:0;
+    height:2px;
+    border-radius:999px;
+    background:linear-gradient(90deg,#52e7ff,#2e8dff);
+    box-shadow:0 0 10px rgba(82,231,255,.42);
+    transform:translateX(-50%);
+    transition:width .2s ease;
+  }
+  #neith-v4-header .n4-links>a.n4-section-link.is-active::after,
+  #neith-v4-header .n4-links>a.n4-section-link[aria-current="location"]::after{width:52%}
+}
+@media(max-width:980px){
+  #neith-v4-header .n4-nav.open .n4-links>a.n4-section-link.is-active,
+  #neith-v4-header .n4-nav.open .n4-links>a.n4-section-link[aria-current="location"]{
+    color:#fff!important;
+    border-color:rgba(84,230,255,.28)!important;
+    background:linear-gradient(90deg,rgba(28,149,199,.18),rgba(7,30,46,.82))!important;
+    box-shadow:inset 3px 0 #54e6ff,0 8px 22px rgba(0,0,0,.12)!important;
+  }
+}
