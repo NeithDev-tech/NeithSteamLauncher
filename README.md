@@ -1,56 +1,113 @@
 # Neith Steam Launcher PRO
 
-**One launcher for Steam accounts, VAC tracking, Hour Boost, achievements, free games and PC optimization.**
+**Your games. Your accounts. One launcher.**
+
+Neith Steam Launcher PRO is a Windows launcher that brings Steam account management, VAC LIVE tracking, Hour Boost, achievements, temporarily free paid games, and PC optimization together in one place.
 
 [![Official Website](https://img.shields.io/badge/Official%20Website-neithlauncher.com-00d4ff?style=for-the-badge)](https://www.neithlauncher.com)
 [![Latest Release](https://img.shields.io/github/v/release/NeithDev-tech/NeithSteamLauncher?style=for-the-badge)](https://github.com/NeithDev-tech/NeithSteamLauncher/releases/latest)
 [![Windows](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D6?style=for-the-badge&logo=windows11&logoColor=white)](https://www.neithlauncher.com)
+[![Discord](https://img.shields.io/badge/Discord-Join%20Community-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/Dgkc6wv79F)
 
 ## What is Neith?
 
-Neith Steam Launcher PRO is a Windows gaming launcher designed to bring useful Steam tools into one place with a fast, modern and streamlined interface.
+Neith Steam Launcher PRO is built for PC gamers who want fewer separate tools and a cleaner way to manage their Steam workflow.
 
-Instead of relying on multiple separate utilities, Neith centralizes account management, VAC information, playtime tools, achievements, free-game discovery and PC gaming optimization.
+Instead of opening multiple utilities, Neith centralizes account switching, VAC information, playtime tools, achievements, free-game discovery and PC gaming optimization inside one modern launcher.
 
 ## Main Features
 
-- **VAC LIVE** — Track VAC information and see the remaining time in real time.
-- **Hour Boost** — Add Steam accounts and games and manage playtime boosting from one place.
-- **One-click Steam account switching** — Connect and switch between your Steam accounts quickly.
-- **Free Games** — Discover free games from multiple gaming platforms in one launcher.
-- **Steam Achievements** — Manage your Steam achievements from a single interface.
-- **Boost PC** — Optimize your PC for gaming performance.
-- **Multi-account management** — Keep your Steam accounts organized inside one launcher.
-- **Windows 10/11 x64 support**.
+### Steam Account Manager
+- Add and organize multiple Steam accounts.
+- Switch between Steam accounts quickly.
+- FREE supports up to **2 Steam accounts**.
+- PREMIUM supports up to **20 Steam accounts**.
+
+### VAC LIVE
+- Check VAC LIVE information from inside Neith.
+- See the remaining VAC LIVE time in real time.
+- Designed for users managing multiple Steam accounts.
+
+### Hour Boost
+- Add Steam accounts and games for playtime boosting.
+- FREE: **1 account × 1 game × 2 hours/day**.
+- PREMIUM: up to **3 accounts × 5 games**.
+- Built-in session status and account-aware controls.
+
+### Free Games
+- Discover **paid games that temporarily become 100% free to keep**.
+- Sources include supported PC gaming platforms such as Steam, Epic, GOG and other verified promotion sources.
+- Neith filters out permanent free-to-play titles, demos and unrelated free content.
+
+### Steam Achievements
+- Browse your Steam game library and achievements.
+- View achievement progress from one interface.
+- Manage supported achievement actions without switching between separate tools.
+
+### PC Boost
+- Optimize your PC for gaming with one click.
+- Monitor CPU, RAM, disk and system activity.
+- Includes maintenance and optimization controls designed for gaming sessions.
+
+## FREE vs PREMIUM
+
+| Feature | FREE | PREMIUM |
+|---|---:|---:|
+| Steam accounts | Up to 2 | Up to 20 |
+| One-click account switching | Yes | Yes |
+| Hour Boost | 1 account × 1 game × 2h/day | Up to 3 accounts × 5 games |
+| VAC LIVE | — | Yes |
+| Free Games | Yes | Yes |
+| Steam Achievements | Yes | Yes |
+| PC Boost | Basic | Advanced |
 
 ## Download
 
-### Official website
+### Official Website
 
-**https://www.neithlauncher.com**
+**https://www.neithlauncher.com/**
 
-### Latest GitHub release
+### Latest GitHub Release
 
 [Download the latest Neith release](https://github.com/NeithDev-tech/NeithSteamLauncher/releases/latest)
 
-The current stable release is available through GitHub Releases, including the Windows installer.
+For a normal Windows installation, use the **NeithSetup.exe** asset from the latest stable release.
 
 ## Why Neith?
 
-Neith was created to reduce the need for several separate Steam-related tools and provide a cleaner workflow for PC gamers who manage multiple accounts, track Steam information, discover free games or want quick access to gaming utilities.
+Neith is designed around one simple idea: **less switching, more control**.
 
-## Feedback
+If you manage several Steam accounts, monitor VAC information, use playtime tools, hunt for paid games temporarily offered for free, manage achievements or optimize your gaming PC, Neith puts those workflows into a single application.
 
-Neith is actively being improved. Feedback, feature suggestions and bug reports are welcome.
+## Compatibility
 
-If you like the project, consider giving this repository a **Star** — it helps more people discover Neith on GitHub.
+- Windows 10 64-bit
+- Windows 11 64-bit
 
-## Links
+## Official Links
 
-- **Website:** https://www.neithlauncher.com
-- **Releases:** https://github.com/NeithDev-tech/NeithSteamLauncher/releases
-- **Repository:** https://github.com/NeithDev-tech/NeithSteamLauncher
+- **Website:** https://www.neithlauncher.com/
+- **Latest Release:** https://github.com/NeithDev-tech/NeithSteamLauncher/releases/latest
+- **All Releases:** https://github.com/NeithDev-tech/NeithSteamLauncher/releases
+- **Discord:** https://discord.gg/Dgkc6wv79F
+- **Instagram:** https://www.instagram.com/neithlauncherpro/
+- **Facebook:** https://www.facebook.com/profile.php?id=61595584469079
+
+## Feedback & Community
+
+Neith is actively being improved. Feedback, suggestions and bug reports are welcome.
+
+Join the Discord community to follow updates, ask questions and share feedback:
+
+**https://discord.gg/Dgkc6wv79F**
+
+## Support the Project
+
+If Neith is useful to you, consider giving this repository a **Star**. It helps the project gain visibility on GitHub and makes it easier for more Steam users to discover it.
+
+You can also share the project with other PC gamers who may find the launcher useful.
 
 ---
 
-**Neith Steam Launcher PRO** — Steam tools. One launcher.
+**Neith Steam Launcher PRO**  
+**Your games. Your accounts. One launcher.**
