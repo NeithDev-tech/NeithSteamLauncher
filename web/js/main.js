@@ -236,11 +236,11 @@ document.querySelectorAll('.product-shot,.shot').forEach(frame=>{
   const count = page.querySelector('[data-faq-count]');
   const title = page.querySelector('[data-faq-category-title]');
   const empty = page.querySelector('[data-faq-empty]');
-  const labels = {general:()=> 'GENERAL', identity:()=> 'NEITH ID & ACCOUNTS', premium:()=> 'PREMIUM', features:()=> 'FEATURES', support:()=> 'DOWNLOAD & SUPPORT'};
+  const labels = {general:()=> 'GENERAL', security:()=> 'SAFETY & PRIVACY', identity:()=> 'NEITH ID & ACCOUNTS', premium:()=> 'PREMIUM', features:()=> 'FEATURES', support:()=> 'DOWNLOAD & SUPPORT'};
   let active = 'general';
   const normalize = value => (value || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
   const apply = () => {
-    const q = normalize(search?.value);
+    const q = normalize(search ? search.value : '');
     let visible = 0;
     items.forEach(item => {
       const inCategory = q ? true : item.dataset.category === active;
@@ -249,8 +249,8 @@ document.querySelectorAll('.product-shot,.shot').forEach(frame=>{
       item.hidden = !match;
       if (match) visible++;
     });
-    if (title) title.textContent = q ? neithText('GLOBAL SEARCH','GLOBAL SEARCH') : labels[active]();
-    if (count) count.textContent = `${visible} ${visible === 1 ? neithText('REGISTRO','ENTRY') : neithText('REGISTROS','ENTRIES')}`;
+    if (title) title.textContent = q ? 'GLOBAL SEARCH' : (labels[active] ? labels[active]() : 'GENERAL');
+    if (count) count.textContent = `${visible} ${visible === 1 ? 'ENTRY' : 'ENTRIES'}`;
     if (empty) empty.hidden = visible !== 0;
     consoleEl?.classList.remove('is-filtering');
     requestAnimationFrame(() => consoleEl?.classList.add('is-filtering'));

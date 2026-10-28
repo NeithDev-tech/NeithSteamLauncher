@@ -12,9 +12,9 @@
   header.innerHTML='<div class="n4-shell n4-nav">'+
     '<a class="n4-brand n4-brand-master" href="'+home+'"><img src="'+depth+'img/neith-master-logo-premium-transparent.webp" alt="Neith Steam Launcher PRO"></a>'+
     '<nav class="n4-links" aria-label="Main">'+
-      '<a class="n4-section-link" href="'+home+'#vac-live">CS2 VAC LIVE</a><a class="n4-section-link" href="'+home+'#hour-boost">HOUR BOOST</a><a class="n4-section-link" href="'+home+'#steam-accounts">STEAM ACCOUNTS</a><a class="n4-section-link" href="'+home+'#free-games">FREE GAMES</a><a class="n4-section-link" href="'+home+'#premium">PREMIUM</a><a class="n4-section-link" href="'+home+'#download">DOWNLOAD FREE</a>'+
+      '<a class="n4-section-link" href="'+home+'#power">FEATURES</a><a class="n4-section-link" href="'+home+'#vac-live">VAC LIVE</a><a class="n4-section-link" href="'+home+'#why-neith">WHY NEITH</a><a class="n4-section-link" href="'+home+'#premium">PREMIUM</a><a class="n4-github-link" href="'+GITHUB_URL+'" target="_blank" rel="noopener">GITHUB</a><a class="n4-section-link" href="'+home+'#download">DOWNLOAD</a>'+
       '<a class="n4-mobile-owner-link n4-mobile-admin-link" href="'+depth+'admin/" hidden>ADMIN</a><a class="n4-mobile-owner-link n4-mobile-premium-link" href="'+depth+'premium/" hidden>PREMIUM</a>'+
-      '<button class="n4-mobile-auth" type="button">NEITH ID / ACCOUNT</button><a class="n4-mobile-download" href="'+DOWNLOAD_URL+'" data-neith-download="1" data-neith-download-source="mobile-menu">DOWNLOAD NEITH FREE</a>'+
+      '<a class="n4-mobile-download" href="'+DOWNLOAD_URL+'" data-neith-download="1" data-neith-download-source="mobile-menu">DOWNLOAD NEITH FREE</a>'+
     '</nav>'+
     '<div class="n4-actions"><button class="n4-btn n4-menu-toggle" type="button" aria-label="Menu">☰</button><a class="n4-owner-link n4-admin-link" href="'+depth+'admin/" hidden>ADMIN</a><a class="n4-owner-link n4-premium-link" href="'+depth+'premium/" hidden>PREMIUM</a><button class="n4-btn n4-auth" type="button"><span class="n4-auth-led"></span><span class="n4-auth-label">SIGN IN</span></button><a class="n4-btn primary" href="'+DOWNLOAD_URL+'" data-neith-download="1" data-neith-download-source="global-header">DOWNLOAD FREE</a></div>'+
   '</div>';
