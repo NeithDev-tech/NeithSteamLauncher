@@ -1070,6 +1070,7 @@
         hydrateImmediateIdentity(createdSession.user);
         syncUI();
         window.dispatchEvent(new CustomEvent('neith:authchange', { detail: { session: state.session, event: 'SIGNED_IN' } }));
+        try { window.NeithSiteAnalytics?.trackFast?.('registration_completed', { source: 'auth_modal', from: location.pathname || '/' }); } catch {}
 
         form.reset();
         prepareRegisterForm({ clear: true });

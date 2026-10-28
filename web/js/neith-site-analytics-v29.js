@@ -15,7 +15,7 @@
   const setStored=(store,key,val)=>{try{store.setItem(key,val)}catch{}};
   const visitorId=(()=>{let id=getStored(localStorage,VISITOR_KEY);if(!validUuid(id)){id=uuid();setStored(localStorage,VISITOR_KEY,id)}return id})();
   const sessionId=(()=>{let id=getStored(sessionStorage,SESSION_KEY);if(!validUuid(id)){id=uuid();setStored(sessionStorage,SESSION_KEY,id)}return id})();
-  const path=()=>`${location.pathname||'/'}${location.search||''}`.slice(0,220);
+  const path=()=>{let p=String(location.pathname||'/').replace(/\/{2,}/g,'/').replace(/\/index\.html$/i,'/').replace(/\/+$/,'');if(!p||p==='/')p='/home';return p.slice(0,220)};
   const device=()=>/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent||'') || matchMedia?.('(max-width: 760px)')?.matches ? 'mobile' : 'desktop';
 
   let identityPromise=null;
@@ -46,7 +46,12 @@
   const isDownloadLink=a=>{try{if(a?.dataset?.neithDownload==='1')return true;const u=new URL(a.href,location.href);const p=u.pathname.replace(/\/+$/,'');return p==='/descargar'||(u.hostname.toLowerCase()==='github.com'&&/\/NeithDev-tech\/NeithSteamLauncher\/releases\/(?:latest\/download|download\/[^/]+)\/NeithSetup\.exe$/i.test(p))}catch{return false}};
   const communityTarget=a=>{try{const u=new URL(a.href,location.href),h=u.hostname.toLowerCase().replace(/^www\./,'');if(h==='discord.gg'||h.endsWith('.discord.gg')||h==='discord.com'||h.endsWith('.discord.com'))return'discord';if(h==='instagram.com'||h.endsWith('.instagram.com'))return'instagram';if(h==='facebook.com'||h.endsWith('.facebook.com'))return'facebook';if(h==='tiktok.com'||h.endsWith('.tiktok.com'))return'tiktok';if(h==='youtube.com'||h.endsWith('.youtube.com')||h==='youtu.be')return'youtube';return''}catch{return''}};
   const withIds=url=>{try{const u=new URL(url,location.href);u.searchParams.set('vid',visitorId);u.searchParams.set('sid',sessionId);return u.href}catch{return url}};
-  const start=()=>{track('page_view',{title:(document.title||'').slice(0,140)});if(getStored(sessionStorage,STARTED_KEY)!=='1'){setStored(sessionStorage,STARTED_KEY,'1');track('session_start',{entry_path:path()})}document.addEventListener('click',e=>{const a=e.target.closest?.('a[href]');if(!a)return;if(isDownloadLink(a)){const meta={source:'download_button',label:(a.textContent||'').trim().slice(0,80),from:path()};trackFast('launcher_download',meta);return}const target=communityTarget(a);if(target){const href=a.href;const meta={target,href_host:(()=>{try{return new URL(href,location.href).hostname}catch{return''}})(),label:(a.textContent||'').trim().slice(0,80),from:path()};trackFast('community_click',meta)}},{capture:true})};
+  const start=()=>{track('page_view',{title:(document.title||'').slice(0,140)});if(getStored(sessionStorage,STARTED_KEY)!=='1'){setStored(sessionStorage,STARTED_KEY,'1');track('session_start',{entry_path:path()})}
+    const observed=new Set();
+    const observeFunnel=(selector,event,step)=>{const el=document.querySelector(selector);if(!el||!('IntersectionObserver'in window))return;const io=new IntersectionObserver(entries=>{for(const entry of entries){if(!entry.isIntersecting||entry.intersectionRatio<0.35||observed.has(step))continue;observed.add(step);track(event,{step,from:path()});io.disconnect();break}},{threshold:[0.35]});io.observe(el)};
+    observeFunnel('#download','funnel_view','download_section');
+    observeFunnel('#premium','funnel_view','premium_section');
+    document.addEventListener('click',e=>{const a=e.target.closest?.('a[href]');if(!a)return;if(isDownloadLink(a)){const meta={source:a.dataset?.neithDownloadSource||'download_button',label:(a.textContent||'').trim().slice(0,80),from:path()};trackFast('launcher_download',meta);return}const href=String(a.getAttribute('href')||'');if(href==='#premium'||href==='#plans'||/\/premium\/?(?:$|[?#])/i.test(href)){trackFast('premium_interest',{source:a.dataset?.neithPremiumSource||'premium_link',label:(a.textContent||'').trim().slice(0,80),from:path()})}const target=communityTarget(a);if(target){const absolute=a.href;const meta={target,source:a.dataset?.neithCommunitySource||'community_link',href_host:(()=>{try{return new URL(absolute,location.href).hostname}catch{return''}})(),label:(a.textContent||'').trim().slice(0,80),from:path()};trackFast('community_click',meta)}},{capture:true})};
   window.NeithSiteAnalytics=Object.freeze({track,trackFast,getVisitorId:()=>visitorId,getSessionId:()=>sessionId});
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
 })();
